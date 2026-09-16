@@ -79,15 +79,26 @@ textarea:focus-visible {
 
 .renacon-mirror #offcanvas.is-open,
 .renacon-mirror #offcanvas.active {
-  display: block;
-  position: fixed;
-  inset: 0;
-  z-index: 100000;
-  background: rgba(10, 30, 20, 0.96);
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100000 !important;
+  background: rgba(10, 30, 20, 0.96) !important;
   color: #fff;
   overflow: auto;
   padding: 1.25rem 1.5rem 2rem;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
   animation: renacon-panel-in 0.22s ease-out;
+}
+
+html.ct-panel-open #main,
+html.ct-panel-open .site-main,
+html.ct-panel-open #header.ct-header,
+html.ct-panel-open footer {
+  pointer-events: none !important;
 }
 
 @keyframes renacon-panel-in {
