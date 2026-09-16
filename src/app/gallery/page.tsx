@@ -1,5 +1,7 @@
-import { redirect } from "next/navigation";
+import { WpPage } from "@/components/WpPage";
 
-export default function GalleryRedirect() {
-  redirect("/media");
+export const metadata = { title: 'Gallery' };
+
+export default function Page() {
+  return <WpPage slug='media' />;
 }

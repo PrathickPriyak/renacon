@@ -1,0 +1,77 @@
+
+			/* buttons hover effect */
+.button,
+.added_to_cart,
+[type="submit"] {
+	right: var(--has-effect, 0);
+	bottom: var(--has-effect, 0);
+	position: var(--has-effect, relative);
+	box-shadow: var(--has-effect, 7px 7px 0px 0px var(--button-shadow-color, var(--theme-palette-color-4)));
+	transition: all 0.12s cubic-bezier(.45,.05,.55,.95);
+}
+
+.button:hover,
+.added_to_cart:hover,
+[type="submit"]:hover {
+	right: var(--has-effect, -7px);
+	bottom: var(--has-effect, -7px);
+	box-shadow: var(--has-effect, 0px 0px 0px 0px var(--theme-palette-color-4));
+}
+
+
+.ct-contact-wpforms,
+.home-products-shortcode .ct-woo-card-actions {
+	--buttonTextInitialColor: #fff;
+	--theme-button-background-initial-color: var(--theme-palette-color-4);
+	--buttonHoverColor: #03070a;
+	--button-border: 2px solid var(--theme-palette-color-3);
+	--button-border-hover-color: var(--theme-palette-color-3);
+	--button-shadow-color: var(--theme-palette-color-3);
+}
+
+/* remove button hover effect from certain elements */
+.ct-cart-actions,
+.select2-search__field,
+.woocommerce-message {
+	--has-effect: var(--false);
+}
+
+
+
+/* home products shortcode */
+.home-products-shortcode .woocommerce-loop-product__title {
+	color: #fff;
+}
+
+.home-products-shortcode .price {
+	color: rgba(255, 255, 255, 0.5)
+}
+
+
+/* contact form */
+.ct-contact-wpforms {
+	--form-text-initial-color: var(--theme-palette-color-5);
+	--form-text-focus-color: var(--theme-palette-color-6);
+	--form-field-border-initial-color: var(--theme-palette-color-3);
+}
+.buttonnew {
+    background: #00984a !important;
+    color: #ffffff !important;
+}
+
+
+.buttonnew:hover {
+    background: #ffcb2d !important;
+    color: #000000 !important;
+}
+
+a.buttonnew {
+    background: #00984a !important;
+    color: #ffffff !important;
+}
+
+
+a.buttonnew:hover {
+    background: #ffcb2d !important;
+    color: #000000 !important;
+}		

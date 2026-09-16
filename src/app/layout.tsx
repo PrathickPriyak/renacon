@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 
-const sans = Plus_Jakarta_Sans({
+const roboto = Roboto({
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
-  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Renacon | AAC Blocks & Green Building Materials",
+    default: "Renacon",
     template: "%s | Renacon",
   },
   description:
-    "Renacon (Renaatus Procon Private Limited) is South India’s leading manufacturer of AAC blocks, Renabond, Renaplast, Renafix adhesives and Rapid Wall panels.",
+    "Renacon (Renaatus Procon Private Limited) – South India’s leading AAC blocks and green building materials brand.",
+  icons: {
+    icon: "https://renacon.in/wp-content/uploads/2023/05/logo-green.png",
+  },
 };
 
 export default function RootLayout({
@@ -25,11 +27,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sans.variable} min-h-screen bg-[#f6fbf8] antialiased`}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </body>
+      <head>
+        {/* Mirrored Blocksy/WordPress styles for visual parity */}
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link rel="stylesheet" href="/wp-mirror/css/renacon-all.css" />
+      </head>
+      <body className={`renacon-mirror ${roboto.className}`}>{children}</body>
     </html>
   );
 }

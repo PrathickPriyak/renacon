@@ -1,12 +1,7 @@
-import { ProductPage } from "@/components/ProductPage";
-import { getProduct } from "@/data/products";
-import { notFound } from "next/navigation";
+import { WpPage } from "@/components/WpPage";
 
-const product = getProduct("renafix-tile-grout");
-
-export const metadata = { title: product?.name ?? "Product" };
+export const metadata = { title: 'Renafix Tile Grout' };
 
 export default function Page() {
-  if (!product) notFound();
-  return <ProductPage product={product} />;
+  return <WpPage slug='renafix-tile-grout' />;
 }

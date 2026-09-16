@@ -1,12 +1,7 @@
-import { ProductPage } from "@/components/ProductPage";
-import { getProduct } from "@/data/products";
-import { notFound } from "next/navigation";
+import { WpPage } from "@/components/WpPage";
 
-const product = getProduct("renabond-aac-joint-mortar");
-
-export const metadata = { title: product?.name ?? "Product" };
+export const metadata = { title: 'Renabond AAC Joint Mortar' };
 
 export default function Page() {
-  if (!product) notFound();
-  return <ProductPage product={product} />;
+  return <WpPage slug='renabond-aac-joint-mortar' />;
 }

@@ -1,0 +1,208 @@
+/* Renacon mirror layout helpers – keep Blocksy structure readable without WP JS */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.renacon-mirror {
+  margin: 0;
+  background: #fff;
+  color: #1a1e21;
+  font-family: Roboto, "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+#main,
+.site-main {
+  min-height: 50vh;
+}
+
+.ct-header .ct-container,
+.ct-footer .ct-container {
+  width: min(1290px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.entry-content {
+  max-width: 1290px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.entry-content.alignfull,
+.entry-content .alignfull {
+  max-width: none;
+}
+
+.sgb-item img,
+.wp-block-image img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Mobile offcanvas toggle without Blocksy JS */
+.renacon-mirror #offcanvas[inert] {
+  display: none;
+}
+
+.renacon-mirror #offcanvas.is-open {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(10, 30, 20, 0.96);
+  color: #fff;
+  overflow: auto;
+  padding: 1.5rem;
+}
+
+.renacon-mirror #offcanvas.is-open a {
+  color: #fff;
+}
+
+.renacon-footer-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .renacon-footer-grid,
+  .ct-footer [data-row="middle"] .ct-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+.ct-footer {
+  background: #0b3d2c;
+  color: #e8fff4;
+  margin-top: 2rem;
+  padding: 2rem 0 1rem;
+}
+
+.ct-footer a {
+  color: #d7ffe9;
+  text-decoration: none;
+}
+
+.ct-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.ct-footer li {
+  margin: 0.35rem 0;
+}
+
+.ct-footer-copyright {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  text-align: center;
+}
+
+/* Keep forms usable even if Forminator assets are missing */
+form input,
+form select,
+form textarea,
+form button {
+  font: inherit;
+}
+
+.wpforms-submit,
+.forminator-button,
+button[type="submit"] {
+  cursor: pointer;
+}
+
+/* Ensure desktop menu items are visible even without Blocksy JS */
+.ct-header .menu-container > .menu {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ct-header .menu-container > .menu > li {
+  position: relative;
+}
+.ct-header .menu-container > .menu > li > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.2rem;
+  color: #1a1e21;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.ct-header .menu-container .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 240px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  padding: 0.5rem 0;
+  z-index: 1000;
+  list-style: none;
+}
+.ct-header .menu-container > .menu > li:hover > .sub-menu,
+.ct-header .menu-container > .menu > li:focus-within > .sub-menu {
+  display: block;
+}
+.ct-header .menu-container .sub-menu a {
+  display: block;
+  padding: 0.55rem 1rem;
+  color: #1a1e21;
+  text-decoration: none;
+}
+.ct-header .menu-container .sub-menu a:hover {
+  background: #f3faf6;
+  color: #0b3d2c;
+}
+.ct-header .menu-container .sub-menu .sub-menu {
+  left: 100%;
+  top: 0;
+}
+.ct-header [data-device="desktop"] {
+  display: block;
+}
+.ct-header [data-device="mobile"] {
+  display: none;
+}
+@media (max-width: 999px) {
+  .ct-header [data-device="desktop"] { display: none; }
+  .ct-header [data-device="mobile"] { display: block; }
+}
+
+/* Simply gallery grid fallback */
+.sgb-gallery, .sgb-row, [class*="sgb-"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+.sgb-item img { width: 100%; height: 220px; object-fit: cover; border-radius: 4px; }
+.sgb-item-caption { font-size: 0.875rem; margin-top: 0.35rem; }
+
+.sgb-preloader { display: none !important; }
+.simply-gallery-amp .sgb-gallery,
+.pgc-sgb-cb .sgb-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  position: relative !important;
+}
+.simply-gallery-amp .sgb-gallery .sgb-item {
+  max-width: none !important;
+  margin: 0 !important;
+}
+.simply-gallery-amp .sgb-gallery .sgb-item img {
+  height: 220px !important;
+  width: 100% !important;
+  object-fit: cover;
+}
