@@ -10,7 +10,7 @@ export default function NewsPage() {
     <>
       <PageHero
         title="News & blogs"
-        subtitle="Official Renacon updates, factory events, expos and construction insights. Casino spam and third-party injected posts are not included."
+        subtitle="Official Renacon updates, factory events, expos and construction insights."
       />
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-14 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => (
