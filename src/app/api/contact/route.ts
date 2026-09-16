@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -8,6 +9,27 @@ function asString(value: unknown): string {
 
 function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+/** Persist locally when possible; on Vercel use /tmp (ephemeral) and always return success after validation. */
+async function persistSubmission(kind: string, payload: Record<string, unknown>): Promise<void> {
+  const line = `${JSON.stringify({ ...payload, at: new Date().toISOString() })}\n`;
+  const candidates = [
+    join(process.cwd(), "data", "submissions"),
+    join(tmpdir(), "renacon-submissions"),
+  ];
+
+  for (const dir of candidates) {
+    try {
+      await mkdir(dir, { recursive: true });
+      await appendFile(join(dir, `${kind}.jsonl`), line, "utf8");
+      return;
+    } catch {
+      // try next location (read-only FS on some hosts)
+    }
+  }
+
+  console.info("[submission]", kind, line.trim());
 }
 
 export async function POST(request: Request) {
@@ -36,13 +58,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid phone number" }, { status: 400 });
   }
 
-  const dir = join(process.cwd(), "data", "submissions");
-  await mkdir(dir, { recursive: true });
-  await appendFile(
-    join(dir, `${kind}.jsonl`),
-    `${JSON.stringify({ ...record, name, email, phone, message, at: new Date().toISOString() })}\n`,
-    "utf8",
-  );
+  await persistSubmission(kind, { ...record, name, email, phone, message, kind });
 
   return NextResponse.json({ ok: true });
 }
