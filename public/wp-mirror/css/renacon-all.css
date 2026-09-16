@@ -3248,6 +3248,13 @@ button[type="submit"] {
 .ct-header#header {
   position: relative !important;
   z-index: 10050 !important;
+  overflow: visible !important;
+}
+
+.ct-header .menu-container,
+.ct-header .ct-container,
+.ct-header .ct-sticky-container {
+  overflow: visible !important;
 }
 
 .ct-header .menu > .menu-item-has-children {
