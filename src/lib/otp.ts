@@ -26,7 +26,7 @@ type Store = {
 };
 
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var -- required for Next.js hot-reload singleton
   var __renaconOtpStore: Store | undefined;
 }
 
