@@ -3244,6 +3244,16 @@ button[type="submit"] {
 }
 
 /* Desktop dropdown menus without Blocksy JS (Blocksy uses .ct-active) */
+#header.ct-header,
+.ct-header#header {
+  position: relative !important;
+  z-index: 10050 !important;
+}
+
+.ct-header .menu > .menu-item-has-children {
+  position: relative !important;
+}
+
 .ct-header [class*="animated-submenu"] > .sub-menu {
   display: block !important;
   position: absolute !important;
@@ -3253,7 +3263,7 @@ button[type="submit"] {
   background: #fff !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
   padding: 0.5rem 0 !important;
-  z-index: 1000 !important;
+  z-index: 10060 !important;
   list-style: none !important;
 }
 
