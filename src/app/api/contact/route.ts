@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
+import { consumeVerificationToken } from "@/lib/otp";
+import { resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -58,7 +60,31 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid phone number" }, { status: 400 });
   }
 
-  await persistSubmission(kind, { ...record, name, email, phone, message, kind });
+  let verifiedPhone: string | undefined;
+  if (kind === "brochure") {
+    const verificationToken = asString(record.verificationToken);
+    const verified = await consumeVerificationToken(verificationToken, phone);
+    if (!verified.ok) {
+      return NextResponse.json({ ok: false, error: verified.error }, { status: 403 });
+    }
+    verifiedPhone = verified.phone;
+  }
+
+  await persistSubmission(kind, {
+    ...record,
+    name,
+    email,
+    phone,
+    message,
+    kind,
+    verifiedPhone,
+  });
+
+  if (kind === "brochure") {
+    const productPath = asString(record.productPath) || asString(record.page_url) || "";
+    const downloadUrl = resolveBrochureUrl(productPath || slugFromPath(asString(record.product)));
+    return NextResponse.json({ ok: true, downloadUrl });
+  }
 
   return NextResponse.json({ ok: true });
 }

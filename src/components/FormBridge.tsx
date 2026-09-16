@@ -1,13 +1,329 @@
 "use client";
 
 import { useEffect } from "react";
+import { isBrochurePath, resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
+
+type OtpSendResponse = {
+  ok?: boolean;
+  error?: string;
+  demoMode?: boolean;
+  devOtp?: string;
+};
+
+type OtpVerifyResponse = {
+  ok?: boolean;
+  error?: string;
+  verificationToken?: string;
+};
+
+type BrochureSubmitResponse = {
+  ok?: boolean;
+  error?: string;
+  downloadUrl?: string;
+};
+
+function fieldValue(form: HTMLFormElement, selectors: string[]): string {
+  for (const selector of selectors) {
+    const el = form.querySelector(selector);
+    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+      const value = el.value.trim();
+      if (value) return value;
+    }
+  }
+  return "";
+}
+
+function findPhoneInput(form: HTMLFormElement): HTMLInputElement | null {
+  const byType = form.querySelector(
+    '.wpforms-field-phone input, input[type="tel"], input[name*="phone" i]',
+  );
+  if (byType instanceof HTMLInputElement) return byType;
+
+  const containers = form.querySelectorAll(".wpforms-field");
+  for (const container of containers) {
+    const label = container.querySelector("label")?.textContent?.toLowerCase() || "";
+    if (label.includes("phone") || label.includes("mobile")) {
+      const input = container.querySelector("input");
+      if (input instanceof HTMLInputElement) return input;
+    }
+  }
+
+  // Many brochure forms use a number field for mobile
+  const numberField = form.querySelector('.wpforms-field-number input, input[type="number"]');
+  if (numberField instanceof HTMLInputElement) return numberField;
+  return null;
+}
+
+function findNameInput(form: HTMLFormElement): HTMLInputElement | null {
+  const el = form.querySelector(
+    '.wpforms-field-name input, input[name*="name" i], input[autocomplete="name"]',
+  );
+  return el instanceof HTMLInputElement ? el : null;
+}
+
+function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
+  let status = form.querySelector<HTMLParagraphElement>(".renacon-otp-status");
+  if (!status) {
+    status = document.createElement("p");
+    status.className = "renacon-otp-status";
+    status.setAttribute("aria-live", "polite");
+    const submitContainer = form.querySelector(".wpforms-submit-container") || form;
+    submitContainer.parentElement?.insertBefore(status, submitContainer);
+  }
+  return status;
+}
+
+function setStatus(form: HTMLFormElement, message: string, kind: "info" | "error" | "ok" = "info") {
+  const status = ensureStatus(form);
+  status.textContent = message;
+  status.dataset.kind = kind;
+}
+
+function enhanceBrochureForm(form: HTMLFormElement): void {
+  if (form.dataset.renaconOtpEnhanced === "1") return;
+  form.dataset.renaconOtpEnhanced = "1";
+  form.classList.add("renacon-brochure-otp-form");
+
+  const phoneInput = findPhoneInput(form);
+  if (!phoneInput) return;
+
+  const phoneContainer =
+    phoneInput.closest(".wpforms-field") || phoneInput.parentElement || form;
+
+  const otpWrap = document.createElement("div");
+  otpWrap.className = "renacon-otp-controls wpforms-field";
+
+  const sendBtn = document.createElement("button");
+  sendBtn.type = "button";
+  sendBtn.className = "renacon-send-otp";
+  sendBtn.textContent = "Send OTP";
+
+  const otpLabel = document.createElement("label");
+  otpLabel.className = "wpforms-field-label renacon-otp-label";
+  otpLabel.innerHTML = 'Enter OTP <span class="wpforms-required-label" aria-hidden="true">*</span>';
+  otpLabel.hidden = true;
+
+  const otpInput = document.createElement("input");
+  otpInput.type = "text";
+  otpInput.inputMode = "numeric";
+  otpInput.maxLength = 6;
+  otpInput.autocomplete = "one-time-code";
+  otpInput.className = "renacon-otp-input wpforms-field-medium";
+  otpInput.placeholder = "6-digit OTP";
+  otpInput.hidden = true;
+
+  const verifyBtn = document.createElement("button");
+  verifyBtn.type = "button";
+  verifyBtn.className = "renacon-verify-otp";
+  verifyBtn.textContent = "Verify OTP";
+  verifyBtn.hidden = true;
+
+  const tokenInput = document.createElement("input");
+  tokenInput.type = "hidden";
+  tokenInput.name = "renacon_verification_token";
+  tokenInput.className = "renacon-verification-token";
+
+  otpWrap.append(sendBtn, otpLabel, otpInput, verifyBtn, tokenInput);
+  phoneContainer.insertAdjacentElement("afterend", otpWrap);
+
+  // Style submit button text
+  const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"], .wpforms-submit');
+  if (submitBtn) {
+    submitBtn.textContent = "DOWNLOAD BROCHURE";
+    submitBtn.classList.add("renacon-download-brochure");
+  }
+
+  let verified = false;
+
+  sendBtn.addEventListener("click", async () => {
+    const phone = phoneInput.value.trim();
+    const name = findNameInput(form)?.value.trim() || "";
+    if (phone.replace(/\D/g, "").length < 8) {
+      setStatus(form, "Enter a valid phone number before sending OTP.", "error");
+      phoneInput.focus();
+      return;
+    }
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Sending…";
+    setStatus(form, "Sending OTP…");
+    try {
+      const res = await fetch("/api/otp/send/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, name }),
+      });
+      const json = (await res.json()) as OtpSendResponse;
+      if (!res.ok || !json.ok) throw new Error(json.error || "Unable to send OTP");
+
+      otpLabel.hidden = false;
+      otpInput.hidden = false;
+      verifyBtn.hidden = false;
+      verified = false;
+      tokenInput.value = "";
+      form.dataset.otpVerified = "0";
+
+      if (json.devOtp) {
+        otpInput.value = json.devOtp;
+        setStatus(
+          form,
+          `Demo mode: OTP is ${json.devOtp}. Enter it below and click Verify OTP.`,
+          "info",
+        );
+      } else {
+        setStatus(form, "OTP sent. Enter the 6-digit code and verify.", "ok");
+      }
+      otpInput.focus();
+    } catch (err) {
+      setStatus(form, err instanceof Error ? err.message : "Unable to send OTP", "error");
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Send OTP";
+    }
+  });
+
+  verifyBtn.addEventListener("click", async () => {
+    const phone = phoneInput.value.trim();
+    const otp = otpInput.value.trim();
+    if (!/^\d{6}$/.test(otp)) {
+      setStatus(form, "Enter the 6-digit OTP.", "error");
+      otpInput.focus();
+      return;
+    }
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = "Verifying…";
+    try {
+      const res = await fetch("/api/otp/verify/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phone, otp }),
+      });
+      const json = (await res.json()) as OtpVerifyResponse;
+      if (!res.ok || !json.ok || !json.verificationToken) {
+        throw new Error(json.error || "OTP verification failed");
+      }
+      tokenInput.value = json.verificationToken;
+      verified = true;
+      form.dataset.otpVerified = "1";
+      setStatus(form, "Phone verified. You can download the brochure now.", "ok");
+      otpInput.disabled = true;
+      verifyBtn.textContent = "Verified";
+    } catch (err) {
+      verified = false;
+      form.dataset.otpVerified = "0";
+      tokenInput.value = "";
+      setStatus(form, err instanceof Error ? err.message : "OTP verification failed", "error");
+      verifyBtn.textContent = "Verify OTP";
+    } finally {
+      verifyBtn.disabled = verified;
+    }
+  });
+
+  phoneInput.addEventListener("input", () => {
+    if (!verified) return;
+    verified = false;
+    form.dataset.otpVerified = "0";
+    tokenInput.value = "";
+    otpInput.disabled = false;
+    otpInput.value = "";
+    verifyBtn.hidden = false;
+    verifyBtn.disabled = false;
+    verifyBtn.textContent = "Verify OTP";
+    setStatus(form, "Phone changed — please send and verify OTP again.", "info");
+  });
+}
+
+function extractPayload(form: HTMLFormElement): Record<string, string> {
+  const data = new FormData(form);
+  const payload: Record<string, string> = {};
+  data.forEach((value, key) => {
+    if (typeof value === "string") payload[key] = value;
+  });
+
+  const name =
+    fieldValue(form, [
+      '.wpforms-field-name input',
+      'input[name*="name" i]',
+    ]) ||
+    payload["name-1"] ||
+    payload.name ||
+    payload["wpforms[fields][0]"] ||
+    "";
+
+  const phoneInput = findPhoneInput(form);
+  const phone =
+    phoneInput?.value.trim() ||
+    payload["phone-1"] ||
+    payload.phone ||
+    payload.tel ||
+    payload["wpforms[fields][4]"] ||
+    payload["wpforms[fields][3]"] ||
+    "";
+
+  const email =
+    fieldValue(form, ['.wpforms-field-email input', 'input[type="email"]']) ||
+    payload["email-1"] ||
+    payload.email ||
+    payload["wpforms[fields][5]"] ||
+    payload["wpforms[fields][1]"] ||
+    "";
+
+  const message =
+    fieldValue(form, ['.wpforms-field-textarea textarea', "textarea"]) ||
+    payload["textarea-1"] ||
+    payload.message ||
+    payload["wpforms[fields][2]"] ||
+    "";
+
+  const verificationToken =
+    (form.querySelector(".renacon-verification-token") as HTMLInputElement | null)?.value ||
+    payload.renacon_verification_token ||
+    "";
+
+  return {
+    ...payload,
+    name: name || "Website visitor",
+    email,
+    phone,
+    message,
+    verificationToken,
+    kind: "brochure",
+    product: document.title,
+    productPath: window.location.pathname,
+    page_url: window.location.pathname,
+  };
+}
+
+function isBrochureForm(form: HTMLFormElement): boolean {
+  if (form.dataset.renaconOtpEnhanced === "1") return true;
+  const title = form.querySelector(".wpforms-title")?.textContent?.toLowerCase() || "";
+  const submitText =
+    form.querySelector(".wpforms-submit, button[type='submit']")?.textContent?.toLowerCase() || "";
+  if (title.includes("brochure") || submitText.includes("download brochure")) return true;
+  return isBrochurePath(window.location.pathname);
+}
 
 /**
  * Makes mirrored Forminator / brochure forms post to our local APIs
  * so the WordPress UI keeps working without WP admin.
+ * Brochure pages require OTP verification before download.
  */
 export function FormBridge() {
   useEffect(() => {
+    const enhanceAll = () => {
+      if (!isBrochurePath(window.location.pathname)) {
+        // Still enhance forms that explicitly say Download Brochure on other paths
+      }
+      document.querySelectorAll("form").forEach((form) => {
+        if (!(form instanceof HTMLFormElement)) return;
+        if (!isBrochureForm(form)) return;
+        enhanceBrochureForm(form);
+      });
+    };
+
+    enhanceAll();
+    const observer = new MutationObserver(() => enhanceAll());
+    observer.observe(document.body, { childList: true, subtree: true });
+
     const onSubmit = async (event: Event) => {
       const form = event.target;
       if (!(form instanceof HTMLFormElement)) return;
@@ -22,13 +338,76 @@ export function FormBridge() {
       event.preventDefault();
       event.stopPropagation();
 
+      const path = window.location.pathname;
+      const brochure = isBrochureForm(form) || isBrochurePath(path);
+
+      if (brochure) {
+        enhanceBrochureForm(form);
+        const payload = extractPayload(form);
+        if (!payload.verificationToken || form.dataset.otpVerified !== "1") {
+          setStatus(form, "Please verify OTP before downloading the brochure.", "error");
+          return;
+        }
+        if (!payload.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+          setStatus(form, "Enter a valid email address.", "error");
+          return;
+        }
+
+        try {
+          setStatus(form, "Submitting…");
+          const res = await fetch("/api/brochure/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const json = (await res.json()) as BrochureSubmitResponse;
+          if (!res.ok || !json.ok) throw new Error(json.error || "Submit failed");
+
+          const downloadUrl =
+            json.downloadUrl ||
+            resolveBrochureUrl(path) ||
+            `/api/brochure/file/?product=${encodeURIComponent(slugFromPath(path))}`;
+
+          setStatus(form, "Verified. Your brochure download is starting…", "ok");
+          const anchor = document.createElement("a");
+          anchor.href = downloadUrl;
+          anchor.target = "_blank";
+          anchor.rel = "noopener";
+          anchor.download = "";
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+
+          form.reset();
+          form.dataset.otpVerified = "0";
+          const token = form.querySelector<HTMLInputElement>(".renacon-verification-token");
+          if (token) token.value = "";
+          const otpInput = form.querySelector<HTMLInputElement>(".renacon-otp-input");
+          if (otpInput) {
+            otpInput.disabled = false;
+            otpInput.value = "";
+          }
+          const verifyBtn = form.querySelector<HTMLButtonElement>(".renacon-verify-otp");
+          if (verifyBtn) {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = "Verify OTP";
+            verifyBtn.hidden = true;
+          }
+          const otpLabel = form.querySelector<HTMLLabelElement>(".renacon-otp-label");
+          if (otpLabel) otpLabel.hidden = true;
+          if (otpInput) otpInput.hidden = true;
+        } catch (err) {
+          setStatus(form, err instanceof Error ? err.message : "Unable to submit form", "error");
+        }
+        return;
+      }
+
       const data = new FormData(form);
       const payload: Record<string, string> = {};
       data.forEach((value, key) => {
         if (typeof value === "string") payload[key] = value;
       });
 
-      // Normalize common fields
       const name =
         payload["name-1"] ||
         payload.name ||
@@ -41,20 +420,8 @@ export function FormBridge() {
       const message =
         payload["textarea-1"] || payload.message || payload["text-2"] || payload.comment || "";
 
-      const path = window.location.pathname;
-      const kind = path.includes("career")
-        ? "careers"
-        : path.includes("renabond") ||
-            path.includes("renaplast") ||
-            path.includes("renafix") ||
-            path.includes("renacon-") ||
-            path.includes("cement") ||
-            path.includes("rapid-wall")
-          ? "brochure"
-          : "contact";
-
-      const endpoint =
-        kind === "careers" ? "/api/careers/" : kind === "brochure" ? "/api/brochure/" : "/api/contact/";
+      const kind = path.includes("career") ? "careers" : "contact";
+      const endpoint = kind === "careers" ? "/api/careers/" : "/api/contact/";
 
       try {
         const res = await fetch(endpoint, {
@@ -80,7 +447,10 @@ export function FormBridge() {
     };
 
     document.addEventListener("submit", onSubmit, true);
-    return () => document.removeEventListener("submit", onSubmit, true);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("submit", onSubmit, true);
+    };
   }, []);
 
   return null;

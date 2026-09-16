@@ -3,3 +3,133 @@
 body.renacon-mirror {
   margin: 0;
 }
+
+/* OTP-gated brochure download forms (WPForms mirror + LeadForm) */
+.renacon-brochure-otp-form,
+.renacon-lead-brochure {
+  --renacon-brochure-green: #008037;
+  --renacon-brochure-ink: #222;
+  max-width: 420px;
+}
+
+.renacon-brochure-otp-form .wpforms-title,
+.renacon-lead-brochure .renacon-title {
+  color: var(--renacon-brochure-ink);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem;
+}
+
+.renacon-brochure-otp-form .wpforms-description {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.renacon-brochure-otp-form .wpforms-field,
+.renacon-lead-brochure .renacon-field,
+.renacon-otp-controls {
+  margin-bottom: 1.15rem;
+}
+
+.renacon-brochure-otp-form .wpforms-field-label,
+.renacon-lead-brochure label,
+.renacon-otp-label {
+  display: block;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.renacon-brochure-otp-form .wpforms-required-label,
+.renacon-lead-brochure .req {
+  color: #d32f2f;
+}
+
+.renacon-brochure-otp-form input[type="text"],
+.renacon-brochure-otp-form input[type="tel"],
+.renacon-brochure-otp-form input[type="email"],
+.renacon-brochure-otp-form input[type="number"],
+.renacon-brochure-otp-form textarea,
+.renacon-brochure-otp-form .renacon-otp-input,
+.renacon-lead-brochure input {
+  width: 100%;
+  border: none !important;
+  border-bottom: 1px solid #111 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.45rem 0 !important;
+  font-size: 1rem;
+  color: #111;
+  outline: none;
+}
+
+.renacon-brochure-otp-form textarea {
+  min-height: 2rem;
+  resize: vertical;
+}
+
+.renacon-send-otp,
+.renacon-verify-otp {
+  display: inline-block;
+  margin: 0.35rem 0.5rem 0.75rem 0;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid #666;
+  background: #e8e8e8;
+  color: #222;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.renacon-send-otp:hover,
+.renacon-verify-otp:hover {
+  background: #ddd;
+}
+
+.renacon-send-otp:disabled,
+.renacon-verify-otp:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+
+.renacon-brochure-otp-form .wpforms-submit,
+.renacon-brochure-otp-form .renacon-download-brochure,
+.renacon-lead-brochure .renacon-download-brochure {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border: none;
+  border-radius: 2px;
+  background: var(--renacon-brochure-green) !important;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #111;
+}
+
+.renacon-brochure-otp-form .wpforms-submit:hover,
+.renacon-brochure-otp-form .renacon-download-brochure:hover,
+.renacon-lead-brochure .renacon-download-brochure:hover {
+  filter: brightness(1.05);
+}
+
+.renacon-otp-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.renacon-otp-status[data-kind="error"] {
+  color: #b00020;
+}
+
+.renacon-otp-status[data-kind="ok"] {
+  color: #0b6b34;
+}
