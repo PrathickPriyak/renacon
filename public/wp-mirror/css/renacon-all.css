@@ -3243,28 +3243,39 @@ button[type="submit"] {
   margin-top: 0.35rem;
 }
 
-/* Desktop dropdown menus without Blocksy JS */
-.ct-header .menu > .menu-item-has-children > .sub-menu {
-  display: none !important;
+/* Desktop dropdown menus without Blocksy JS (Blocksy uses .ct-active) */
+.ct-header [class*="animated-submenu"] > .sub-menu {
+  display: block !important;
   position: absolute !important;
   top: 100% !important;
   left: 0 !important;
-  min-width: 240px !important;
+  min-width: 260px !important;
   background: #fff !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
   padding: 0.5rem 0 !important;
   z-index: 1000 !important;
+  list-style: none !important;
+}
+
+.ct-header [class*="animated-submenu"]:not(.ct-active) > .sub-menu {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.ct-header [class*="animated-submenu"].ct-active > .sub-menu,
+.ct-header [class*="animated-submenu"]:hover > .sub-menu,
+.ct-header [class*="animated-submenu"]:focus-within > .sub-menu {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  height: auto !important;
-  overflow: visible !important;
   transform: none !important;
 }
 
-.ct-header .menu > .menu-item-has-children:hover > .sub-menu,
-.ct-header .menu > .menu-item-has-children:focus-within > .sub-menu {
-  display: block !important;
+.ct-header [class*="animated-submenu"].ct-active > .sub-menu > li,
+.ct-header [class*="animated-submenu"]:hover > .sub-menu > li {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 .ct-header .menu .sub-menu .menu-item-has-children > .sub-menu {
