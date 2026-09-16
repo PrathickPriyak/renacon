@@ -219,6 +219,7 @@ html.ct-panel-open footer {
   font-weight: 400;
   opacity: 0.92;
   padding: 0.55rem 0;
+  color: #e8fff4 !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .sub-menu .menu-item-has-children > .sub-menu {
