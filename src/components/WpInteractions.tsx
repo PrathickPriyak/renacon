@@ -15,29 +15,88 @@ export function WpInteractions() {
 
     const open = () => {
       if (!offcanvas) return;
-      offcanvas.classList.add("is-open");
+      offcanvas.classList.add("is-open", "active");
       offcanvas.removeAttribute("inert");
+      document.documentElement.classList.add("ct-panel-open");
       document.body.style.overflow = "hidden";
     };
     const close = () => {
       if (!offcanvas) return;
-      offcanvas.classList.remove("is-open");
+      offcanvas.classList.remove("is-open", "active");
       offcanvas.setAttribute("inert", "");
+      document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";
     };
 
-    const onClick = (e: Event) => {
+    const onOpenerClick = (e: Event) => {
       e.preventDefault();
       if (!offcanvas) return;
       if (offcanvas.classList.contains("is-open")) close();
       else open();
     };
 
-    openers.forEach((el) => el.addEventListener("click", onClick));
-    offcanvas?.addEventListener("click", (e) => {
+    openers.forEach((el) => el.addEventListener("click", onOpenerClick));
+
+    const onOffcanvasClick = (e: Event) => {
       const t = e.target as HTMLElement;
-      if (t.closest("a")) close();
-      if (t.matches("#offcanvas") || t.closest("[data-close]")) close();
+      if (t.closest(".ct-toggle-close, [data-close]")) {
+        e.preventDefault();
+        close();
+        return;
+      }
+      // Close when tapping the backdrop (the panel itself, not inner content)
+      if (t === offcanvas) {
+        close();
+        return;
+      }
+      // Follow links: close drawer after navigation intent
+      const link = t.closest("a");
+      if (link && !link.getAttribute("href")?.startsWith("#")) {
+        close();
+      }
+    };
+    offcanvas?.addEventListener("click", onOffcanvasClick);
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && offcanvas?.classList.contains("is-open")) {
+        close();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    // Mobile offcanvas accordion: Blocksy uses `.dropdown-active` on parents
+    const mobileToggles = Array.from(
+      document.querySelectorAll<HTMLElement>(".ct-toggle-dropdown-mobile"),
+    );
+
+    const onMobileToggle = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const btn = e.currentTarget as HTMLElement;
+      const item = btn.closest<HTMLElement>(".menu-item-has-children, [class*='children']");
+      if (!item) return;
+      const willOpen = !item.classList.contains("dropdown-active");
+      // Accordion: close siblings at the same level
+      const parentList = item.parentElement;
+      if (parentList) {
+        Array.from(parentList.children).forEach((sib) => {
+          if (!(sib instanceof HTMLElement) || sib === item) return;
+          if (sib.classList.contains("menu-item-has-children") || /children/.test(sib.className)) {
+            sib.classList.remove("dropdown-active", "ct-active");
+            sib
+              .querySelectorAll<HTMLElement>(":scope > .ct-sub-menu-parent .ct-toggle-dropdown-mobile, :scope > a + .ct-toggle-dropdown-mobile")
+              .forEach((b) => b.setAttribute("aria-expanded", "false"));
+          }
+        });
+      }
+      item.classList.toggle("dropdown-active", willOpen);
+      item.classList.toggle("ct-active", willOpen);
+      btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    };
+
+    mobileToggles.forEach((btn) => {
+      btn.setAttribute("aria-expanded", "false");
+      btn.addEventListener("click", onMobileToggle);
     });
 
     // Blocksy desktop dropdowns expect `.ct-active` on parents
@@ -45,7 +104,7 @@ export function WpInteractions() {
       document.querySelectorAll<HTMLElement>(
         ".ct-header .menu > .menu-item-has-children, .ct-header .menu .menu-item-has-children",
       ),
-    );
+    ).filter((el) => !el.closest("#offcanvas"));
 
     const activate = (el: HTMLElement) => {
       el.classList.add("ct-active");
@@ -69,21 +128,28 @@ export function WpInteractions() {
       el.addEventListener("mouseenter", onEnter);
       el.addEventListener("mouseleave", onLeave);
       el.addEventListener("focusin", onEnter);
-      el.addEventListener("focusout", (e) => {
-        if (!el.contains((e as FocusEvent).relatedTarget as Node | null)) {
+      const onFocusOut = (e: FocusEvent) => {
+        if (!el.contains(e.relatedTarget as Node | null)) {
           deactivate(el);
         }
-      });
+      };
+      el.addEventListener("focusout", onFocusOut);
       cleanups.push(() => {
         el.removeEventListener("mouseenter", onEnter);
         el.removeEventListener("mouseleave", onLeave);
         el.removeEventListener("focusin", onEnter);
+        el.removeEventListener("focusout", onFocusOut);
       });
     });
 
     return () => {
-      openers.forEach((el) => el.removeEventListener("click", onClick));
+      openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
+      offcanvas?.removeEventListener("click", onOffcanvasClick);
+      document.removeEventListener("keydown", onKeyDown);
+      mobileToggles.forEach((btn) => btn.removeEventListener("click", onMobileToggle));
       cleanups.forEach((fn) => fn());
+      document.documentElement.classList.remove("ct-panel-open");
+      document.body.style.overflow = "";
     };
   }, []);
 
