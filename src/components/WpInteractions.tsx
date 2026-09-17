@@ -713,8 +713,10 @@ export function WpInteractions() {
       root.classList.add("renacon-projects-gallery-ix");
       root.setAttribute("data-renacon-gallery-ix", "projects-v1");
       document.body.classList.add("renacon-page-projects-2");
-      hydrateWpImages(root);
-      normalizeSimplyGalleries(root);
+      document.querySelector("main.site-main")?.classList.add("renacon-projects-gallery-ix");
+      hydrateWpImages(document.querySelector("main.site-main") || root);
+      // Prefer main — mirrored markup previously ejected later galleries from <article>
+      normalizeSimplyGalleries(document.querySelector("main.site-main") || root);
       clearGalleryMotionLocks(root);
       initPageInteractions(
         root,
@@ -751,8 +753,9 @@ export function WpInteractions() {
       root.classList.add("renacon-media-ix");
       root.setAttribute("data-renacon-gallery-ix", "media-v1");
       document.body.classList.add("renacon-page-media");
-      hydrateWpImages(root);
-      normalizeSimplyGalleries(root);
+      document.querySelector("main.site-main")?.classList.add("renacon-media-ix");
+      hydrateWpImages(document.querySelector("main.site-main") || root);
+      normalizeSimplyGalleries(document.querySelector("main.site-main") || root);
       clearGalleryMotionLocks(root);
       cleanups.push(initQubelyTabs(root));
       initPageInteractions(
