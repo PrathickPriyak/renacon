@@ -341,12 +341,17 @@ function wrapHomeBands(
     wrap.className = `renacon-home-band renacon-home-band--${band.name}`;
     wrap.setAttribute("data-renacon-band", band.name);
     wrap.setAttribute("data-renacon-home", "bg-only");
-    // Force vertical page flow — prevent mirror CSS from flexing bands sideways
+    // Force vertical page flow + full-bleed breakout (CSS also targets these)
     wrap.style.display = "block";
-    wrap.style.width = "100%";
-    wrap.style.maxWidth = "none";
+    wrap.style.width = "100vw";
+    wrap.style.maxWidth = "100vw";
+    wrap.style.marginLeft = "calc(50% - 50vw)";
+    wrap.style.marginRight = "calc(50% - 50vw)";
     wrap.style.clear = "both";
     wrap.style.float = "none";
+    if (band.name === "hero") {
+      wrap.style.padding = "0";
+    }
     first.before(wrap);
     band.els.forEach((node) => wrap.appendChild(node));
     wrappers.push(wrap);
@@ -671,8 +676,31 @@ export function WpInteractions() {
       );
     }
 
-    // Projects gallery — lightbox viewer (never navigate to missing WP child pages)
+    // Projects / media gallery — lightbox viewer (never navigate to missing WP child pages)
     cleanups.push(initGalleryLightbox());
+
+    // Media page — Qubely tab switcher (plugin JS not shipped)
+    const mediaRoot =
+      document.getElementById("post-1067") ||
+      document.querySelector<HTMLElement>(".page-id-1067, article.post-1067");
+    if (mediaRoot || /\/media\/?$/.test(window.location.pathname)) {
+      const root =
+        mediaRoot ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      root.classList.add("renacon-media-ix");
+      hydrateWpImages(root);
+      cleanups.push(initQubelyTabs(root));
+    }
+
+    // Projects-2 gallery page marker for spacing/overflow CSS
+    const projectsGalleryRoot =
+      document.getElementById("post-1192") ||
+      document.querySelector<HTMLElement>(".page-id-1192, article.post-1192");
+    if (projectsGalleryRoot || /\/projects-2\/?$/.test(window.location.pathname)) {
+      (projectsGalleryRoot || document.body).classList.add("renacon-projects-gallery-ix");
+      hydrateWpImages(projectsGalleryRoot || document.body);
+    }
 
     // Contact page — interactive form polish marker
     const contactRoot =
@@ -771,6 +799,71 @@ function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fal
     ? `<div class="wp-block-getwid-image-hotspot__tooltip-content">${content}</div>`
     : "";
   return `<div class="wp-block-getwid-image-hotspot__tooltip"><div class="wp-block-getwid-image-hotspot__tooltip-title">${titleHtml}</div>${contentHtml}<a class="renacon-hotspot-cta" href="${href}"${target}>View product</a></div>`;
+}
+
+/** Qubely tabs (media page Recent Events / Media) — plugin JS not shipped. */
+function initQubelyTabs(scope: ParentNode = document): () => void {
+  const roots = Array.from(
+    scope.querySelectorAll<HTMLElement>(".qubely-block-tab"),
+  );
+  if (!roots.length) return () => undefined;
+
+  const cleanups: Array<() => void> = [];
+
+  roots.forEach((root) => {
+    if (root.dataset.renaconQubelyReady === "1") return;
+    root.dataset.renaconQubelyReady = "1";
+
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>(".qubely-tab-nav > .qubely-tab-item"),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>(
+        ":scope > .qubely-tab-body > .qubely-tab-content, .qubely-tab-body > .qubely-tab-content",
+      ),
+    );
+    if (!items.length || !panels.length) return;
+
+    const activate = (index: number) => {
+      items.forEach((item, i) => {
+        item.classList.toggle("qubely-active", i === index);
+        item.setAttribute("aria-selected", i === index ? "true" : "false");
+      });
+      panels.forEach((panel, i) => {
+        const on = i === index;
+        panel.classList.toggle("qubely-active", on);
+        panel.style.display = on ? "block" : "none";
+      });
+    };
+
+    items.forEach((item, index) => {
+      item.setAttribute("role", "tab");
+      item.tabIndex = 0;
+      const onActivate = (e: Event) => {
+        e.preventDefault();
+        activate(index);
+      };
+      item.addEventListener("click", onActivate);
+      item.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          activate(index);
+        }
+      });
+      cleanups.push(() => item.removeEventListener("click", onActivate));
+    });
+
+    activate(
+      (() => {
+        const initial = items.findIndex((el) =>
+          el.classList.contains("qubely-active"),
+        );
+        return initial >= 0 ? initial : 0;
+      })(),
+    );
+  });
+
+  return () => cleanups.forEach((fn) => fn());
 }
 
 /** Editor Plus tabs (contact forms) — WP plugin JS is not shipped. */
