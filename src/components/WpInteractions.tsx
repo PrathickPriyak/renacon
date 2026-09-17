@@ -540,9 +540,16 @@ export function WpInteractions() {
     const header =
       document.getElementById("header") ||
       document.querySelector<HTMLElement>(".ct-header");
+    const stickyNodes = Array.from(
+      document.querySelectorAll<HTMLElement>("#header [data-sticky]"),
+    );
     const onScroll = () => {
       if (!header) return;
-      header.classList.toggle("renacon-header-scrolled", window.scrollY > 8);
+      const scrolled = window.scrollY > 8;
+      header.classList.toggle("renacon-header-scrolled", scrolled);
+      stickyNodes.forEach((el) => {
+        el.setAttribute("data-sticky", scrolled ? "yes" : "shrink");
+      });
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });

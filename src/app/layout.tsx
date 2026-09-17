@@ -3,7 +3,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 
 const roboto = Roboto({
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -35,10 +35,22 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-products-spacing-no-img-hover-202609171015"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-header-in-202609171120"
+        />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link
+          rel="stylesheet"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-header-in-202609171120"
         />
       </head>
-      <body className={`renacon-mirror ${roboto.className}`}>{children}</body>
+      <body
+        className={`renacon-mirror ${roboto.className}`}
+        data-header="type-1:sticky"
+        data-prefix="single_page"
+        data-footer="type-1"
+      >
+        {children}
+      </body>
     </html>
   );
 }
