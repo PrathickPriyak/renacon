@@ -162,15 +162,19 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
       tokenInput.value = "";
       form.dataset.otpVerified = "0";
 
-      if (json.devOtp) {
-        otpInput.value = json.devOtp;
+      if (json.demoMode && json.devOtp) {
         setStatus(
           form,
-          `Demo mode: OTP is ${json.devOtp}. Enter it below and click Verify OTP.`,
+          `Demo mode only: OTP is ${json.devOtp}. Configure MSG91/Twilio for real SMS.`,
           "info",
         );
       } else {
-        setStatus(form, "OTP sent. Enter the 6-digit code and verify.", "ok");
+        setStatus(
+          form,
+          "OTP sent to your mobile number. Enter the SMS code and click Verify OTP.",
+          "ok",
+        );
+        otpInput.value = "";
       }
       otpInput.focus();
     } catch (err) {

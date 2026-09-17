@@ -38,17 +38,19 @@ export function LeadForm({
         ok?: boolean;
         error?: string;
         devOtp?: string;
+        demoMode?: boolean;
+        message?: string;
       };
       if (!res.ok || !json.ok) throw new Error(json.error || "Unable to send OTP");
       setOtpSent(true);
       setVerificationToken("");
-      if (json.devOtp) {
-        setOtp(json.devOtp);
+      setOtp("");
+      if (json.demoMode && json.devOtp) {
         setStatus("ok");
-        setMessage(`Demo mode: OTP is ${json.devOtp}. Click Verify OTP.`);
+        setMessage(`Demo mode only: OTP is ${json.devOtp}. Add SMS keys for real SMS.`);
       } else {
         setStatus("ok");
-        setMessage("OTP sent. Enter the code and verify.");
+        setMessage(json.message || "OTP sent to your mobile. Enter the SMS code and verify.");
       }
     } catch (err) {
       setStatus("error");
