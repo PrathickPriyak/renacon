@@ -24,14 +24,14 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-products-spacing-no-img-hover-202609171015`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-header-in-202609171120`}
         />
       ) : null}
       {/* Hard cache-bust site overrides on calculator + product pages */}
       {slug === "calculator" || product ? (
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-products-spacing-no-img-hover-202609171015"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-header-in-202609171120"
         />
       ) : null}
       <WpMain html={html} />
