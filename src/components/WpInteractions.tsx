@@ -655,7 +655,7 @@ export function WpInteractions() {
         document.querySelector<HTMLElement>("main.site-main") ||
         document.body;
       root.classList.add("renacon-our-products-ix");
-      root.setAttribute("data-renacon-products-ix", "products-hub-v2");
+      root.setAttribute("data-renacon-products-ix", "products-hub-v3");
       document.body.classList.add("renacon-page-our-products");
       hydrateWpImages(root);
 
