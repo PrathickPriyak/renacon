@@ -147,11 +147,13 @@ body.renacon-page-about-us,
   --stk-column-margin: 0px;
 }
 
-@media screen and (max-width: 689px) {
+@media screen and (max-width: 999px) {
   #post-4487 .ugb-a10dec0-wrapper {
     padding: 40px 23.3333px !important;
   }
+}
 
+@media screen and (max-width: 689px) {
   #post-4487 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
   #post-4487 .entry-content > .wp-block-columns:not(.alignfull),
   #post-4487 .entry-content > .stk-block-columns:not(.alignfull),
@@ -175,4 +177,4 @@ body.renacon-page-about-us,
   }
 }
 
-/* CACHE_BUST_MARKER about-us-exact-202609171400 */
+/* CACHE_BUST_MARKER about-us-exact-202609171430 */
