@@ -556,10 +556,9 @@ export function FormBridge() {
         clearFieldStates();
         const responseMsg = form.querySelector<HTMLElement>(".forminator-response-message");
         if (responseMsg) {
-          responseMsg.classList.remove("forminator-error");
-          responseMsg.classList.add("forminator-success");
-          responseMsg.setAttribute("aria-hidden", "false");
-          responseMsg.textContent = "Thank you. Your request has been received.";
+          responseMsg.classList.remove("forminator-error", "forminator-success");
+          responseMsg.setAttribute("aria-hidden", "true");
+          responseMsg.textContent = "";
         }
       } catch (err) {
         setStatus(
