@@ -220,10 +220,10 @@ body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
 #post-4487.renacon-ix-v2 .stk-7f8fab2 .stk-block-heading__text,
 #post-4487.renacon-ix-v2 .wp-block-media-text .stk-block-heading__text{
   font-size:83px !important;
-  line-height:1.2 !important;
+  line-height:1.5 !important;
   font-weight:700 !important;
   color:#01953f !important;
-  text-transform:uppercase !important;
+  text-transform:none !important;
   letter-spacing:normal !important;
   margin:0 !important;
   display:block !important;
@@ -280,8 +280,8 @@ body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
   font-size:30px !important;
   line-height:45px !important;
   font-weight:700 !important;
-  color:#000000 !important;
-  text-transform:uppercase !important;
+  color:#1a1e21 !important;
+  text-transform:none !important;
   letter-spacing:normal !important;
   text-align:center !important;
   margin-top:0 !important;
@@ -376,9 +376,9 @@ body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
   border-inline-start:none !important;
   box-shadow:none !important;
   transform:none !important;
-  padding:4em 0 !important;
+  padding:70px !important;
   text-align:center;
-  margin:0 0 1em;
+  margin:0 !important;
   overflow-wrap:break-word;
 }
 #post-4487.renacon-ix-v2 .wp-block-pullquote:hover{
@@ -467,8 +467,26 @@ body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
 }
 
 /* Vision / Mission / We Serve — UGB + Stackable gray cards */
+#post-4487 .ugb-a10dec0{
+  display:flex !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+#post-4487 .ugb-a10dec0 .ugb-inner-block,
+#post-4487 .ugb-a10dec0 .ugb-block-content,
+#post-4487 .ugb-a10dec0 .ugb-container__side{
+  display:flex !important;
+  width:100%;
+}
+#post-4487 .ugb-a10dec0 .stk-b827d7a{
+  margin-bottom:0 !important;
+}
 #post-4487 .ugb-a10dec0 .ugb-container__wrapper,
 #post-4487 .ugb-a10dec0-wrapper{
+  display:flex !important;
+  background-color:#ffffff !important;
+  border-radius:12px !important;
+  box-shadow:0 5px 5px 0 rgba(18,63,82,0.035), 0 0 0 1px rgba(176,181,193,0.2) !important;
   padding-top:60px !important;
   padding-right:35px !important;
   padding-bottom:60px !important;
@@ -554,4 +572,4 @@ body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
   }
 }
 
-/* CACHE_BUST_MARKER about-us-recreation-202609171250 */
+/* CACHE_BUST_MARKER about-us-recreation-202609171305 */
