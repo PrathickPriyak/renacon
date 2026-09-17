@@ -4217,24 +4217,26 @@ button[type="submit"]:hover {
   }
 }
 
-/* ---------- Homepage: highlights strip (3 brand claims) ---------- */
-/* Also match inside .renacon-home-band (JS wraps blocks; > child selectors break) */
+/* ---------- Homepage: highlights strip (3 brand claims) — match renacon.in ---------- */
+/* site-overrides owns the final !important rules; keep this aligned as a fallback. */
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
 .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
   display: flex !important;
   flex-direction: row !important;
-  flex-wrap: wrap !important;
-  max-width: min(1100px, 100%) !important;
-  width: 100% !important;
+  flex-wrap: nowrap !important;
+  max-width: 1290px !important;
+  width: min(1290px, calc(100% - 2rem)) !important;
   margin-inline: auto !important;
-  margin-block: 0.35rem 0.75rem !important;
-  padding: 1.15rem 1.35rem !important;
-  gap: 1.25rem 1.75rem !important;
+  margin-block: 0 !important;
+  padding: 5% !important;
+  gap: 0 !important;
   align-items: stretch !important;
-  background: transparent !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(rgba(204, 204, 204, 0.19), rgba(204, 204, 204, 0.19)) !important;
   border: none !important;
-  box-sizing: border-box;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
@@ -4242,53 +4244,56 @@ button[type="submit"]:hover {
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
   display: flex !important;
   flex-direction: column !important;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: center;
-  gap: 0.4rem;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
   flex: 1 1 0 !important;
-  min-width: 0;
-  max-width: 100%;
+  min-width: 0 !important;
+  max-width: none !important;
   float: none !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer,
 .renacon-home-band--highlights .wp-block-spacer,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer {
-  display: none !important;
+  display: block !important;
+  height: 10px !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
 .renacon-home-band--highlights .wp-block-image,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image {
-  margin: 0 !important;
+  margin: 0 auto !important;
   float: none !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
 .renacon-home-band--highlights .wp-block-image img,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
-  width: 56px !important;
-  height: 56px !important;
-  object-fit: contain;
-  display: block;
-  margin-inline: auto;
+  width: 64px !important;
+  height: 64px !important;
+  max-width: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-inline: auto !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p,
 .renacon-home-band--highlights p,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p {
+  width: 100% !important;
   margin: 0 !important;
-  font-size: 0.92rem;
-  line-height: 1.35;
-  color: #1a1e21;
+  text-align: center !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p strong,
 .renacon-home-band--highlights p strong,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p strong {
-  font-weight: 700;
-  color: #123528;
+  font-weight: 700 !important;
+  color: #000000 !important;
 }
 
 @media (max-width: 689px) {
@@ -4296,14 +4301,14 @@ button[type="submit"]:hover {
   .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
   #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
     flex-direction: column !important;
-    padding: 1rem 0.85rem !important;
-    gap: 1.1rem !important;
+    flex-wrap: wrap !important;
+    gap: 1.25rem !important;
   }
 
   .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
   .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
   #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
-    flex-basis: 100% !important;
+    flex: 1 1 100% !important;
     max-width: 100% !important;
     width: 100% !important;
   }

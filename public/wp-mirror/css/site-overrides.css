@@ -1734,64 +1734,112 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
    Restore Editor Plus + Stackable look. No atmosphere bands, mint sections,
    or forced highlight chrome. home.css injects live page styles. */
 
-/* Undo prior !important highlight strip redesign (also present in renacon-all) */
+/* Highlights strip — match renacon.in exactly (equal 64px icons, eplus gray wash) */
+/* Prior `width:auto !important` blew 128px source icons past their inline 64px size. */
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
 .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
 #post-2306 .renacon-home-band--highlights .wp-block-columns {
   display: flex !important;
   flex-direction: row !important;
-  flex-wrap: wrap !important;
-  max-width: min(1290px, calc(100% - 2rem)) !important;
-  width: 100% !important;
+  flex-wrap: nowrap !important;
+  max-width: 1290px !important;
+  width: min(1290px, calc(100% - 2rem)) !important;
   margin-inline: auto !important;
   margin-block: 0 !important;
-  /* Exact Editor Plus rule from renacon.in */
+  /* Exact Editor Plus rule from renacon.in — ~#f5f5f5 wash, not full-bleed */
   background-color: transparent !important;
   background-image: linear-gradient(rgba(204, 204, 204, 0.19), rgba(204, 204, 204, 0.19)) !important;
   padding: 5% !important;
-  gap: unset !important;
+  gap: 0 !important;
   align-items: stretch !important;
-  justify-content: unset !important;
+  justify-content: space-between !important;
   border: none !important;
+  border-radius: 0 !important;
   box-sizing: border-box !important;
 }
 
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
 .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
-  /* Let core/WP column flex behave; keep content centered like live */
-  text-align: center;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0 !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
   float: none !important;
+  min-width: 0 !important;
   max-width: none !important;
+  width: auto !important;
+  box-sizing: border-box !important;
 }
 
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer,
-.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer {
-  /* Spacers exist on live; do not hide */
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer {
+  /* 10px spacers between icon and copy — keep like live */
   display: block !important;
+  height: 10px !important;
+  min-height: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image {
+  margin: 0 auto !important;
+  float: none !important;
+  width: 64px !important;
+  max-width: 64px !important;
 }
 
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
-.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
-  /* Live icons are native size (64x64 assets); do not force crop/filter */
-  width: auto !important;
-  height: auto !important;
-  max-width: 100%;
-  object-fit: contain;
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
+  /* All three icons identical 64×64 — live renacon.in size */
+  width: 64px !important;
+  height: 64px !important;
+  max-width: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-inline: auto !important;
   filter: none !important;
 }
 
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p,
-.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p {
-  /* eplus-styles-uid-17de4e sets 15px/#000 on body copy via home.css */
-  margin-block: 0.35em !important;
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e p {
+  width: 100% !important;
+  margin: 0 !important;
+  text-align: center !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p strong,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p strong,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e p strong {
+  font-weight: 700 !important;
+  color: #000000 !important;
 }
 
 @media (max-width: 689px) {
   #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
-  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
+  .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e {
     flex-direction: column !important;
+    flex-wrap: wrap !important;
+    gap: 1.25rem !important;
+  }
+
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
