@@ -6055,3 +6055,34 @@ article.post.type-post .entry-content img {
   height: 100%;
   object-fit: cover;
 }
+
+/* Editor Plus tabs (contact) — show active panel/forms without WP plugin JS */
+.renacon-ep-tabs .ep_tabs_header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.renacon-ep-tabs .ep_label_main {
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.renacon-ep-tabs .ep_label_main.ep_active_tab,
+.renacon-ep-tabs .ep_active_tab .ep_label {
+  color: #00984a;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper {
+  display: none;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper.ep_active_tab {
+  display: block !important;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper.ep_active_tab form {
+  display: block !important;
+}

@@ -685,6 +685,7 @@ export function WpInteractions() {
         document.body;
       root.classList.add("renacon-contact-ix");
       hydrateWpImages(root);
+      cleanups.push(initEditorPlusTabs(root));
       initPageInteractions(
         root,
         {
@@ -695,6 +696,7 @@ export function WpInteractions() {
             ".entry-content > h1",
             ".entry-content > h2",
             ".wp-block-image",
+            ".ep_tabs_wrapper",
           ].join(", "),
           heroSelectors: [
             ".entry-content > .wp-block-image:first-child",
@@ -769,6 +771,62 @@ function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fal
     ? `<div class="wp-block-getwid-image-hotspot__tooltip-content">${content}</div>`
     : "";
   return `<div class="wp-block-getwid-image-hotspot__tooltip"><div class="wp-block-getwid-image-hotspot__tooltip-title">${titleHtml}</div>${contentHtml}<a class="renacon-hotspot-cta" href="${href}"${target}>View product</a></div>`;
+}
+
+/** Editor Plus tabs (contact forms) — WP plugin JS is not shipped. */
+function initEditorPlusTabs(scope: ParentNode = document): () => void {
+  const roots = Array.from(
+    scope.querySelectorAll<HTMLElement>(".ep_tabs_root, .wp-block-ep-tabs .ep_tabs_root"),
+  );
+  if (!roots.length) return () => undefined;
+
+  const cleanups: Array<() => void> = [];
+
+  roots.forEach((root) => {
+    if (root.dataset.renaconTabsReady === "1") return;
+    root.dataset.renaconTabsReady = "1";
+    root.classList.add("renacon-ep-tabs");
+
+    const labels = Array.from(
+      root.querySelectorAll<HTMLAnchorElement>(".ep_tabs_header > a.ep_label_main"),
+    );
+    const panels = Array.from(
+      root.querySelectorAll<HTMLElement>(":scope > .ep_tabs_wrapper > .ep_tab_item_wrapper"),
+    );
+    if (!labels.length || !panels.length) return;
+
+    const activate = (index: number) => {
+      labels.forEach((label, i) => {
+        label.classList.toggle("ep_active_tab", i === index);
+        label.setAttribute("aria-selected", i === index ? "true" : "false");
+      });
+      panels.forEach((panel, i) => {
+        const on = i === index;
+        panel.classList.toggle("ep_active_tab", on);
+        panel.style.display = on ? "block" : "none";
+        // Forms inside inactive tabs may be display:none from theme CSS
+        panel.querySelectorAll<HTMLElement>("form").forEach((form) => {
+          form.style.display = on ? "" : "none";
+        });
+      });
+    };
+
+    labels.forEach((label, index) => {
+      label.setAttribute("role", "tab");
+      label.setAttribute("href", label.getAttribute("href") || `#tab-${index}`);
+      const onClick = (e: Event) => {
+        e.preventDefault();
+        activate(index);
+      };
+      label.addEventListener("click", onClick);
+      cleanups.push(() => label.removeEventListener("click", onClick));
+    });
+
+    panels.forEach((panel) => panel.setAttribute("role", "tabpanel"));
+    activate(0);
+  });
+
+  return () => cleanups.forEach((fn) => fn());
 }
 
 /** Pick largest URL from an img srcset, falling back to src. */
