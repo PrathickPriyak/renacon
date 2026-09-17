@@ -135,7 +135,7 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
   demoBanner.hidden = true;
   demoBanner.setAttribute("role", "status");
 
-  otpWrap.append(sendBtn, otpLabel, otpInput, verifyBtn, tokenInput, challengeInput, demoBanner);
+  otpWrap.append(sendBtn, demoBanner, otpLabel, otpInput, verifyBtn, tokenInput, challengeInput);
   phoneContainer.insertAdjacentElement("afterend", otpWrap);
 
   // Style submit button text
