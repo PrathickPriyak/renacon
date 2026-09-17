@@ -102,16 +102,13 @@ body:has(#post-2306) .wp-block-getwid-section__background-video,
   z-index: 3 !important;
 }
 
-/* ---- WP custom font sizes (missing from mirrored global-styles; tokens force h1 to 30px) ---- */
+/* ---- Headings: live .in computes h1 at 30px (Blocksy), product h3 at 25px ---- */
+#post-2306 h1,
 #post-2306 h1.has-45-font-size,
-#post-2306 .has-45-font-size {
-  font-size: 45px !important;
-  line-height: 1.5 !important;
-}
-
 #post-2306 h1.has-46-font-size,
+#post-2306 .has-45-font-size,
 #post-2306 .has-46-font-size {
-  font-size: 46px !important;
+  font-size: 30px !important;
   line-height: 1.5 !important;
 }
 
@@ -119,17 +116,19 @@ body:has(#post-2306) .wp-block-getwid-section__background-video,
   font-size: 20px !important;
 }
 
-#post-2306 h3,
-#post-2306 h3.wp-block-heading,
 #post-2306 h3.eplus-styles-uid-71fa75,
 #post-2306 h3.eplus-styles-uid-341832,
-#post-2306 h4,
-#post-2306 h4.wp-block-heading,
-#post-2306 .wp-block-getwid-image-box h3,
-#post-2306 .wp-block-getwid-image-box h4 {
+#post-2306 .wp-block-getwid-image-box h3 {
   font-size: 25px !important;
   line-height: 1.5 !important;
   text-transform: uppercase !important;
+  color: #000000 !important;
+}
+
+#post-2306 .wp-block-getwid-image-box h4 {
+  font-size: 25px !important;
+  line-height: 1.5 !important;
+  text-transform: none !important;
   color: #000000 !important;
 }
 
@@ -138,36 +137,85 @@ body:has(#post-2306) .wp-block-getwid-section__background-video,
   color: #000000 !important;
 }
 
-/* ---- Product / highlights containers: Blocksy 1290 / 90vw ---- */
+#post-2306 .wp-block-getwid-image-box.has-image-left {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+@media (max-width: 767.98px) {
+  #post-2306 .wp-block-getwid-image-box.has-mobile-layout-column {
+    flex-direction: column !important;
+  }
+}
+
+#post-2306 .wp-block-getwid-image-box__image,
+#post-2306 .has-image-left .wp-block-getwid-image-box__image {
+  object-fit: fill !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
 #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
 #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+  gap: 1.5em !important;
+}
+
+@media (max-width: 999px) {
+  #post-2306 .entry-content > .stk-block-columns:not(.alignfull),
+  #post-2306 .stk-d11fa5b,
+  #post-2306 .stk-ee3acf8,
+  #post-2306 .stk-70b1ef1,
+  #post-2306 .entry-content > .wp-block-columns:not(.alignfull) {
+    padding-inline: 0 !important;
+  }
+}
+
+/* ---- Product / highlights / services containers: Blocksy 1290 / 90vw ---- */
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+#post-2306 .stk-ee3acf8,
+#post-2306 .stk-d11fa5b,
+#post-2306 .stk-70b1ef1 {
   width: min(1290px, 90vw) !important;
   max-width: min(1290px, 90vw) !important;
   margin-inline: auto !important;
 }
 
-@media (max-width: 689.98px) {
-  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
-  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
-  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
-    width: min(1290px, 88vw) !important;
-    max-width: min(1290px, 88vw) !important;
-  }
-
-  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+@media (max-width: 781.98px) {
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
     flex-wrap: wrap !important;
+    flex-direction: column !important;
   }
 
-  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
     flex: 1 1 100% !important;
     max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
-/* ---- Getwid hotspot: full-bleed black pulsing dots like .in (no plus icon) ---- */
+@media (max-width: 689.98px) {
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+  #post-2306 .stk-ee3acf8,
+  #post-2306 .stk-d11fa5b,
+  #post-2306 .stk-70b1ef1 {
+    width: min(1290px, 88vw) !important;
+    max-width: min(1290px, 88vw) !important;
+  }
+}
+
+/* ---- Getwid hotspot: 1280px centered image, black 24px pulsing dots ---- */
 #post-2306 .wp-block-getwid-image-hotspot.alignfull,
 #post-2306 .wp-block-getwid-image-hotspot {
+  display: flex !important;
+  justify-content: center !important;
   width: 100% !important;
   max-width: none !important;
   margin-inline: 0 !important;
@@ -175,22 +223,24 @@ body:has(#post-2306) .wp-block-getwid-section__background-video,
 
 #post-2306 .wp-block-getwid-image-hotspot__wrapper {
   width: 100% !important;
-  max-width: none !important;
+  max-width: 1280px !important;
 }
 
 #post-2306 .wp-block-getwid-image-hotspot__image {
   width: 100% !important;
+  max-width: 1280px !important;
   height: auto !important;
   display: block !important;
 }
 
 #post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot,
 #post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot.renacon-hotspot-dot {
-  width: auto !important;
-  height: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
   padding: 8px !important;
+  box-sizing: border-box !important;
   background-color: #000000 !important;
   background: #000000 !important;
   border: none !important;
@@ -269,4 +319,4 @@ body:has(#post-2306) .renacon-side-item.calculator:hover {
   color: #ffffff !important;
 }
 
-/* CACHE_BUST_MARKER homepage-recreation-202609171200 */
+/* CACHE_BUST_MARKER homepage-recreation-202609171245 */
