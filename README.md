@@ -31,9 +31,7 @@ export VERCEL_TOKEN=…   # session only — never commit
 
 ## Brochure downloads
 
-Brochure forms collect name, phone, and email, then start the download directly — **no OTP step**.
-
-OTP API routes (`/api/otp/send`, `/api/otp/verify`) remain available but unused by the UI. Copy `env.sms.example` → `.env.local` only if you re-enable SMS verification later.
+Brochure forms collect name, phone, and email, then start the download directly — **no OTP**.
 
 ## Notes
 

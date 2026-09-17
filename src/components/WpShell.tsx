@@ -22,5 +22,6 @@ export function WpShell({ children }: { children: React.ReactNode }) {
 }
 
 export function WpMain({ html }: { html: string }) {
-  return <div dangerouslySetInnerHTML={{ __html: html }} />;
+  // Mirrored WP HTML can differ after browser parse / client plugins → avoid hydration #418 noise
+  return <div suppressHydrationWarning dangerouslySetInnerHTML={{ __html: html }} />;
 }

@@ -151,7 +151,7 @@ function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
   let status = form.querySelector<HTMLParagraphElement>(".renacon-form-status, .renacon-otp-status");
   if (!status) {
     status = document.createElement("p");
-    status.className = "renacon-form-status renacon-otp-status";
+    status.className = "renacon-form-status";
     status.setAttribute("aria-live", "polite");
     const submitContainer =
       form.querySelector(
@@ -167,6 +167,8 @@ function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
     } else {
       form.appendChild(status);
     }
+  } else {
+    status.className = "renacon-form-status";
   }
   return status;
 }
@@ -285,6 +287,17 @@ export function FormBridge() {
           /\/careers\/?$/.test(window.location.pathname)
         ) {
           form.classList.add("renacon-contact-form");
+          // Forminator mirrors often ship with inline display:none until WP JS runs
+          if (
+            /\/contact-us\/?$/.test(window.location.pathname) &&
+            form.className.includes("forminator")
+          ) {
+            const panel = form.closest<HTMLElement>(".ep_tab_item_wrapper");
+            const panelActive = !panel || panel.classList.contains("ep_active_tab");
+            if (panelActive) {
+              form.style.setProperty("display", "block", "important");
+            }
+          }
           form.querySelectorAll<HTMLElement>(
             "input:not([type='file']), textarea, select, .forminator-input, .forminator-textarea",
           ).forEach((el) => {
