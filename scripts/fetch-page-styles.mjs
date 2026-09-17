@@ -12,8 +12,11 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const outDir = join(root, "content/page-styles");
+const publicDir = join(root, "public/wp-mirror/css/page-styles");
 
 const PRODUCTS = [
+  "home",
+  "about-us",
   "our-products",
   "cement-mortar",
   "rapid-wall-installation",
@@ -46,6 +49,8 @@ function extractStyles(html) {
     if (!body) continue;
     const keep =
       attrs.includes("stk-block-styles") ||
+      attrs.includes("editorplus-generated-styles-header") ||
+      attrs.includes("ugb-style-css-inline-css") ||
       (body.includes("background-image") &&
         (body.includes("wp-content") ||
           body.includes("stk-") ||
@@ -65,10 +70,11 @@ function normalizeCss(css) {
 }
 
 mkdirSync(outDir, { recursive: true });
+mkdirSync(publicDir, { recursive: true });
 const manifest = {};
 
 for (const slug of PRODUCTS) {
-  const url = `https://renacon.in/${slug}/`;
+  const url = slug === "home" ? "https://renacon.in/" : `https://renacon.in/${slug}/`;
   process.stdout.write(`Fetching ${url} … `);
   try {
     const res = await fetch(url, {
@@ -78,6 +84,7 @@ for (const slug of PRODUCTS) {
     const html = await res.text();
     const css = normalizeCss(extractStyles(html));
     writeFileSync(join(outDir, `${slug}.css`), css ? `${css}\n` : "", "utf8");
+    writeFileSync(join(publicDir, `${slug}.css`), css ? `${css}\n` : "", "utf8");
     const bgs = [...css.matchAll(/background-image\s*:\s*url\(([^)]+)\)/g)].map(
       (m) => m[1].replace(/['"]/g, ""),
     );
