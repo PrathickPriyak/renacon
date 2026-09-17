@@ -135,6 +135,114 @@ function initPageInteractions(
   }
 }
 
+function classifyHomeChild(el: HTMLElement): string | null {
+  if (
+    el.classList.contains("stk-52d755f") ||
+    el.querySelector(".wp-block-getwid-section")
+  ) {
+    return "hero";
+  }
+  if (el.classList.contains("eplus-styles-uid-2b8c9e")) {
+    return "highlights";
+  }
+  if (
+    el.classList.contains("stk-d11fa5b") ||
+    el.classList.contains("eplus-styles-uid-afaa2e") ||
+    el.classList.contains("eplus-styles-uid-5b3f17") ||
+    (el.classList.contains("wp-block-image") &&
+      !!el.querySelector('img[src*="brickwall"]')) ||
+    (el.classList.contains("wp-block-group") &&
+      el.classList.contains("alignfull") &&
+      !el.textContent?.trim())
+  ) {
+    return "products";
+  }
+  if (el.classList.contains("stk-ee3acf8")) {
+    return "services";
+  }
+  if (el.classList.contains("wp-block-getwid-image-hotspot")) {
+    return "hotspot";
+  }
+  if (
+    el.classList.contains("stk-70b1ef1") ||
+    (el.matches("h1.wp-block-heading") &&
+      /project/i.test(el.textContent || "")) ||
+    (el.classList.contains("wp-block-image") &&
+      !!el.querySelector('img[src*="design-1"]')) ||
+    (el.matches("p") && /sustainable projects/i.test(el.textContent || ""))
+  ) {
+    return "projects";
+  }
+  return null;
+}
+
+/** Groups homepage blocks into full-bleed atmosphere bands (DOM-only). */
+function wrapHomeBands(
+  root: HTMLElement,
+  cleanups: Array<() => void>,
+): void {
+  const content = root.querySelector<HTMLElement>(".entry-content");
+  if (!content || content.dataset.renaconBands === "1") return;
+  content.dataset.renaconBands = "1";
+
+  const children = Array.from(content.children).filter(
+    (n): n is HTMLElement => n instanceof HTMLElement,
+  );
+
+  interface HomeBand {
+    name: string;
+    els: HTMLElement[];
+  }
+
+  const bands: HomeBand[] = [];
+  let activeBand: HomeBand | null = null;
+
+  for (const el of children) {
+    const kind = classifyHomeChild(el);
+    if (kind) {
+      if (!activeBand || activeBand.name !== kind) {
+        if (activeBand && activeBand.els.length > 0) {
+          bands.push(activeBand);
+        }
+        activeBand = { name: kind, els: [] };
+      }
+      activeBand.els.push(el);
+      continue;
+    }
+    if (activeBand) {
+      activeBand.els.push(el);
+    }
+  }
+  if (activeBand && activeBand.els.length > 0) {
+    bands.push(activeBand);
+  }
+
+  const wrappers: HTMLElement[] = [];
+  for (const band of bands) {
+    if (band.els.length === 0) continue;
+    const first = band.els[0];
+    if (!first) continue;
+    const wrap = document.createElement("div");
+    wrap.className = `renacon-home-band renacon-home-band--${band.name}`;
+    wrap.setAttribute("data-renacon-band", band.name);
+    first.before(wrap);
+    band.els.forEach((node) => wrap.appendChild(node));
+    wrappers.push(wrap);
+  }
+
+  cleanups.push(() => {
+    wrappers.forEach((wrap) => {
+      const parent = wrap.parentElement;
+      if (!parent) return;
+      while (wrap.firstChild) {
+        parent.insertBefore(wrap.firstChild, wrap);
+      }
+      wrap.remove();
+    });
+    delete content.dataset.renaconBands;
+  });
+}
+
 /** Enables Blocksy mobile menu and desktop dropdowns without WordPress JS. */
 export function WpInteractions() {
   useEffect(() => {
@@ -287,6 +395,38 @@ export function WpInteractions() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     cleanups.push(() => window.removeEventListener("scroll", onScroll));
+
+    // Homepage — section bands + scroll reveals (do not touch header)
+    const homeRoot = document.getElementById("post-2306");
+    if (homeRoot) {
+      homeRoot.classList.add("renacon-home-ix");
+      wrapHomeBands(homeRoot, cleanups);
+      initPageInteractions(
+        homeRoot,
+        {
+          revealSelector: [
+            ".renacon-home-band--highlights .wp-block-column",
+            ".renacon-home-band--products > .wp-block-image",
+            ".renacon-home-band--products h1.wp-block-heading",
+            ".renacon-home-band--products .wp-block-getwid-image-box",
+            ".renacon-home-band--services .stk-e01c6a5",
+            ".renacon-home-band--services .stk-43533bb",
+            ".renacon-home-band--services .stk-f0223a1",
+            ".renacon-home-band--services .stk-e3c56a3",
+            ".renacon-home-band--services .stk-92754a5",
+            ".renacon-home-band--hotspot .wp-block-getwid-image-hotspot",
+            ".renacon-home-band--projects > .wp-block-image",
+            ".renacon-home-band--projects h1.wp-block-heading",
+            ".renacon-home-band--projects > p",
+            ".renacon-home-band--projects .stk-block-image-box",
+          ].join(", "),
+          heroSelectors: [
+            ".renacon-home-band--hero .wp-block-getwid-section",
+          ],
+        },
+        cleanups,
+      );
+    }
 
     // About Us — obvious scroll reveals + hero stagger
     const aboutRoot = document.getElementById("post-4487");

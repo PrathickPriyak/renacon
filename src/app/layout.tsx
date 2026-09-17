@@ -31,11 +31,11 @@ export default function RootLayout({
         {/* Mirrored Blocksy/WordPress styles for visual parity */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/wp-mirror/css/renacon-all.css" />
-        {/* Interactive layer cache-bust (About Us / Why Renacon) — renacon-ix-v2-sep2026 */}
+        {/* Interactive layer cache-bust — homepage atmospheres + ix-v2 */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-ix-v2-sep2026"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-home-atmos-sep2026"
         />
       </head>
       <body className={`renacon-mirror ${roboto.className}`}>{children}</body>

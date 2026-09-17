@@ -3007,6 +3007,7 @@ h1:where(.wp-block-heading).has-background,h2:where(.wp-block-heading).has-backg
 .stk-d11fa5b .stk--block-align-d11fa5b{align-items:center !important;}.stk-57da9d5-column,.stk-473efc4-column{--stk-column-gap:40px !important;row-gap:50px !important;}.stk-2e8bd88,.stk-3257fdb,.stk-24b91e2{border-radius:30px !important;overflow:hidden !important;}.stk-43533bb:before,.stk-f0223a1:before,.stk-e3c56a3:before,.stk-92754a5:before{background-color:var(--theme-palette-color-8, #ffffff) !important;}.stk-43533bb,.stk-f0223a1,.stk-e3c56a3,.stk-92754a5{background-color:var(--theme-palette-color-8, #ffffff) !important;border-radius:5px !important;overflow:hidden !important;}.stk-b162ce9-container:before,.stk-0458ac2-container:before,.stk-2c3e48d-container:before,.stk-7623a40-container:before{background-color:transparent !important;}.stk-b162ce9,.stk-0458ac2,.stk-2c3e48d,.stk-7623a40{padding-top:10px !important;padding-right:10px !important;padding-bottom:10px !important;padding-left:10px !important;}.stk-d11fa5b,.stk-ee3acf8,.stk-70b1ef1,.stk-16fdad3,.stk-7949f6e,.stk-3020028{margin-bottom:0px !important;}.stk-b162ce9-container,.stk-0458ac2-container,.stk-2c3e48d-container,.stk-7623a40-container{margin-top:0px !important;margin-right:0px !important;margin-bottom:0px !important;margin-left:0px !important;background-color:transparent !important;border-style:solid !important;border-color:#178a47 !important;padding-top:0px !important;padding-right:0px !important;padding-bottom:0px !important;padding-left:0px !important;}.stk-df90d5b:before{background-color:#cccccc33 !important;}.stk-df90d5b{align-self:center !important;background-color:#cccccc33 !important;}.stk-e01c6a5:before{background-color:#000000 !important;opacity:0.6 !important;}.stk-e01c6a5{background-color:#000000 !important;background-image:url(https://renacon.in/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;background-position:center center !important;background-repeat:no-repeat !important;background-size:cover !important;padding-top:90px !important;padding-right:50px !important;padding-bottom:90px !important;padding-left:50px !important;}.stk-e01c6a5-inner-blocks{justify-content:center !important;}.stk-a627947-container,.stk-e01c6a5-container,.stk-df90d5b-container,.stk-43533bb-container,.stk-f0223a1-container,.stk-e3c56a3-container,.stk-92754a5-container,.stk-298224a-container,.stk-49dc01b-container,.stk-9918911-container{margin-top:0px !important;margin-right:0px !important;margin-bottom:0px !important;margin-left:0px !important;}.stk-d11fa5b-column{--stk-column-gap:100px !important;row-gap:50px !important;}.stk-298224a,.stk-49dc01b,.stk-9918911{align-self:flex-end !important;padding-top:35px !important;padding-right:35px !important;padding-bottom:35px !important;padding-left:35px !important;}:where(.stk-hover-parent:hover,  .stk-hover-parent.stk--is-hovered) :is(.stk-2e8bd88, .stk-3257fdb, .stk-24b91e2) .stk-img-wrapper img{transform:scale(1.1) !important;}:where(.stk-hover-parent:hover,  .stk-hover-parent.stk--is-hovered) :is(.stk-2e8bd88, .stk-3257fdb, .stk-24b91e2) .stk-img-wrapper::after{background-color:#000000 !important;}:where(.stk-hover-parent:hover,  .stk-hover-parent.stk--is-hovered) :is(.stk-2e8bd88, .stk-3257fdb, .stk-24b91e2) .stk-img-wrapper{--stk-gradient-overlay:0.5 !important;}@media screen and (min-width:690px){.stk-e01c6a5{flex:var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2 ) !important;}.stk-df90d5b{flex:var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2 ) !important;}}@media screen and (min-width:690px) and (max-width:999px){.stk-a627947,.stk-e01c6a5,.stk-df90d5b{flex:var(--stk-flex-grow, 1) 1 calc(100% - var(--stk-column-gap, 0px) * 0 / 1 ) !important;}.stk-43533bb,.stk-f0223a1,.stk-e3c56a3,.stk-92754a5{flex:var(--stk-flex-grow, 1) 1 calc(75% - var(--stk-column-gap, 0px) * 1 / 2 ) !important;}}@media screen and (max-width:999px){.stk-d11fa5b .stk--block-align-d11fa5b{align-items:flex-start !important;}.stk-d11fa5b-column{--stk-column-gap:50px !important;row-gap:30px !important;}.stk-ee3acf8-column{row-gap:80px !important;}.stk-e01c6a5{padding-top:60px !important;padding-right:40px !important;padding-bottom:60px !important;padding-left:40px !important;}.stk-df90d5b{padding-left:0px !important;}.stk-57da9d5,.stk-473efc4{margin-bottom:50px !important;}}@media screen and (max-width:689px){.stk-ffc7a96-column,.stk-3aba5db-column,.stk-f67d06c-column,.stk-570345e-column{row-gap:20px !important;}}
 /* === site-overrides.css === */
 /* Renacon mirror layout helpers – keep Blocksy structure readable without WP JS */
+/* renacon-home-atmos-sep2026 — taller header + homepage section atmospheres */
 
 :root {
   --renacon-header-pad-y: 1.05rem;
@@ -5199,5 +5200,370 @@ button[type="submit"]:hover {
 
   #post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-accordion__content {
     animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   Homepage (#post-2306): alternating section atmospheres + interactions
+   Brand: Renacon green + yellow — soft white / warm stone / green wash / deep green
+   ========================================================================== */
+
+#post-2306.renacon-home-ix {
+  --renacon-green: #0b3d2c;
+  --renacon-green-mid: #1b7a3d;
+  --renacon-green-deep: #052e1f;
+  --renacon-yellow: #f4c709;
+  --renacon-yellow-bright: #ffcb2d;
+  --renacon-stone: #f3f1ec;
+  --renacon-stone-deep: #e8e4dc;
+  --renacon-mist: #f3faf6;
+  --renacon-mist-deep: #e4efe8;
+}
+
+#post-2306.renacon-home-ix .entry-content {
+  background: #ffffff;
+}
+
+/* Full-bleed section bands (JS wraps consecutive blocks) */
+#post-2306.renacon-home-ix .renacon-home-band {
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+  padding-block: 1.75rem 2rem;
+  padding-inline: max(1rem, calc((100vw - min(1290px, 100% - 2rem)) / 2));
+  transition: background-color 0.45s ease;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band > .wp-block-spacer {
+  display: none !important;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band > :where(:not(.alignfull):not(.alignwide)) {
+  max-width: min(1290px, 100%);
+  margin-inline: auto;
+}
+
+/* 1. Hero — video stays; soft green bottom fade into next band */
+#post-2306.renacon-home-ix .renacon-home-band--hero {
+  padding: 0;
+  background: #0a1f16;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(7rem, 18vh);
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(10, 31, 22, 0.35) 55%,
+    rgba(243, 241, 236, 0.92) 100%
+  );
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--hero > * {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+}
+
+/* 2. Highlights — soft warm stone + yellow hairline */
+#post-2306.renacon-home-ix .renacon-home-band--highlights {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(244, 199, 9, 0.08), transparent 70%),
+    linear-gradient(180deg, var(--renacon-stone) 0%, var(--renacon-stone-deep) 100%);
+  border-block: 1px solid rgba(11, 61, 44, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--highlights .eplus-styles-uid-2b8c9e,
+#post-2306.renacon-home-ix .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
+  background: transparent !important;
+  border: none !important;
+  max-width: min(1100px, 100%) !important;
+  margin-inline: auto !important;
+  padding: 0.35rem 0.25rem !important;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-column {
+  border-radius: 6px;
+  padding: 0.85rem 0.65rem;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    box-shadow 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-column:hover {
+    transform: translateY(-4px);
+    background-color: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 10px 28px rgba(11, 61, 44, 0.1);
+  }
+}
+
+/* 3. Product categories — clean white → soft green mist wash */
+#post-2306.renacon-home-ix .renacon-home-band--products {
+  background:
+    linear-gradient(180deg, #ffffff 0%, var(--renacon-mist) 42%, var(--renacon-mist-deep) 100%);
+  border-bottom: 1px solid rgba(11, 61, 44, 0.07);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--products h1.wp-block-heading {
+  position: relative;
+  padding-bottom: 0.55rem;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--products h1.wp-block-heading::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-green),
+    var(--renacon-yellow)
+  );
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-2306.renacon-home-ix.renacon-hero-in .renacon-home-band--products h1.wp-block-heading::after,
+#post-2306.renacon-home-ix .renacon-home-band--products.renacon-reveal-in h1.wp-block-heading::after,
+#post-2306.renacon-home-ix .renacon-home-band--products h1.renacon-reveal-in::after {
+  width: min(9rem, 40%);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box {
+  border-radius: 8px;
+  padding: 0.85rem 0.75rem;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    box-shadow 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box:hover {
+    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 14px 32px rgba(11, 61, 44, 0.12);
+  }
+
+  #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box:hover img {
+    transform: scale(1.04);
+  }
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box img {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--products .stk-highlight {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* 4. Our Services — deeper green band + mist service grid */
+#post-2306.renacon-home-ix .renacon-home-band--services {
+  background:
+    linear-gradient(180deg, var(--renacon-green-deep) 0%, #0b2e1f 38%, #123528 100%);
+  padding-block: 2.25rem 2.5rem;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--services > .stk-ee3acf8,
+#post-2306.renacon-home-ix .renacon-home-band--services .stk-ee3acf8 {
+  max-width: min(1290px, 100%) !important;
+  margin-inline: auto !important;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
+#post-2306.renacon-home-ix .stk-df90d5b {
+  background-color: rgba(228, 239, 232, 0.94) !important;
+}
+
+#post-2306.renacon-home-ix .stk-43533bb,
+#post-2306.renacon-home-ix .stk-f0223a1,
+#post-2306.renacon-home-ix .stk-e3c56a3,
+#post-2306.renacon-home-ix .stk-92754a5 {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(11, 61, 44, 0.08) !important;
+  border-top: 3px solid transparent !important;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-top-color 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-2306.renacon-home-ix .stk-43533bb:hover,
+  #post-2306.renacon-home-ix .stk-f0223a1:hover,
+  #post-2306.renacon-home-ix .stk-e3c56a3:hover,
+  #post-2306.renacon-home-ix .stk-92754a5:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(5, 46, 31, 0.14);
+    border-top-color: var(--renacon-yellow) !important;
+  }
+}
+
+/* 5. Building hotspot — dark cinematic frame */
+#post-2306.renacon-home-ix .renacon-home-band--hotspot {
+  background: linear-gradient(180deg, #0a1f16 0%, #123528 55%, #0b2e1f 100%);
+  padding-block: 1.5rem 1.75rem;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--hotspot .wp-block-getwid-image-hotspot {
+  max-width: min(1290px, 100%);
+  margin-inline: auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--hotspot .wp-block-getwid-image-hotspot__dot {
+  background-color: var(--renacon-green-mid) !important;
+  box-shadow: 0 0 0 0 rgba(244, 199, 9, 0.55);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-2306.renacon-home-ix .renacon-home-band--hotspot .wp-block-getwid-image-hotspot__dot:hover {
+    transform: scale(1.12);
+    box-shadow: 0 0 0 6px rgba(244, 199, 9, 0.28);
+  }
+}
+
+/* 6. Our Projects — soft warm stone return */
+#post-2306.renacon-home-ix .renacon-home-band--projects {
+  background:
+    radial-gradient(ellipse 70% 50% at 80% 20%, rgba(27, 122, 61, 0.07), transparent 65%),
+    linear-gradient(180deg, var(--renacon-stone) 0%, #f7f5f1 55%, #ffffff 100%);
+  border-top: 1px solid rgba(11, 61, 44, 0.08);
+  padding-block: 2rem 2.75rem;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--projects h1.wp-block-heading {
+  position: relative;
+  padding-bottom: 0.55rem;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--projects h1.wp-block-heading::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-yellow),
+    var(--renacon-green)
+  );
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--projects h1.renacon-reveal-in::after,
+#post-2306.renacon-home-ix .renacon-home-band--projects.renacon-reveal-in h1.wp-block-heading::after {
+  width: min(9rem, 40%);
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box,
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-column {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box:hover {
+    transform: translateY(-5px);
+  }
+
+  #post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box:hover img {
+    transform: scale(1.03);
+  }
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-img {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 4px;
+}
+
+/* Scroll reveal — homepage scoped */
+#post-2306.renacon-home-ix .renacon-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  filter: blur(2px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s ease;
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+}
+
+#post-2306.renacon-home-ix .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+#post-2306.renacon-home-ix .renacon-hero-piece {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+#post-2306.renacon-home-ix.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 689px) {
+  #post-2306.renacon-home-ix .renacon-home-band {
+    padding-block: 1.35rem 1.5rem;
+  }
+
+  #post-2306.renacon-home-ix .renacon-home-band--services {
+    padding-block: 1.5rem 1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #post-2306.renacon-home-ix .renacon-reveal,
+  #post-2306.renacon-home-ix .renacon-hero-piece {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  #post-2306.renacon-home-ix .renacon-home-band--products h1.wp-block-heading::after,
+  #post-2306.renacon-home-ix .renacon-home-band--projects h1.wp-block-heading::after {
+    width: min(9rem, 40%) !important;
+    transition: none !important;
+  }
+
+  #post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-column,
+  #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box,
+  #post-2306.renacon-home-ix .stk-43533bb,
+  #post-2306.renacon-home-ix .stk-f0223a1,
+  #post-2306.renacon-home-ix .stk-e3c56a3,
+  #post-2306.renacon-home-ix .stk-92754a5,
+  #post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box,
+  #post-2306.renacon-home-ix .renacon-home-band--projects .stk-img {
+    transition: none !important;
+    transform: none !important;
   }
 }
