@@ -664,6 +664,8 @@ function sanitizeEmbedTitles(scope: ParentNode = document): void {
   });
 }
 
+const qubelyAbortByRoot = new WeakMap<HTMLElement, AbortController>();
+
 /** Qubely tabs (media page Recent Events / Media) — plugin JS not shipped. */
 function initQubelyTabs(scope: ParentNode = document): () => void {
   const roots = Array.from(
@@ -674,7 +676,10 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
   const cleanups: Array<() => void> = [];
 
   roots.forEach((root) => {
-    if (root.dataset.renaconQubelyReady === "1") return;
+    qubelyAbortByRoot.get(root)?.abort();
+    const ac = new AbortController();
+    qubelyAbortByRoot.set(root, ac);
+
     root.dataset.renaconQubelyReady = "1";
     root.classList.add("renacon-qubely-tabs");
 
@@ -703,38 +708,51 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
         const on = i === index;
         panel.classList.toggle("qubely-active", on);
         panel.classList.toggle("renacon-tab-panel-in", on);
-        panel.style.display = on ? "block" : "none";
+        panel.style.setProperty("display", on ? "block" : "none", "important");
         panel.setAttribute("aria-hidden", on ? "false" : "true");
       });
     };
 
-    items.forEach((item, index) => {
-      item.setAttribute("role", "tab");
-      item.tabIndex = 0;
-      const onActivate = (e: Event) => {
+    const onClick = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      const item = t?.closest<HTMLElement>(".qubely-tab-nav > .qubely-tab-item");
+      if (!item || !root.contains(item)) return;
+      e.preventDefault();
+      const index = items.indexOf(item);
+      if (index < 0) return;
+      activate(index);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      const item = t?.closest<HTMLElement>(".qubely-tab-nav > .qubely-tab-item");
+      if (!item || !root.contains(item)) return;
+      const index = items.indexOf(item);
+      if (index < 0) return;
+      if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         activate(index);
-      };
-      item.addEventListener("click", onActivate);
-      const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          activate(index);
-          return;
-        }
-        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-          e.preventDefault();
-          const dir = e.key === "ArrowRight" ? 1 : -1;
-          const next = (index + dir + items.length) % items.length;
-          activate(next);
-          items[next]?.focus();
-        }
-      };
-      item.addEventListener("keydown", onKey);
-      cleanups.push(() => {
-        item.removeEventListener("click", onActivate);
-        item.removeEventListener("keydown", onKey);
-      });
+        return;
+      }
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        const dir = e.key === "ArrowRight" ? 1 : -1;
+        const next = (index + dir + items.length) % items.length;
+        activate(next);
+        items[next]?.focus();
+      }
+    };
+
+    items.forEach((item) => {
+      item.setAttribute("role", "tab");
+      item.tabIndex = 0;
+    });
+
+    root.addEventListener("click", onClick, { signal: ac.signal });
+    root.addEventListener("keydown", onKey, { signal: ac.signal });
+    cleanups.push(() => {
+      ac.abort();
+      delete root.dataset.renaconQubelyReady;
+      qubelyAbortByRoot.delete(root);
     });
 
     activate(
@@ -760,7 +778,6 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
   const cleanups: Array<() => void> = [];
 
   roots.forEach((root) => {
-    if (root.dataset.renaconTabsReady === "1") return;
     root.dataset.renaconTabsReady = "1";
     root.classList.add("renacon-ep-tabs");
 
@@ -780,8 +797,7 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
       panels.forEach((panel, i) => {
         const on = i === index;
         panel.classList.toggle("ep_active_tab", on);
-        panel.style.display = on ? "block" : "none";
-        // Forms inside inactive tabs may be display:none from theme CSS
+        panel.style.setProperty("display", on ? "block" : "none", "important");
         panel.querySelectorAll<HTMLElement>("form").forEach((form) => {
           form.style.display = on ? "" : "none";
         });
@@ -801,6 +817,9 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
 
     panels.forEach((panel) => panel.setAttribute("role", "tabpanel"));
     activate(0);
+    cleanups.push(() => {
+      delete root.dataset.renaconTabsReady;
+    });
   });
 
   return () => cleanups.forEach((fn) => fn());

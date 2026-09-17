@@ -1000,11 +1000,11 @@ body.renacon-page-media .renacon-hotspot-tip,
 }
 
 .qubely-block-tab .qubely-tab-body > .qubely-tab-content {
-  display: none;
+  display: none !important;
 }
 
 .qubely-block-tab .qubely-tab-body > .qubely-tab-content.qubely-active {
-  display: block;
+  display: block !important;
 }
 
 /* Superseded by 16:9 absolute-fill rules above (renacon-hero-clip-videos-v3) */
@@ -5240,7 +5240,7 @@ body.renacon-mirror .stk-img-wrapper:active img {
   transform: none !important;
 }
 
-/* CACHE_BUST_MARKER animation-interactions-202609171530 */
+/* CACHE_BUST_MARKER animation-interactions-202609171600 */
 
 /* Phase 6 — neutralize invented scroll-reveal / stagger (live renacon.in has none).
    Keep content visible even if leftover classes remain in the DOM. */
