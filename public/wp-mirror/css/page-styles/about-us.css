@@ -77,7 +77,8 @@ body.renacon-page-about-us,
 
 #post-4487 .entry-content > h2.wp-block-heading {
   margin-top: 1.5em !important;
-  margin-bottom: 0.87em !important;
+  /* Blocksy heading: 0.3em of own size + 10px — matches .in at every clamp step */
+  margin-bottom: calc(0.3em + 10px) !important;
 }
 
 #post-4487 .entry-content > .wp-block-spacer {
@@ -106,6 +107,7 @@ body.renacon-page-about-us,
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-inline: 0 !important;
+  text-align: center;
 }
 
 #post-4487 .stk-830c817 .stk-53d1045 {
@@ -138,6 +140,13 @@ body.renacon-page-about-us,
 #post-4487 .ugb-a10dec0-wrapper {
   padding: 60px 35px !important;
   box-sizing: border-box;
+  display: flex !important;
+  background-color: #ffffff !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow:
+    0 5px 5px 0 rgba(18, 63, 82, 0.035),
+    0 0 0 1px rgba(176, 181, 193, 0.2) !important;
 }
 
 #post-4487 .stk-9ca72ed,
@@ -177,4 +186,68 @@ body.renacon-page-about-us,
   }
 }
 
-/* CACHE_BUST_MARKER about-us-exact-202609171430 */
+/* About Us only: in-flow white header like Blocksy on this page (no hero overlay) */
+body.renacon-page-about-us,
+body:has(#post-4487) {
+  font-family: Roboto, sans-serif;
+}
+
+body.renacon-page-about-us #post-4487,
+body:has(#post-4487) #post-4487 {
+  font-family: Roboto, sans-serif;
+}
+
+body.renacon-page-about-us #main.site-main,
+body.renacon-page-about-us .site-main,
+body:has(#post-4487) #main.site-main,
+body:has(#post-4487) .site-main {
+  padding-top: 0 !important;
+}
+
+@media (min-width: 1000px) {
+  body.renacon-page-about-us #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-4487) #header.ct-header [data-device="desktop"][data-transparent] {
+    position: relative !important;
+  }
+}
+
+@media (max-width: 999.98px) {
+  body.renacon-page-about-us #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-4487) #header.ct-header [data-device="mobile"][data-transparent] {
+    position: relative !important;
+  }
+}
+
+body.renacon-page-about-us #header.ct-header [data-row*="middle"],
+body:has(#post-4487) #header.ct-header [data-row*="middle"] {
+  background-color: #ffffff !important;
+}
+
+body.renacon-page-about-us #header.ct-header .ct-container,
+body:has(#post-4487) #header.ct-header .ct-container {
+  width: min(1290px, 90vw) !important;
+}
+
+body.renacon-page-about-us #header.ct-header .menu-container > .menu,
+body:has(#post-4487) #header.ct-header .menu-container > .menu {
+  align-items: stretch !important;
+  height: 100%;
+}
+
+body.renacon-page-about-us #header.ct-header .menu-container > .menu > li,
+body:has(#post-4487) #header.ct-header .menu-container > .menu > li {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+body.renacon-page-about-us #header.ct-header .menu-container > .menu > li > a,
+body.renacon-page-about-us #header.ct-header .menu-container > .menu > li > a.ct-menu-link,
+body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a,
+body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a.ct-menu-link {
+  height: 100% !important;
+  display: flex !important;
+  gap: 0 !important;
+}
+
+/* CACHE_BUST_MARKER about-us-exact-202609171545 */
