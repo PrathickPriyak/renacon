@@ -696,7 +696,7 @@ body.renacon-page-media .stk-block-columns > .stk-row {
 body.renacon-page-media .stk-block-columns .stk-block-column {
   min-width: 0 !important;
   flex: 1 1 calc(33.333% - 1.25rem) !important;
-  max-width: calc(33.333% - 1rem) !important;
+  max-width: 100% !important;
 }
 
 #post-1067 .wp-block-embed,
@@ -708,6 +708,27 @@ body.renacon-page-media .stk-block-columns .stk-block-column {
   margin: 0;
   overflow: hidden;
   border-radius: 2px;
+}
+
+/* Force 16:9 — HTML height="726" was keeping portrait iframes and eating gutters */
+#post-1067 .wp-block-embed.wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+.renacon-media-ix .wp-block-embed.wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+body.renacon-page-media .wp-block-embed .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  width: 100% !important;
+}
+
+#post-1067 .wp-block-embed iframe,
+.renacon-media-ix .wp-block-embed iframe,
+body.renacon-page-media .wp-block-embed iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  aspect-ratio: auto !important;
 }
 
 /* Opacity-only reveal on embeds — transforms break iframe chrome / leave title ghosts */

@@ -35,7 +35,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-hero-clip-videos-v2"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-hero-clip-videos-v3"
         />
       </head>
       <body className={`renacon-mirror ${roboto.className}`}>{children}</body>
