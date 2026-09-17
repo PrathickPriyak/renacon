@@ -1,0 +1,112 @@
+/* Mirrored from https://renacon.in/privacy/ — Editor Plus + Stackable */
+
+/* source:editorplus-generated-styles-header */
+.eplus-styles-uid-ee7bd8{grid-template-columns:repeat(1,1fr);list-style-type:decimal}@media (max-width:981px){.eplus-styles-uid-ee7bd8{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-ee7bd8{list-style-type:}}.eplus-styles-uid-ee7bd8:hover{list-style-type:}.eplus-styles-uid-005830{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-005830{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-005830{list-style-type:}}.eplus-styles-uid-005830:hover{list-style-type:}.eplus-styles-uid-66b482{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-66b482{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-66b482{list-style-type:}}.eplus-styles-uid-66b482:hover{list-style-type:}.eplus-styles-uid-696894{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-696894{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-696894{list-style-type:}}.eplus-styles-uid-696894:hover{list-style-type:}.eplus-styles-uid-922577{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-922577{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-922577{list-style-type:}}.eplus-styles-uid-922577:hover{list-style-type:}.eplus-styles-uid-696ef6{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-696ef6{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-696ef6{list-style-type:}}.eplus-styles-uid-696ef6:hover{list-style-type:}.eplus-styles-uid-f1aa40{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-f1aa40{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-f1aa40{list-style-type:}}.eplus-styles-uid-f1aa40:hover{list-style-type:}.eplus-styles-uid-6d0507{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-6d0507{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-6d0507{list-style-type:}}.eplus-styles-uid-6d0507:hover{list-style-type:}
+
+
+/* Phase 5 — in-flow sticky header (no overlay hero pull-under) */
+body.renacon-page-privacy .renacon-site-header,
+body:has(#post-7264) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body.renacon-page-privacy #header.ct-header,
+body:has(#post-7264) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body.renacon-page-privacy #main.site-main,
+body.renacon-page-privacy .site-main,
+body:has(#post-7264) #main.site-main,
+body:has(#post-7264) .site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body.renacon-page-privacy #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-7264) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-privacy #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-7264) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+body.renacon-page-privacy #header.ct-header [data-row*="middle"],
+body:has(#post-7264) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+body.renacon-page-privacy,
+body:has(#post-7264){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+#post-7264{
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+/* Full-bleed first hero — sit below in-flow header */
+body.renacon-page-privacy .entry-content > .wp-block-image.alignfull:first-child,
+body.renacon-page-privacy .entry-content > .wp-block-cover.alignfull:first-child,
+body:has(#post-7264) .entry-content > .wp-block-image.alignfull:first-child,
+body:has(#post-7264) .entry-content > .wp-block-cover.alignfull:first-child,
+#post-7264 .entry-content > .wp-block-image.alignfull:first-child,
+#post-7264 .entry-content > .wp-block-cover.alignfull:first-child{
+  margin-top:0 !important;
+  max-width:none !important;
+  width:100% !important;
+}
+#post-7264 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:fill;
+  transform:none !important;
+}
+#post-7264 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+@media screen and (max-width:689px){
+  #post-7264 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+    width:calc(100% - 47px) !important;
+  }
+}
+
+
+#post-7264 .entry-content ul{
+  list-style-position:outside;
+  padding-left:2.5em;
+  margin:0 0 1.5em;
+}
+#post-7264 .entry-content p{
+  font-size:15px;
+  line-height:24.75px;
+  color:#000000;
+  margin:0 0 1.5em;
+}
+#post-7264 .entry-content > h2{
+  font-size:20px;
+  font-weight:700;
+  color:#000000;
+  margin:1.5em 0 0.75em;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

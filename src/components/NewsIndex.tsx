@@ -15,6 +15,8 @@ export function NewsIndex({ page = 1 }: { page?: number }) {
   const slice = posts.slice(start, start + PAGE_SIZE);
 
   return (
+    <>
+    <link rel="stylesheet" href="/wp-mirror/css/page-styles/news.css?v=renacon-remaining-pages-202609171500" />
     <main id="main" className="site-main news-index">
       <div className="hero-section" data-type="type-2">
         <header className="entry-header ct-container-narrow">
@@ -103,5 +105,6 @@ export function NewsIndex({ page = 1 }: { page?: number }) {
         ) : null}
       </div>
     </main>
+    </>
   );
 }

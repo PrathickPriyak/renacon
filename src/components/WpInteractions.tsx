@@ -570,6 +570,23 @@ export function WpInteractions() {
       document.body.classList.add("renacon-page-why-renacon");
     }
 
+    // Phase 5 hub pages — body classes for page-scoped sticky header chrome
+    const careersRoot = document.getElementById("post-7899");
+    if (careersRoot) {
+      document.body.classList.add("renacon-page-careers");
+    }
+    const privacyRoot = document.getElementById("post-7264");
+    if (privacyRoot) {
+      document.body.classList.add("renacon-page-privacy");
+    }
+    const sitemapRoot = document.getElementById("post-5483");
+    if (sitemapRoot) {
+      document.body.classList.add("renacon-page-sitemap");
+    }
+    if (document.querySelector("main.gallery-hub")) {
+      document.body.classList.add("renacon-page-gallery");
+    }
+
     // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
     cleanups.push(initGetwidHotspots());
 

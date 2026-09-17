@@ -35,6 +35,10 @@ export default function Page() {
 
   return (
     <WpShell>
+      <link
+        rel="stylesheet"
+        href="/wp-mirror/css/page-styles/gallery.css?v=renacon-remaining-pages-202609171500"
+      />
       <WpMain html={html} />
     </WpShell>
   );

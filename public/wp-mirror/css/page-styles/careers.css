@@ -1,0 +1,104 @@
+/* Mirrored from https://renacon.in/careers/ — Editor Plus + Stackable */
+
+/* source:editorplus-generated-styles-header */
+.eplus-styles-uid-072622{padding-top:50px}
+
+/* source:stk-block-styles */
+.stk-60b67df .stk-block-heading__text{font-size:70px !important;color:#ffffff !important;}.stk-f4b60eb{margin-bottom:0px !important;}@media screen and (max-width:999px){.stk-60b67df .stk-block-heading__text{font-size:50px !important;}}
+
+
+/* Phase 5 — in-flow sticky header (no overlay hero pull-under) */
+body.renacon-page-careers .renacon-site-header,
+body:has(#post-7899) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body.renacon-page-careers #header.ct-header,
+body:has(#post-7899) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body.renacon-page-careers #main.site-main,
+body.renacon-page-careers .site-main,
+body:has(#post-7899) #main.site-main,
+body:has(#post-7899) .site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body.renacon-page-careers #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-7899) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-careers #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-7899) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+body.renacon-page-careers #header.ct-header [data-row*="middle"],
+body:has(#post-7899) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+body.renacon-page-careers,
+body:has(#post-7899){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+#post-7899{
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+/* Full-bleed first hero — sit below in-flow header */
+body.renacon-page-careers .entry-content > .wp-block-image.alignfull:first-child,
+body.renacon-page-careers .entry-content > .wp-block-cover.alignfull:first-child,
+body:has(#post-7899) .entry-content > .wp-block-image.alignfull:first-child,
+body:has(#post-7899) .entry-content > .wp-block-cover.alignfull:first-child,
+#post-7899 .entry-content > .wp-block-image.alignfull:first-child,
+#post-7899 .entry-content > .wp-block-cover.alignfull:first-child{
+  margin-top:0 !important;
+  max-width:none !important;
+  width:100% !important;
+}
+#post-7899 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:fill;
+  transform:none !important;
+}
+#post-7899 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+@media screen and (max-width:689px){
+  #post-7899 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+    width:calc(100% - 47px) !important;
+  }
+}
+
+
+/* Careers cover hero height from live */
+#post-7899 .wp-block-cover.alignfull{min-height:645px;}
+#post-7899 .stk-60b67df .stk-block-heading__text{font-size:70px !important;color:#ffffff !important;}
+@media screen and (max-width:999px){
+  #post-7899 .stk-60b67df .stk-block-heading__text{font-size:50px !important;}
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */
