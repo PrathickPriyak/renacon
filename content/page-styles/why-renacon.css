@@ -43,14 +43,16 @@
 
 /* Restore Blocksy/WP flow that global site-overrides flattened (Why Renacon only) */
 body.renacon-page-why-renacon,
-body:has(#post-5659),
-#post-5659{
+body:has(#post-5659){
   color:rgb(72,75,77);
   background-color:#fefefe;
   font-family:Roboto,sans-serif;
 }
 
 #post-5659{
+  color:rgb(72,75,77);
+  background-color:transparent;
+  font-family:Roboto,sans-serif;
   width:100% !important;
   max-width:none !important;
   margin-left:0 !important;
@@ -137,7 +139,7 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
 #post-5659 .stk-72ab4ab .wp-block-image.alignleft{
   display:table;
   float:left;
-  margin:0.5em 1em 0.5em 0;
+  margin:0 27px 5.4px 0;
   width:auto;
 }
 #post-5659 .stk-72ab4ab .wp-block-image.alignleft img{
@@ -268,6 +270,8 @@ body:has(#post-5659) #header.ct-header [data-row*="middle"]{
 body.renacon-page-why-renacon #header.ct-header .ct-container,
 body:has(#post-5659) #header.ct-header .ct-container{
   width:min(1290px,90vw) !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
 }
 
 body.renacon-page-why-renacon #header.ct-header .menu-container > .menu,
@@ -288,4 +292,4 @@ body:has(#post-5659) #header.ct-header .menu-container > .menu > li > a{
   gap:0 !important;
 }
 
-/* CACHE_BUST_MARKER why-renacon-exact-202609171248 */
+/* CACHE_BUST_MARKER why-renacon-exact-202609171305 */
