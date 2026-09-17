@@ -180,7 +180,7 @@ textarea:focus-visible {
 .renacon-mirror #offcanvas.is-open .ct-panel-content-inner,
 .renacon-mirror #offcanvas.active .ct-panel-content-inner {
   overflow-y: auto !important;
-  padding: 0.75rem 1.35rem 2rem 1.5rem !important;
+  padding: 0.85rem 1.5rem 2.25rem 1.75rem !important;
   flex: 1 1 auto !important;
   min-height: 0 !important;
 }
@@ -598,11 +598,16 @@ html.ct-panel-open #offcanvas * {
 #post-1067 .simply-gallery-amp.alignwide,
 .renacon-projects-gallery-ix .simply-gallery-amp,
 .renacon-projects-gallery-ix .pgc_sgb_slider,
+.renacon-projects-gallery-ix .simply-gallery-amp.alignwide,
 .renacon-media-ix .simply-gallery-amp,
-.renacon-media-ix .pgc_sgb_slider {
-  max-width: min(1180px, calc(100% - 2rem)) !important;
-  width: min(1180px, calc(100% - 2rem)) !important;
-  margin-inline: auto !important;
+.renacon-media-ix .pgc_sgb_slider,
+.renacon-media-ix .simply-gallery-amp.alignwide,
+.page-id-1192 .simply-gallery-amp,
+.page-id-1067 .simply-gallery-amp {
+  max-width: 1180px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   margin-block: 0.75rem 1.75rem;
   padding-inline: 0 !important;
   box-sizing: border-box !important;
@@ -612,13 +617,18 @@ html.ct-panel-open #offcanvas * {
   transform: none !important;
 }
 
+/* Keep headings on the same content rail as galleries */
 #post-1192 h1.wp-block-heading,
 #post-1067 h1.wp-block-heading,
-#post-1067 h2.wp-block-heading {
+#post-1067 h2.wp-block-heading,
+.renacon-projects-gallery-ix h1.wp-block-heading,
+.renacon-media-ix h1.wp-block-heading {
   margin-block: 1.5rem 0.75rem;
   padding-inline: 0.25rem;
-  max-width: min(1180px, 100%);
+  max-width: 1180px;
+  width: 100%;
   margin-inline: auto;
+  text-align: center;
 }
 
 .simply-gallery-amp .sgb-gallery .sgb-item,
@@ -695,9 +705,10 @@ html.ct-panel-open #offcanvas * {
 #post-1067 .sgb-gallery,
 .renacon-projects-gallery-ix .sgb-gallery,
 .renacon-media-ix .sgb-gallery {
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-  max-width: min(1180px, 100%);
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  max-width: 100%;
   margin-inline: auto;
+  justify-content: center;
 }
 
 /* Homepage projects: don't leave image boxes invisible/washed if observer lags */

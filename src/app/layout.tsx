@@ -35,7 +35,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-match-mobile-gallery-v2"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-match-mobile-gallery-v3"
         />
       </head>
       <body className={`renacon-mirror ${roboto.className}`}>{children}</body>

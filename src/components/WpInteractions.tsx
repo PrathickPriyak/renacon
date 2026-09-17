@@ -983,6 +983,15 @@ function largestImageUrl(img: HTMLImageElement): string {
  * to a plain flow/grid and fill blank captions from the linked slug.
  */
 function normalizeSimplyGalleries(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(".simply-gallery-amp, .pgc_sgb_slider").forEach((wrap) => {
+    wrap.style.maxWidth = "1180px";
+    wrap.style.width = "100%";
+    wrap.style.marginLeft = "auto";
+    wrap.style.marginRight = "auto";
+    wrap.style.float = "none";
+    wrap.style.transform = "none";
+  });
+
   root.querySelectorAll<HTMLElement>(".sgb-gallery").forEach((gallery) => {
     gallery.style.height = "auto";
     gallery.style.position = "relative";
