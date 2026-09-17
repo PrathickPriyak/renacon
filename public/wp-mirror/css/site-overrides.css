@@ -574,7 +574,22 @@ html.ct-panel-open #offcanvas * {
   overflow: visible;
 }
 
-/* Heroes: edge-to-edge via 100% of full-width parent — avoid 100vw/scrollbar math */
+/* Blocksy article side inset left PROJECTS/MEDIA titles flush/clipped — neutralize */
+#post-1192,
+#post-1067,
+.page-id-1192 article,
+.page-id-1067 article,
+body.renacon-page-projects-2 article.post-1192,
+body.renacon-page-media article.post-1067,
+.renacon-projects-gallery-ix,
+.renacon-media-ix {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Heroes: full-width with safe inset so baked-in titles (PROJECTS/MEDIA) clear edges */
 #post-1192 .entry-content > .wp-block-image.alignfull,
 #post-1067 .entry-content > .wp-block-image.alignfull,
 .renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull,
@@ -585,11 +600,14 @@ body.renacon-page-media .entry-content > .wp-block-image.alignfull {
   max-width: 100% !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  padding: 0 !important;
+  /* Safe inset: MEDIA title sits flush in the artwork; keep letterforms readable */
+  padding-inline: clamp(0.85rem, 2.8vw, 2.25rem) clamp(0.85rem, 4vw, 3.75rem) !important;
+  box-sizing: border-box !important;
   left: auto !important;
   right: auto !important;
   transform: none !important;
   overflow: visible !important;
+  background-color: #e6f4ea;
 }
 
 #post-1192 .entry-content > .wp-block-image.alignfull img,
