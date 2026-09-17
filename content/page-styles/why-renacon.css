@@ -11,7 +11,7 @@
   background-image:url(https://renacon.in/wp-content/uploads/2022/10/1035-scaled-1.jpg) !important;
   background-repeat:no-repeat !important;
   background-size:35% !important;
-  background-position:left center !important;
+  background-position:50% 50% !important;
   margin-bottom:0px !important;
   position:relative;
 }
@@ -130,15 +130,30 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
   color:#000000 !important;
   margin-top:0 !important;
-  margin-bottom:22.5px !important;
+  margin-bottom:1.5em !important;
+}
+
+/* Tailwind preflight sets img{display:block}; WP alignleft table shrink-wraps on inline */
+#post-5659 .stk-72ab4ab .wp-block-image.alignleft{
+  display:table;
+  float:left;
+  margin:0.5em 1em 0.5em 0;
+  width:auto;
+}
+#post-5659 .stk-72ab4ab .wp-block-image.alignleft img{
+  display:inline !important;
+  width:64px;
+  height:auto;
+  max-width:100%;
+  vertical-align:bottom;
 }
 
 #post-5659 .ep-custom-list{
   list-style-type:disc !important;
   list-style-position:outside !important;
-  display:block !important;
-  grid-template-columns:none !important;
-  gap:0 !important;
+  display:grid !important;
+  grid-template-columns:repeat(1,1fr);
+  gap:normal;
   margin:0 !important;
   padding:0 0 0 2.5em !important;
   font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
@@ -196,7 +211,7 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   line-height:24.75px !important;
   color:#000000 !important;
   margin-top:0 !important;
-  margin-bottom:22.5px !important;
+  margin-bottom:1.5em !important;
 }
 
 #post-5659 .entry-content > h2.wp-block-heading{
@@ -273,4 +288,4 @@ body:has(#post-5659) #header.ct-header .menu-container > .menu > li > a{
   gap:0 !important;
 }
 
-/* CACHE_BUST_MARKER why-renacon-exact-202609171215 */
+/* CACHE_BUST_MARKER why-renacon-exact-202609171248 */
