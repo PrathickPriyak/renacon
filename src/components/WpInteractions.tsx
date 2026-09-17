@@ -484,6 +484,9 @@ export function WpInteractions() {
       );
     }
 
+    // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
+    cleanups.push(initGetwidHotspots());
+
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);
@@ -499,4 +502,209 @@ export function WpInteractions() {
   }, []);
 
   return null;
+}
+
+type HotspotPoint = {
+  link?: string;
+  title?: string;
+  content?: string;
+  placement?: string;
+  popUpWidth?: string;
+  newTab?: boolean;
+};
+
+function parseHotspotPoints(raw: string | null): HotspotPoint[] {
+  if (!raw) return [];
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as HotspotPoint[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fallbackHref: string): string {
+  const title = (point.title || fallbackTitle || "Learn more").trim();
+  const href = (point.link || fallbackHref || "#").trim() || "#";
+  const content = (point.content || "").trim();
+  const target = point.newTab ? ' target="_blank" rel="noopener noreferrer"' : "";
+  const titleHtml = href && href !== "#"
+    ? `<a class="wp-block-getwid-image-hotspot__tooltip-link" href="${href}"${target}>${title}</a>`
+    : `<span>${title}</span>`;
+  const contentHtml = content
+    ? `<div class="wp-block-getwid-image-hotspot__tooltip-content">${content}</div>`
+    : "";
+  return `<div class="wp-block-getwid-image-hotspot__tooltip"><div class="wp-block-getwid-image-hotspot__tooltip-title">${titleHtml}</div>${contentHtml}<a class="renacon-hotspot-cta" href="${href}"${target}>View product</a></div>`;
+}
+
+function initGetwidHotspots(): () => void {
+  const roots = Array.from(
+    document.querySelectorAll<HTMLElement>(".wp-block-getwid-image-hotspot"),
+  );
+  if (!roots.length) return () => undefined;
+
+  const cleanups: Array<() => void> = [];
+  let openTip: HTMLElement | null = null;
+
+  const closeOpen = () => {
+    if (!openTip) return;
+    openTip.classList.remove("is-open", "renacon-hotspot-open");
+    openTip.querySelector<HTMLElement>(".renacon-hotspot-tip")?.setAttribute("hidden", "");
+    openTip.setAttribute("aria-expanded", "false");
+    openTip = null;
+  };
+
+  roots.forEach((root) => {
+    const points = parseHotspotPoints(root.getAttribute("data-image-points"));
+    const trigger = (root.getAttribute("data-trigger") || "hover").toLowerCase();
+    const dots = Array.from(
+      root.querySelectorAll<HTMLElement>(".wp-block-getwid-image-hotspot__dot"),
+    );
+
+    dots.forEach((dot, index) => {
+      if (dot.dataset.renaconHotspotReady === "1") return;
+      dot.dataset.renaconHotspotReady = "1";
+      dot.classList.add("is-visible", "renacon-hotspot-dot");
+      dot.setAttribute("role", "button");
+      dot.setAttribute("tabindex", "0");
+      dot.setAttribute("aria-expanded", "false");
+
+      const point = points[index] || {};
+      const titleEl = dot.querySelector<HTMLAnchorElement>(
+        ".wp-block-getwid-image-hotspot__dot-title a",
+      );
+      const fallbackTitle =
+        titleEl?.textContent?.replace(/\u00a0/g, " ").trim() ||
+        point.title ||
+        `Hotspot ${index + 1}`;
+      const fallbackHref = titleEl?.getAttribute("href") || point.link || "#";
+      dot.setAttribute("aria-label", fallbackTitle);
+
+      // Ensure a visible + marker when Font Awesome is unavailable
+      const icon = dot.querySelector<HTMLElement>(".wp-block-getwid-image-hotspot__dot-icon");
+      if (icon && !icon.textContent?.trim()) {
+        icon.setAttribute("data-renacon-plus", "1");
+      }
+
+      let tip = dot.querySelector<HTMLElement>(".renacon-hotspot-tip");
+      if (!tip) {
+        tip = document.createElement("div");
+        tip.className = "renacon-hotspot-tip tippy-popper";
+        tip.setAttribute("hidden", "");
+        tip.innerHTML = buildHotspotTooltipHtml(point, fallbackTitle, fallbackHref);
+        const placement = (point.placement || "top").toLowerCase();
+        tip.dataset.placement = placement;
+        tip.style.setProperty("--renacon-tip-width", `${point.popUpWidth || 200}px`);
+        dot.appendChild(tip);
+      }
+
+      const open = () => {
+        if (openTip && openTip !== dot) closeOpen();
+        tip?.removeAttribute("hidden");
+        dot.classList.add("is-open", "renacon-hotspot-open");
+        dot.setAttribute("aria-expanded", "true");
+        openTip = dot;
+      };
+
+      const toggle = () => {
+        if (dot.classList.contains("is-open")) closeOpen();
+        else open();
+      };
+
+      const onActivate = (e: Event) => {
+        // Let clicks on links inside the tip navigate normally
+        const target = e.target as HTMLElement | null;
+        if (target?.closest("a.renacon-hotspot-cta, a.wp-block-getwid-image-hotspot__tooltip-link")) {
+          return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        toggle();
+      };
+
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        } else if (e.key === "Escape") {
+          closeOpen();
+        }
+      };
+
+      // Prefer pointerup (mouse + touch) so we don't double-toggle with a follow-up click
+      const supportsPointer = typeof window.PointerEvent !== "undefined";
+      if (supportsPointer) {
+        let lastPointerTs = 0;
+        const onPointerUp = (e: Event) => {
+          const target = e.target as HTMLElement | null;
+          // Allow real link navigation inside the tip
+          if (target?.closest("a.renacon-hotspot-cta, a.wp-block-getwid-image-hotspot__tooltip-link")) {
+            return;
+          }
+          lastPointerTs = Date.now();
+          onActivate(e);
+        };
+        const suppressGhostClick = (e: Event) => {
+          const target = e.target as HTMLElement | null;
+          if (target?.closest("a.renacon-hotspot-cta, a.wp-block-getwid-image-hotspot__tooltip-link")) {
+            return;
+          }
+          if (Date.now() - lastPointerTs < 500) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        };
+        dot.addEventListener("pointerup", onPointerUp);
+        dot.addEventListener("click", suppressGhostClick);
+        cleanups.push(() => {
+          dot.removeEventListener("pointerup", onPointerUp);
+          dot.removeEventListener("click", suppressGhostClick);
+        });
+      } else {
+        dot.addEventListener("click", onActivate);
+        cleanups.push(() => dot.removeEventListener("click", onActivate));
+      }
+      dot.addEventListener("keydown", onKey);
+      cleanups.push(() => {
+        dot.removeEventListener("keydown", onKey);
+      });
+
+      // Desktop hover when original trigger is hover
+      if (trigger === "hover") {
+        const onEnter = () => open();
+        const onLeave = () => {
+          // Delay close so user can move into tip
+          window.setTimeout(() => {
+            if (!dot.matches(":hover") && !tip?.matches(":hover")) {
+              if (openTip === dot) closeOpen();
+            }
+          }, 160);
+        };
+        dot.addEventListener("mouseenter", onEnter);
+        dot.addEventListener("mouseleave", onLeave);
+        tip?.addEventListener("mouseenter", onEnter);
+        tip?.addEventListener("mouseleave", onLeave);
+        cleanups.push(() => {
+          dot.removeEventListener("mouseenter", onEnter);
+          dot.removeEventListener("mouseleave", onLeave);
+          tip?.removeEventListener("mouseenter", onEnter);
+          tip?.removeEventListener("mouseleave", onLeave);
+        });
+      }
+    });
+  });
+
+  const onDocPointer = (e: Event) => {
+    const t = e.target as HTMLElement | null;
+    if (!t?.closest(".wp-block-getwid-image-hotspot__dot")) {
+      closeOpen();
+    }
+  };
+  document.addEventListener("pointerdown", onDocPointer);
+  cleanups.push(() => document.removeEventListener("pointerdown", onDocPointer));
+
+  return () => {
+    closeOpen();
+    cleanups.forEach((fn) => fn());
+  };
 }
