@@ -35,12 +35,12 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-why-renacon-exact-202609171200"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-why-renacon-exact-202609171215"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-why-renacon-exact-202609171200"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-why-renacon-exact-202609171215"
         />
       </head>
       <body

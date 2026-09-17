@@ -60,7 +60,7 @@ body:has(#post-5659),
 
 #post-5659 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
 #post-5659 .entry-content > .wp-block-columns:not(.alignfull),
-#post-5659 .entry-content > .stk-block-columns:not(.alignfull),
+#post-5659 .entry-content > .stk-block-columns:not(.alignfull):not(.stk-8eed3ae),
 #post-5659 .entry-content > p,
 #post-5659 .entry-content > h1,
 #post-5659 .entry-content > h2{
@@ -74,7 +74,7 @@ body:has(#post-5659),
   box-sizing:border-box;
 }
 
-#post-5659 .entry-content > .stk-8eed3ae{
+#post-5659 .entry-content > .stk-8eed3ae.stk-block-columns{
   max-width:1290px !important;
   width:min(1290px,90vw) !important;
   margin-left:auto !important;
@@ -84,7 +84,7 @@ body:has(#post-5659),
 }
 
 @media screen and (max-width:689px){
-  #post-5659 .entry-content > .stk-8eed3ae{
+  #post-5659 .entry-content > .stk-8eed3ae.stk-block-columns{
     padding:16px !important;
   }
 }
@@ -140,7 +140,7 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   grid-template-columns:none !important;
   gap:0 !important;
   margin:0 !important;
-  padding:0 0 0 2.07em !important;
+  padding:0 0 0 2.5em !important;
   font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
 }
 #post-5659 .ep-custom-list > li{
@@ -173,9 +173,22 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   box-shadow:none !important;
   overflow:visible !important;
   padding:0 !important;
+  margin:0 !important;
 }
-#post-5659 .wp-block-embed-youtube iframe{
+#post-5659 .wp-block-embed .wp-block-embed__wrapper{
+  position:relative;
+  width:100%;
+}
+#post-5659 .wp-has-aspect-ratio .wp-block-embed__wrapper::before{
+  content:"";
   display:block;
+  padding-top:56.25%;
+}
+#post-5659 .wp-block-embed iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
 }
 
 #post-5659 .entry-content > p{
@@ -260,4 +273,4 @@ body:has(#post-5659) #header.ct-header .menu-container > .menu > li > a{
   gap:0 !important;
 }
 
-/* CACHE_BUST_MARKER why-renacon-exact-202609171200 */
+/* CACHE_BUST_MARKER why-renacon-exact-202609171215 */
