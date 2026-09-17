@@ -1857,6 +1857,7 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
 #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
 #post-2306 .stk-ee3acf8-column {
   display: flex !important;
+  flex-direction: row !important;
   flex-wrap: wrap !important;
   align-items: stretch !important;
   width: 100% !important;
@@ -1959,15 +1960,26 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
 }
 
 @media screen and (min-width: 1000px) {
+  /* Match renacon.in: never wrap the left panel under the cards on desktop */
+  #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+  #post-2306 .stk-ee3acf8-column {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+
   #post-2306 .stk-e01c6a5 {
     flex: var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
     max-width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    min-width: 0 !important;
     min-height: 0 !important;
   }
 
   #post-2306 .stk-df90d5b {
     flex: var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
     max-width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    min-width: 0 !important;
   }
 
   #post-2306 .stk-b162ce9,
@@ -1984,11 +1996,13 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
   #post-2306 .stk-df90d5b {
     flex: 1 1 100% !important;
     max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
 @media screen and (max-width: 999px) {
   #post-2306 .stk-ee3acf8-column {
+    flex-wrap: wrap !important;
     row-gap: 80px !important;
   }
 
@@ -4200,10 +4214,10 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
-/* CACHE_BUST_MARKER renacon-services-exact-202609170935-v5 */
+/* CACHE_BUST_MARKER renacon-prod-visible-20260917093607-mustsee */
 
 /* ==========================================================================
-   LIVE FORCE WINNERS (renacon-services-exact-202609170935-v5)
+   LIVE FORCE WINNERS (renacon-prod-visible-20260917093607-mustsee)
    Last in cascade — OUR SERVICES side-by-side + highlights 64px gray box.
    Must beat any earlier site-overrides / renacon-all leftovers.
    ========================================================================== */
