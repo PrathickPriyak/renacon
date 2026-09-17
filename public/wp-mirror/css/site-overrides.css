@@ -682,10 +682,10 @@ body.renacon-page-media h2.wp-block-heading {
 body.renacon-page-media .stk-block-columns > .stk-row {
   display: flex !important;
   flex-wrap: wrap !important;
-  gap: 1.25rem 1.35rem !important;
-  column-gap: 1.35rem !important;
-  row-gap: 1.5rem !important;
-  --stk-column-gap: 1.35rem !important;
+  gap: 1.5rem 1.75rem !important;
+  column-gap: 1.75rem !important;
+  row-gap: 1.75rem !important;
+  --stk-column-gap: 1.75rem !important;
   width: 100%;
   box-sizing: border-box;
   padding-inline: 1rem max(1rem, 3.75rem);
@@ -695,8 +695,8 @@ body.renacon-page-media .stk-block-columns > .stk-row {
 .renacon-media-ix .stk-block-columns .stk-block-column,
 body.renacon-page-media .stk-block-columns .stk-block-column {
   min-width: 0 !important;
-  flex: 1 1 calc(33.333% - 1rem) !important;
-  max-width: 100% !important;
+  flex: 1 1 calc(33.333% - 1.25rem) !important;
+  max-width: calc(33.333% - 1rem) !important;
 }
 
 #post-1067 .wp-block-embed,
