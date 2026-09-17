@@ -3514,3 +3514,286 @@ article.post.type-post .entry-content img {
 .renacon-ep-tabs .ep_tab_item_wrapper.ep_active_tab form {
   display: block !important;
 }
+
+/* ============================================================
+   Projects-2 + Media — interactive gallery layer (scoped)
+   Brand: Renacon green (#00984a / #0b3d2c) + yellow (#f4c709)
+   Marker: data-renacon-gallery-ix + renacon-projects-media-ix-v1
+   ============================================================ */
+
+body.renacon-page-projects-2,
+body.renacon-page-media,
+.renacon-projects-gallery-ix[data-renacon-gallery-ix],
+.renacon-media-ix[data-renacon-gallery-ix] {
+  --renacon-green: #00984a;
+  --renacon-green-deep: #0b3d2c;
+  --renacon-yellow: #f4c709;
+}
+
+/* Scroll-reveal: headings, embeds, tab nav, gallery cards */
+.renacon-projects-gallery-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-media-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-projects-gallery-ix .renacon-reveal,
+.renacon-media-ix .renacon-reveal {
+  opacity: 0;
+  transform: translateY(1.15rem);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, var(--renacon-stagger-delay, 0ms));
+  will-change: opacity, transform;
+}
+
+.renacon-projects-gallery-ix.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+.renacon-media-ix.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+.renacon-projects-gallery-ix .renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Override masonry kill-switch so reveal/hover can animate cards */
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal {
+  opacity: 0 !important;
+  transform: translateY(1.1rem) !important;
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease !important;
+  transition-delay: var(--renacon-reveal-delay, var(--renacon-stagger-delay, 0ms));
+}
+
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Soft heading underline pulse on reveal (green → yellow) */
+.renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in,
+.renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in,
+.renacon-media-ix h1.wp-block-heading.renacon-reveal-in,
+.renacon-media-ix h2.wp-block-heading.renacon-reveal-in {
+  position: relative;
+}
+
+.renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+  content: "";
+  display: block;
+  width: min(4.5rem, 28%);
+  height: 3px;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--renacon-green), var(--renacon-yellow));
+  transform-origin: center;
+  animation: renacon-gallery-rule-in 0.55s ease both;
+  animation-delay: var(--renacon-reveal-delay, 0ms);
+}
+
+@keyframes renacon-gallery-rule-in {
+  from {
+    transform: scaleX(0.25);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Hover scale/lift on project/media images */
+.renacon-projects-gallery-ix .sgb-item img,
+.renacon-media-ix .sgb-item img,
+body.renacon-page-projects-2 .sgb-item img,
+body.renacon-page-media .sgb-item img {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    filter 0.35s ease !important;
+}
+
+.renacon-projects-gallery-ix .sgb-item > a,
+.renacon-media-ix .sgb-item > a {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-projects-gallery-ix .sgb-item.renacon-reveal-in:hover,
+  .renacon-media-ix .sgb-item.renacon-reveal-in:hover,
+  body.renacon-page-projects-2 .sgb-item.renacon-gallery-item:hover,
+  body.renacon-page-media .sgb-item.renacon-gallery-item:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 14px 28px rgba(11, 61, 44, 0.14);
+  }
+
+  .renacon-projects-gallery-ix .sgb-item:hover img,
+  .renacon-media-ix .sgb-item:hover img,
+  body.renacon-page-projects-2 .sgb-item:hover img,
+  body.renacon-page-media .sgb-item:hover img {
+    transform: scale(1.045) !important;
+    filter: brightness(1.04) saturate(1.04);
+    box-shadow: 0 10px 24px rgba(0, 152, 74, 0.18);
+  }
+
+  .renacon-projects-gallery-ix .sgb-item:hover .sgb-item-caption,
+  .renacon-media-ix .sgb-item:hover .sgb-item-caption {
+    color: var(--renacon-green-deep) !important;
+  }
+}
+
+/* Active/touch feedback */
+.renacon-projects-gallery-ix .sgb-item:active img,
+.renacon-media-ix .sgb-item:active img {
+  transform: scale(0.985) !important;
+}
+
+/* Hero banner entrance */
+.renacon-projects-gallery-ix .renacon-hero-piece,
+.renacon-media-ix .renacon-hero-piece {
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.985);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+.renacon-projects-gallery-ix.renacon-hero-in .renacon-hero-piece,
+.renacon-media-ix.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+/* Lightbox polish — brand ring */
+.renacon-page-projects-2 .renacon-lightbox,
+.renacon-page-media .renacon-lightbox {
+  background: rgba(5, 30, 22, 0.9);
+}
+
+.renacon-page-projects-2 .renacon-lightbox-img,
+.renacon-page-media .renacon-lightbox-img {
+  box-shadow:
+    0 0 0 2px rgba(244, 199, 9, 0.35),
+    0 22px 55px rgba(0, 0, 0, 0.5);
+}
+
+.renacon-page-projects-2 .renacon-lightbox-close:hover,
+.renacon-page-media .renacon-lightbox-close:hover,
+.renacon-page-projects-2 .renacon-lightbox-close:focus-visible,
+.renacon-page-media .renacon-lightbox-close:focus-visible {
+  background: var(--renacon-green);
+  box-shadow: 0 0 0 2px var(--renacon-yellow);
+}
+
+/* Qubely tabs — interactive polish (media) */
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-nav,
+.renacon-page-media .renacon-qubely-tabs .qubely-tab-nav {
+  gap: 0.65rem 0.85rem;
+  margin-block: 1.15rem 1.35rem;
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item,
+.renacon-page-media .qubely-block-tab .qubely-tab-item {
+  position: relative;
+  padding: 0.45rem 0.85rem;
+  border-radius: 4px;
+  border-bottom: 0;
+  color: #4a5560;
+  background: transparent;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item:hover,
+.renacon-page-media .qubely-block-tab .qubely-tab-item:hover {
+  color: var(--renacon-green-deep);
+  background: rgba(0, 152, 74, 0.08);
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item.qubely-active,
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item.renacon-tab-active,
+.renacon-page-media .qubely-block-tab .qubely-tab-item.qubely-active {
+  color: var(--renacon-green-deep);
+  background: rgba(0, 152, 74, 0.12);
+  box-shadow: inset 0 -3px 0 var(--renacon-yellow);
+  transform: translateY(-1px);
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item:focus-visible {
+  outline: 2px solid var(--renacon-green);
+  outline-offset: 2px;
+}
+
+.renacon-media-ix .qubely-tab-content.renacon-tab-panel-in {
+  animation: renacon-tab-panel-fade 0.4s ease both;
+}
+
+@keyframes renacon-tab-panel-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Mobile: keep motion subtle, preserve 2-col / 1-col grid */
+@media (max-width: 767px) {
+  .renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal {
+    transform: translateY(0.7rem) !important;
+  }
+
+  .renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+    width: min(3.25rem, 36%);
+  }
+
+  .renacon-media-ix .renacon-qubely-tabs .qubely-tab-item {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-projects-gallery-ix .renacon-reveal,
+  .renacon-media-ix .renacon-reveal,
+  .renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-projects-gallery-ix .renacon-hero-piece,
+  .renacon-media-ix .renacon-hero-piece,
+  .renacon-projects-gallery-ix .sgb-item img,
+  .renacon-media-ix .sgb-item img,
+  .renacon-media-ix .qubely-tab-content.renacon-tab-panel-in,
+  .renacon-media-ix .renacon-qubely-tabs .qubely-tab-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+    animation: none !important;
+  }
+}
+

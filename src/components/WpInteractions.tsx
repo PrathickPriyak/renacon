@@ -701,21 +701,7 @@ export function WpInteractions() {
     // Projects / media gallery — lightbox viewer (never navigate to missing WP child pages)
     cleanups.push(initGalleryLightbox());
 
-    // Media page — Qubely tab switcher (plugin JS not shipped)
-    const mediaRoot =
-      document.getElementById("post-1067") ||
-      document.querySelector<HTMLElement>(".page-id-1067, article.post-1067");
-    if (mediaRoot || /\/media\/?$/.test(window.location.pathname)) {
-      const root =
-        mediaRoot ||
-        document.querySelector<HTMLElement>("main.site-main") ||
-        document.body;
-      root.classList.add("renacon-media-ix");
-      hydrateWpImages(root);
-      cleanups.push(initQubelyTabs(root));
-    }
-
-    // Projects-2 gallery page marker for spacing/overflow CSS
+    // Projects-2 — scroll-reveal, stagger, hover lift (layout-preserving)
     const projectsGalleryRoot =
       document.getElementById("post-1192") ||
       document.querySelector<HTMLElement>(".page-id-1192, article.post-1192");
@@ -725,17 +711,73 @@ export function WpInteractions() {
         document.querySelector<HTMLElement>("main.site-main") ||
         document.body;
       root.classList.add("renacon-projects-gallery-ix");
+      root.setAttribute("data-renacon-gallery-ix", "projects-v1");
+      document.body.classList.add("renacon-page-projects-2");
       hydrateWpImages(root);
       normalizeSimplyGalleries(root);
+      clearGalleryMotionLocks(root);
+      initPageInteractions(
+        root,
+        {
+          revealSelector: [
+            "h1.wp-block-heading",
+            "h2.wp-block-heading",
+            "h1.page-title",
+            ".sgb-item",
+            ".entry-content > .wp-block-image",
+            ".entry-content > p",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image.alignfull:first-child",
+            ".entry-content > .wp-block-image:first-child",
+            "h1.page-title",
+            "h1.wp-block-heading",
+          ],
+        },
+        cleanups,
+      );
+      softStaggerGalleryItems(root);
     }
 
-    // Media page galleries also need caption/grid hardening
+    // Media — Qubely tabs + scroll-reveal + gallery polish
+    const mediaRoot =
+      document.getElementById("post-1067") ||
+      document.querySelector<HTMLElement>(".page-id-1067, article.post-1067");
     if (mediaRoot || /\/media\/?$/.test(window.location.pathname)) {
       const root =
         mediaRoot ||
         document.querySelector<HTMLElement>("main.site-main") ||
         document.body;
+      root.classList.add("renacon-media-ix");
+      root.setAttribute("data-renacon-gallery-ix", "media-v1");
+      document.body.classList.add("renacon-page-media");
+      hydrateWpImages(root);
       normalizeSimplyGalleries(root);
+      clearGalleryMotionLocks(root);
+      cleanups.push(initQubelyTabs(root));
+      initPageInteractions(
+        root,
+        {
+          revealSelector: [
+            "h1.wp-block-heading",
+            "h2.wp-block-heading",
+            "h1.page-title",
+            ".qubely-tab-nav",
+            ".sgb-item",
+            ".wp-block-embed",
+            ".entry-content > .wp-block-image",
+            ".entry-content > p",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image.alignfull:first-child",
+            ".entry-content > .wp-block-image:first-child",
+            "h1.page-title",
+            "h1.wp-block-heading",
+          ],
+        },
+        cleanups,
+      );
+      softStaggerGalleryItems(root);
     }
 
     // Contact page — interactive form polish marker
@@ -849,6 +891,7 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
   roots.forEach((root) => {
     if (root.dataset.renaconQubelyReady === "1") return;
     root.dataset.renaconQubelyReady = "1";
+    root.classList.add("renacon-qubely-tabs");
 
     const items = Array.from(
       root.querySelectorAll<HTMLElement>(".qubely-tab-nav > .qubely-tab-item"),
@@ -860,16 +903,37 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
     );
     if (!items.length || !panels.length) return;
 
+    const nav = root.querySelector<HTMLElement>(".qubely-tab-nav");
+    nav?.setAttribute("role", "tablist");
+
     const activate = (index: number) => {
       items.forEach((item, i) => {
-        item.classList.toggle("qubely-active", i === index);
-        item.setAttribute("aria-selected", i === index ? "true" : "false");
+        const on = i === index;
+        item.classList.toggle("qubely-active", on);
+        item.classList.toggle("renacon-tab-active", on);
+        item.setAttribute("aria-selected", on ? "true" : "false");
+        item.tabIndex = on ? 0 : -1;
       });
       panels.forEach((panel, i) => {
         const on = i === index;
         panel.classList.toggle("qubely-active", on);
+        panel.classList.toggle("renacon-tab-panel-in", on);
         panel.style.display = on ? "block" : "none";
+        panel.setAttribute("aria-hidden", on ? "false" : "true");
       });
+      const activePanel = panels[index];
+      if (activePanel) {
+        softStaggerGalleryItems(activePanel);
+        if (!prefersReducedMotion()) {
+          activePanel
+            .querySelectorAll<HTMLElement>(".sgb-item.renacon-reveal")
+            .forEach((el) => {
+              el.classList.remove("renacon-reveal-in");
+              void el.offsetWidth;
+              requestAnimationFrame(() => el.classList.add("renacon-reveal-in"));
+            });
+        }
+      }
     };
 
     items.forEach((item, index) => {
@@ -880,13 +944,25 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
         activate(index);
       };
       item.addEventListener("click", onActivate);
-      item.addEventListener("keydown", (e) => {
+      const onKey = (e: KeyboardEvent) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           activate(index);
+          return;
         }
+        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+          e.preventDefault();
+          const dir = e.key === "ArrowRight" ? 1 : -1;
+          const next = (index + dir + items.length) % items.length;
+          activate(next);
+          items[next]?.focus();
+        }
+      };
+      item.addEventListener("keydown", onKey);
+      cleanups.push(() => {
+        item.removeEventListener("click", onActivate);
+        item.removeEventListener("keydown", onKey);
       });
-      cleanups.push(() => item.removeEventListener("click", onActivate));
     });
 
     activate(
@@ -1002,9 +1078,7 @@ function normalizeSimplyGalleries(root: ParentNode): void {
       item.style.width = "100%";
       item.style.height = "auto";
       item.style.maxWidth = "none";
-      item.style.transform = "none";
-      item.style.opacity = "1";
-      item.style.visibility = "visible";
+      // Leave transform/opacity to CSS so scroll-reveal + hover lift can run
 
       let caption = item.querySelector<HTMLElement>(".sgb-item-caption");
       const captionText = caption?.textContent?.replace(/\s+/g, " ").trim() || "";
@@ -1030,6 +1104,31 @@ function normalizeSimplyGalleries(root: ParentNode): void {
       caption.style.position = "relative";
       caption.style.opacity = "1";
       caption.style.visibility = "visible";
+    });
+  });
+}
+
+
+/** Remove masonry leftover locks that would block reveal/hover motion. */
+function clearGalleryMotionLocks(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(".sgb-item").forEach((item) => {
+    item.style.removeProperty("transform");
+    item.style.removeProperty("opacity");
+    item.style.removeProperty("visibility");
+  });
+}
+
+/** Soft per-grid stagger delays (capped) for gallery cards. */
+function softStaggerGalleryItems(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(".sgb-gallery").forEach((gallery) => {
+    const items = Array.from(gallery.querySelectorAll<HTMLElement>(".sgb-item"));
+    items.forEach((item, i) => {
+      item.classList.add("renacon-gallery-stagger");
+      const delay = `${Math.min(i * 45, 420)}ms`;
+      item.style.setProperty("--renacon-stagger-delay", delay);
+      if (item.classList.contains("renacon-reveal")) {
+        item.style.setProperty("--renacon-reveal-delay", delay);
+      }
     });
   });
 }
