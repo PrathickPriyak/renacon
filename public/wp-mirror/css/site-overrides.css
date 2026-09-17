@@ -903,16 +903,10 @@ body.renacon-page-media .renacon-hotspot-tip,
   display: block;
 }
 
+/* Superseded by 16:9 absolute-fill rules above (renacon-hero-clip-videos-v3) */
 #post-1067 .wp-block-embed,
 #post-1067 .wp-block-embed__wrapper {
   max-width: 100%;
-}
-
-#post-1067 .wp-block-embed iframe {
-  width: 100% !important;
-  max-width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto !important;
 }
 
 @media (max-width: 767px) {
