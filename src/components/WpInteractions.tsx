@@ -135,6 +135,117 @@ function initPageInteractions(
   }
 }
 
+
+const WP_ORIGIN = "https://renacon.in";
+
+function absolutizeWpUrl(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
+    return trimmed;
+  }
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  if (trimmed.startsWith("/wp-content/") || trimmed.startsWith("/wp-includes/")) {
+    return `${WP_ORIGIN}${trimmed}`;
+  }
+  return trimmed;
+}
+
+/** Fix relative / lazy WordPress media so product images actually paint. */
+function hydrateWpImages(root: ParentNode): void {
+  root.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
+    const lazy =
+      img.getAttribute("data-src") ||
+      img.getAttribute("data-lazy-src") ||
+      img.getAttribute("data-original");
+    const current = img.getAttribute("src") || "";
+    if (lazy && (!current || current.startsWith("data:"))) {
+      img.setAttribute("src", absolutizeWpUrl(lazy));
+    } else if (current) {
+      const abs = absolutizeWpUrl(current);
+      if (abs !== current) img.setAttribute("src", abs);
+    }
+
+    const srcset = img.getAttribute("srcset");
+    if (srcset) {
+      const next = srcset.replace(
+        /(^|,\s*)(\/wp-content\/|\/wp-includes\/)/g,
+        (_m, sep: string, path: string) => `${sep}${WP_ORIGIN}${path}`,
+      );
+      if (next !== srcset) img.setAttribute("srcset", next);
+    }
+  });
+
+  root.querySelectorAll<HTMLElement>("[style*='wp-content'], [style*='background']").forEach(
+    (el) => {
+      const style = el.getAttribute("style");
+      if (!style || !style.includes("/wp-content/")) return;
+      el.setAttribute(
+        "style",
+        style.replace(
+          /url\(\s*(['"]?)\/(wp-content|wp-includes)\//g,
+          `url($1${WP_ORIGIN}/$2/`,
+        ),
+      );
+    },
+  );
+}
+
+function initProductImagePolish(
+  root: HTMLElement,
+  cleanups: Array<() => void>,
+): void {
+  root.classList.add("renacon-product-ix");
+
+  const figures = Array.from(
+    root.querySelectorAll<HTMLElement>(
+      ".wp-block-image, .stk-block-background, .stk-block-image, .wp-block-getwid-image-box",
+    ),
+  );
+  figures.forEach((fig) => fig.classList.add("renacon-product-media"));
+
+  const photoCols = Array.from(
+    root.querySelectorAll<HTMLElement>(
+      ".stk-block-background.stk--has-background-overlay",
+    ),
+  );
+  if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
+    photoCols.forEach((el) => el.classList.add("renacon-product-photo-in"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const el = entry.target as HTMLElement;
+        el.classList.toggle("renacon-product-photo-in", entry.isIntersecting);
+      });
+    },
+    { threshold: 0.2 },
+  );
+  photoCols.forEach((el) => io.observe(el));
+  cleanups.push(() => io.disconnect());
+}
+
+function initProductAccordions(
+  root: HTMLElement,
+  cleanups: Array<() => void>,
+): void {
+  const details = Array.from(
+    root.querySelectorAll<HTMLDetailsElement>(
+      "details.stk-block-accordion, details.wp-block-stackable-accordion",
+    ),
+  );
+  details.forEach((el) => {
+    el.classList.add("renacon-product-accordion");
+    const onToggle = () => {
+      el.classList.toggle("renacon-product-accordion-open", el.open);
+    };
+    onToggle();
+    el.addEventListener("toggle", onToggle);
+    cleanups.push(() => el.removeEventListener("toggle", onToggle));
+  });
+}
+
 function classifyHomeChild(el: HTMLElement): string | null {
   if (
     el.classList.contains("stk-52d755f") ||
@@ -486,6 +597,45 @@ export function WpInteractions() {
 
     // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
     cleanups.push(initGetwidHotspots());
+
+
+    // Product pages — images, accordion, CTA polish (all product slugs)
+    const productRoots = Array.from(
+      document.querySelectorAll<HTMLElement>("article.renacon-product-page"),
+    );
+    productRoots.forEach((productRoot) => {
+      hydrateWpImages(productRoot);
+      initPageInteractions(
+        productRoot,
+        {
+          revealSelector: [
+            ".entry-content > .wp-block-image",
+            ".entry-content > p",
+            ".entry-content > h1",
+            ".entry-content > h2",
+            ".entry-content > h3",
+            ".wp-block-stackable-columns",
+            ".wp-block-stackable-accordion",
+            ".wp-block-image",
+            ".ugb-container",
+            ".wpforms-container",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image.alignfull:first-child",
+            ".entry-content > .wp-block-image:first-child",
+            "h1.wp-block-heading",
+            ".stk-block-heading",
+          ],
+        },
+        cleanups,
+      );
+      initProductImagePolish(productRoot, cleanups);
+      initProductAccordions(productRoot, cleanups);
+    });
+
+    // Global belt-and-suspenders for mirrored media URLs / lazy attrs
+    hydrateWpImages(document.body);
+
 
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
