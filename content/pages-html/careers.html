@@ -73,12 +73,15 @@
 <p class=" has-text-align-center eplus-wrapper">Fill the form below, and let’s explore how you can be a part of our exciting journey. Your next big opportunity starts here!&#8221;</p>
 
 
-<div class="renacon-careers-form-wrap">
+<div class="renacon-careers-form-wrap" id="apply">
 <form id="renacon-careers-form" class="renacon-careers-form wpforms-form" method="post" action="/api/careers/" enctype="multipart/form-data" novalidate>
   <div class="renacon-careers-intro">
-    <p class="renacon-careers-kicker">Renacon careers</p>
-    <h3 class="renacon-careers-form-title">Apply now</h3>
-    <p class="renacon-careers-form-lead">Share your details and attach your resume. Our HR team will review your application.</p>
+    <span class="renacon-careers-brand-mark" aria-hidden="true"></span>
+    <div class="renacon-careers-intro-copy">
+      <p class="renacon-careers-kicker">Renacon careers</p>
+      <h3 class="renacon-careers-form-title">Apply now</h3>
+      <p class="renacon-careers-form-lead">Share your details and attach your resume. Our HR team will review your application.</p>
+    </div>
   </div>
   <div class="renacon-careers-grid">
     <div class="renacon-field">
@@ -87,20 +90,22 @@
     </div>
     <div class="renacon-field">
       <label for="careers-phone">Phone <span class="req" aria-hidden="true">*</span></label>
-      <input id="careers-phone" type="tel" name="phone" autocomplete="tel" required placeholder="10-digit mobile number">
+      <input id="careers-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="10-digit mobile number">
     </div>
     <div class="renacon-field renacon-field-span">
       <label for="careers-email">Email <span class="req" aria-hidden="true">*</span></label>
       <input id="careers-email" type="email" name="email" autocomplete="email" required placeholder="you@example.com">
     </div>
-    <div class="renacon-field">
+    <div class="renacon-field renacon-field-select">
       <label for="careers-role">Position applying for <span class="req" aria-hidden="true">*</span></label>
-      <select id="careers-role" name="role" required>
-        <option value="" disabled selected>Select a position</option>
-        <option>Marketing Executive (Sales) – Cuddalore</option>
-        <option>Cluster Head (Sales) – Tirunelveli</option>
-        <option>Other / General application</option>
-      </select>
+      <div class="renacon-select-wrap">
+        <select id="careers-role" name="role" required>
+          <option value="" disabled selected>Select a position</option>
+          <option>Marketing Executive (Sales) – Cuddalore</option>
+          <option>Cluster Head (Sales) – Tirunelveli</option>
+          <option>Other / General application</option>
+        </select>
+      </div>
     </div>
     <div class="renacon-field">
       <label for="careers-experience">Experience (years) <span class="req" aria-hidden="true">*</span></label>
@@ -141,7 +146,7 @@
     </div>
   </div>
   <div class="renacon-careers-actions">
-    <button type="submit" class="renacon-careers-submit">Submit application</button>
+    <button type="submit" class="renacon-careers-submit wpforms-submit">Submit application</button>
     <p class="renacon-careers-hint">Questions? Email <a href="mailto:career@renacon.in">career@renacon.in</a></p>
   </div>
 </form>

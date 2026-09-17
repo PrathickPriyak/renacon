@@ -452,16 +452,15 @@ export function FormBridge() {
         markInvalid('input[type="email"], input[name="email"], input[name="email-1"], .forminator-email--field');
         return;
       }
-      if (phone && phone.replace(/\D/g, "").length > 0 && phone.replace(/\D/g, "").length < 8) {
-        setStatus(form, "Enter a valid phone number.", "error");
-        markInvalid('input[name="phone"], input[name="phone-1"], .forminator-field--phone, input[type="tel"]');
-        return;
-      }
-      const phoneForApi = phone.trim() || "0000000000";
 
       let resumeFile: File | null = null;
       if (kind === "careers") {
         enhanceCareersForm(form);
+        if (!phone.trim() || phone.replace(/\D/g, "").length < 8) {
+          setStatus(form, "Enter a valid phone number.", "error");
+          markInvalid('input[name="phone"], #careers-phone, input[type="tel"]');
+          return;
+        }
         if (!(payload.role || "").trim()) {
           setStatus(form, "Please select the position you are applying for.", "error");
           markInvalid('select[name="role"], #careers-role');
@@ -494,7 +493,14 @@ export function FormBridge() {
           return;
         }
         setResumeError(form, null);
+      } else if (phone && phone.replace(/\D/g, "").length > 0 && phone.replace(/\D/g, "").length < 8) {
+        setStatus(form, "Enter a valid phone number.", "error");
+        markInvalid('input[name="phone"], input[name="phone-1"], .forminator-field--phone, input[type="tel"]');
+        return;
       }
+
+      const phoneForApi =
+        kind === "careers" ? phone.trim() : phone.trim() || "0000000000";
 
       const submitBtn = form.querySelector<HTMLButtonElement>(
         'button[type="submit"], .forminator-button-submit, .wpforms-submit, .renacon-careers-submit',

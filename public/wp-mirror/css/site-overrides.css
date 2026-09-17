@@ -1250,9 +1250,9 @@ form textarea:focus {
   box-shadow: 0 0 0 3px rgba(11, 61, 44, 0.12);
 }
 
-.wpforms-submit,
+.wpforms-submit:not(.renacon-careers-submit),
 .forminator-button,
-button[type="submit"] {
+button[type="submit"]:not(.renacon-careers-submit) {
   cursor: pointer;
   background: #0b3d2c;
   color: #fff;
@@ -1262,9 +1262,9 @@ button[type="submit"] {
   font-weight: 600;
 }
 
-.wpforms-submit:hover,
+.wpforms-submit:not(.renacon-careers-submit):hover,
 .forminator-button:hover,
-button[type="submit"]:hover {
+button[type="submit"]:not(.renacon-careers-submit):hover {
   background: #0f5240;
   transform: translateY(-1px);
 }
@@ -4027,3 +4027,500 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
+
+/* ============================================================
+   Careers apply form — premium panel (must beat generic form UI)
+   ============================================================ */
+.renacon-mirror .renacon-careers-form-wrap {
+  --renacon-careers-green: #008037;
+  --renacon-careers-green-deep: #00662c;
+  --renacon-careers-yellow: #e8b923;
+  --renacon-careers-yellow-soft: #f7e7a8;
+  --renacon-careers-ink: #1a2e22;
+  --renacon-careers-muted: #5a6b60;
+  --renacon-careers-line: #c9d5cc;
+  --renacon-careers-surface: #f3f9f5;
+  position: relative;
+  isolation: isolate;
+  max-width: 760px;
+  margin: 2.5rem auto 3.5rem;
+  padding: 2.15rem 1.85rem 1.85rem;
+  background:
+    linear-gradient(145deg, rgba(232, 185, 35, 0.16) 0%, transparent 32%),
+    linear-gradient(180deg, #f7fcf8 0%, #ffffff 42%, #ffffff 100%);
+  border: 1px solid rgba(0, 128, 55, 0.18);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 18px 40px rgba(26, 46, 34, 0.08),
+    0 4px 12px rgba(26, 46, 34, 0.04);
+  overflow: hidden;
+}
+
+.renacon-mirror .renacon-careers-form-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--renacon-careers-yellow) 0%,
+    var(--renacon-careers-green) 42%,
+    var(--renacon-careers-green-deep) 100%
+  );
+  z-index: 1;
+}
+
+.renacon-mirror .renacon-careers-form-wrap::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  top: -28px;
+  width: 96px;
+  height: 96px;
+  background:
+    linear-gradient(135deg, var(--renacon-careers-yellow) 0 50%, transparent 50%),
+    linear-gradient(225deg, var(--renacon-careers-green) 0 50%, transparent 50%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.renacon-mirror .renacon-careers-form {
+  position: relative;
+  z-index: 1;
+}
+
+.renacon-mirror .renacon-careers-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid rgba(201, 213, 204, 0.9);
+}
+
+.renacon-mirror .renacon-careers-brand-mark {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: 0.15rem;
+  border-radius: 2px;
+  background:
+    linear-gradient(160deg, var(--renacon-careers-yellow) 0%, #f0d56a 46%, transparent 47%),
+    linear-gradient(200deg, var(--renacon-careers-green) 0%, var(--renacon-careers-green-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+    3px 3px 0 rgba(18, 53, 40, 0.18);
+}
+
+.renacon-mirror .renacon-careers-intro-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.renacon-mirror .renacon-careers-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--renacon-careers-green);
+}
+
+.renacon-mirror .renacon-careers-form-title {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.55rem, 3vw, 1.95rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--renacon-careers-ink);
+  letter-spacing: 0.01em;
+}
+
+.renacon-mirror .renacon-careers-form-lead {
+  margin: 0;
+  color: var(--renacon-careers-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  max-width: 38rem;
+}
+
+.renacon-mirror .renacon-careers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.35rem 1.4rem;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field {
+  min-width: 0;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field-span {
+  grid-column: 1 / -1;
+}
+
+.renacon-mirror .renacon-careers-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--renacon-careers-ink);
+}
+
+.renacon-mirror .renacon-careers-form .req {
+  color: #c62828;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]),
+.renacon-mirror .renacon-careers-form select,
+.renacon-mirror .renacon-careers-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.82rem 0.95rem;
+  border: 1px solid var(--renacon-careers-line) !important;
+  border-radius: 2px !important;
+  background: #fff !important;
+  color: var(--renacon-careers-ink);
+  font-size: 1rem;
+  line-height: 1.35;
+  outline: none;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]):hover,
+.renacon-mirror .renacon-careers-form select:hover,
+.renacon-mirror .renacon-careers-form textarea:hover {
+  border-color: #9bb5a4 !important;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]):focus,
+.renacon-mirror .renacon-careers-form select:focus,
+.renacon-mirror .renacon-careers-form textarea:focus,
+.renacon-mirror .renacon-careers-form .renacon-field-focus {
+  border-color: var(--renacon-careers-green) !important;
+  box-shadow:
+    0 0 0 3px rgba(0, 128, 55, 0.16),
+    0 0 0 1px var(--renacon-careers-yellow-soft) !important;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12) !important;
+}
+
+.renacon-mirror .renacon-careers-form textarea {
+  min-height: 7.25rem;
+  resize: vertical;
+}
+
+.renacon-mirror .renacon-select-wrap {
+  position: relative;
+}
+
+.renacon-mirror .renacon-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 0.95rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--renacon-careers-green-deep);
+  border-bottom: 2px solid var(--renacon-careers-green-deep);
+  transform: translateY(-65%) rotate(45deg);
+  pointer-events: none;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.4rem;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%) !important;
+  cursor: pointer;
+}
+
+.renacon-mirror .renacon-resume-dropzone {
+  position: relative;
+  border: 1.5px dashed #8fad9a !important;
+  border-radius: 2px;
+  background:
+    radial-gradient(ellipse at top, rgba(232, 185, 35, 0.12), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--renacon-careers-surface)) !important;
+  min-height: 8.25rem;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.renacon-mirror .renacon-resume-dropzone:hover,
+.renacon-mirror .renacon-resume-dropzone:focus-within {
+  border-color: var(--renacon-careers-green) !important;
+  box-shadow: 0 0 0 3px rgba(0, 128, 55, 0.12);
+}
+
+.renacon-mirror .renacon-resume-dropzone.is-dragover {
+  border-color: var(--renacon-careers-yellow) !important;
+  border-style: solid !important;
+  background: rgba(247, 231, 168, 0.42) !important;
+  box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.28);
+  transform: scale(1.01);
+}
+
+.renacon-mirror .renacon-resume-dropzone.has-file {
+  border-style: solid !important;
+  border-color: var(--renacon-careers-green) !important;
+  background: rgba(0, 128, 55, 0.06) !important;
+}
+
+.renacon-mirror .renacon-resume-dropzone.is-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12);
+}
+
+.renacon-mirror .renacon-resume-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.renacon-mirror .renacon-resume-dropzone-inner {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.5rem 1.15rem;
+  text-align: center;
+}
+
+.renacon-mirror .renacon-resume-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: 0.15rem;
+  border-radius: 2px;
+  background:
+    linear-gradient(160deg, var(--renacon-careers-yellow) 0%, #f0d56a 45%, transparent 46%),
+    linear-gradient(200deg, var(--renacon-careers-green) 0%, var(--renacon-careers-green-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+    2px 2px 0 rgba(18, 53, 40, 0.16);
+}
+
+.renacon-mirror .renacon-resume-prompt {
+  margin: 0;
+  color: var(--renacon-careers-ink);
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.renacon-mirror .renacon-resume-browse {
+  color: var(--renacon-careers-green);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.renacon-mirror .renacon-resume-meta {
+  margin: 0;
+  color: var(--renacon-careers-muted);
+  font-size: 0.82rem;
+}
+
+.renacon-mirror .renacon-resume-filename {
+  margin: 0.4rem 0 0;
+  max-width: 100%;
+  padding: 0.4rem 0.75rem;
+  border-radius: 2px;
+  background: rgba(0, 128, 55, 0.12);
+  color: var(--renacon-careers-green-deep);
+  font-size: 0.88rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.renacon-mirror .renacon-resume-error {
+  margin: 0.55rem 0 0;
+  color: #b00020;
+  font-size: 0.88rem;
+}
+
+.renacon-mirror .renacon-careers-actions {
+  margin-top: 1.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  padding: 1.35rem 0 0.15rem;
+  border-top: 1px solid rgba(201, 213, 204, 0.95);
+  background: linear-gradient(180deg, transparent, rgba(243, 249, 245, 0.65));
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit,
+.renacon-mirror button.renacon-careers-submit[type="submit"],
+.renacon-mirror .renacon-careers-form button.wpforms-submit.renacon-careers-submit {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 13.5rem;
+  border: none !important;
+  border-radius: 2px !important;
+  padding: 1rem 1.7rem !important;
+  background: linear-gradient(180deg, #00a045 0%, var(--renacon-careers-green) 55%, var(--renacon-careers-green-deep) 100%) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #123528 !important;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:hover,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+  box-shadow: 4px 5px 0 #123528 !important;
+  background: linear-gradient(180deg, #00a845 0%, #00903c 55%, var(--renacon-careers-green-deep) 100%) !important;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:focus-visible,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:focus-visible {
+  outline: 2px solid var(--renacon-careers-yellow);
+  outline-offset: 3px;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:disabled,
+.renacon-mirror .renacon-careers-form .renacon-careers-submit.renacon-submit-busy,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:disabled {
+  opacity: 0.72;
+  cursor: default;
+  filter: none;
+  transform: none;
+  box-shadow: 3px 3px 0 #123528 !important;
+}
+
+.renacon-mirror .renacon-careers-hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--renacon-careers-muted);
+}
+
+.renacon-mirror .renacon-careers-hint a {
+  color: var(--renacon-careers-green);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status {
+  flex-basis: 100%;
+  margin: 0.2rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid transparent;
+  background: transparent;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="info"] {
+  border-left-color: var(--renacon-careers-yellow);
+  background: rgba(247, 231, 168, 0.4);
+  color: var(--renacon-careers-ink);
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="ok"] {
+  border-left-color: var(--renacon-careers-green);
+  background: rgba(0, 128, 55, 0.09);
+  color: var(--renacon-careers-green-deep);
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="error"] {
+  border-left-color: #b00020;
+  background: rgba(176, 0, 32, 0.07);
+  color: #8a0018;
+}
+
+.renacon-mirror .renacon-careers-form.renacon-form-success .renacon-careers-submit {
+  box-shadow: 3px 3px 0 var(--renacon-careers-yellow) !important;
+}
+
+@media (max-width: 640px) {
+  .renacon-mirror .renacon-careers-form-wrap {
+    margin: 1.35rem 0 2.25rem;
+    padding: 1.45rem 1.05rem 1.35rem;
+  }
+
+  .renacon-mirror .renacon-careers-intro {
+    gap: 0.85rem;
+    margin-bottom: 1.35rem;
+    padding-bottom: 1.1rem;
+  }
+
+  .renacon-mirror .renacon-careers-brand-mark {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .renacon-mirror .renacon-careers-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .renacon-mirror .renacon-careers-actions {
+    flex-direction: column;
+    align-items: stretch;
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    margin-left: -1.05rem;
+    margin-right: -1.05rem;
+    margin-bottom: -0.35rem;
+    padding: 1rem 1.05rem 0.85rem;
+    border-top: 1px solid rgba(201, 213, 204, 0.95);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 -8px 20px rgba(26, 46, 34, 0.06);
+  }
+
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit,
+  .renacon-mirror button.renacon-careers-submit[type="submit"] {
+    width: 100%;
+    min-width: 0;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-mirror .renacon-careers-form input:not([type="file"]),
+  .renacon-mirror .renacon-careers-form select,
+  .renacon-mirror .renacon-careers-form textarea,
+  .renacon-mirror .renacon-resume-dropzone,
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit,
+  .renacon-mirror button.renacon-careers-submit[type="submit"] {
+    transition: none !important;
+  }
+
+  .renacon-mirror .renacon-resume-dropzone.is-dragover,
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit:hover,
+  .renacon-mirror button.renacon-careers-submit[type="submit"]:hover {
+    transform: none !important;
+  }
+}

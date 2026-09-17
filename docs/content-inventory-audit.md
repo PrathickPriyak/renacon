@@ -27,7 +27,7 @@ Audit result: **0 HTML pages without a route**, **0 orphan app routes**.
 ## Forms / OTP
 
 - Brochure download: form submit → `/api/brochure/` (no OTP in UI)
-- Careers apply: multipart form → `/api/careers/` with required resume (PDF/DOC/DOCX, max 5MB); files under `data/submissions/resumes/` (or `/tmp` on Vercel) + metadata in `careers.jsonl`
+- Careers apply: multipart form → `/api/careers/` with required resume (PDF/DOC/DOCX, max 5MB); premium Renacon green/yellow panel (drag-drop upload + sticky mobile submit); files under `data/submissions/resumes/` (or `/tmp` on Vercel) + metadata in `careers.jsonl`
 - OTP APIs retained unused: `/api/otp/send/`, `/api/otp/verify/`
 - Without MSG91/Twilio/Fast2SMS env vars → **demoMode** with `devOtp` in response
 - Documented in `env.sms.example`
