@@ -370,15 +370,101 @@ function wrapHomeBands(
   });
 }
 
+function normalizePath(path: string): string {
+  if (!path) return "/";
+  try {
+    const u = path.startsWith("http") ? new URL(path) : null;
+    const p = u ? u.pathname : path.split("?")[0]?.split("#")[0] || "/";
+    const trimmed = p.replace(/\/+$/, "");
+    return trimmed === "" ? "/" : trimmed;
+  } catch {
+    return "/";
+  }
+}
+
+/** Mark current page / ancestors in desktop + offcanvas menus from the URL. */
+function markActiveNav(pathname: string) {
+  const current = normalizePath(pathname);
+  const scopes = document.querySelectorAll<HTMLElement>(
+    "#header .menu, #offcanvas .mobile-menu ul",
+  );
+
+  scopes.forEach((menu) => {
+    menu
+      .querySelectorAll<HTMLElement>(
+        ".current-menu-item, .current_page_item, .current-menu-ancestor, .current-menu-parent, .renacon-nav-active",
+      )
+      .forEach((el) => {
+        el.classList.remove(
+          "current-menu-item",
+          "current_page_item",
+          "current-menu-ancestor",
+          "current-menu-parent",
+          "renacon-nav-active",
+        );
+        el
+          .querySelectorAll<HTMLElement>(
+            ":scope > a.ct-menu-link, :scope > .ct-sub-menu-parent > a.ct-menu-link",
+          )
+          .forEach((a) => a.removeAttribute("aria-current"));
+      });
+  });
+
+  const links = document.querySelectorAll<HTMLAnchorElement>(
+    "#header .menu a.ct-menu-link, #offcanvas .mobile-menu a.ct-menu-link",
+  );
+
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href || href === "#" || href.startsWith("#")) return;
+    const target = normalizePath(href);
+    const isExact = target === current;
+    const isPrefix =
+      target !== "/" &&
+      (current === target || current.startsWith(`${target}/`));
+    if (!isExact && !isPrefix) return;
+
+    const item = link.closest<HTMLElement>("li.menu-item");
+    if (!item) return;
+
+    if (isExact) {
+      item.classList.add(
+        "current-menu-item",
+        "current_page_item",
+        "renacon-nav-active",
+      );
+      link.setAttribute("aria-current", "page");
+    } else {
+      item.classList.add("renacon-nav-active");
+    }
+
+    let parent = item.parentElement?.closest<HTMLElement>("li.menu-item");
+    while (parent) {
+      parent.classList.add(
+        "current-menu-ancestor",
+        "current-menu-parent",
+        "renacon-nav-active",
+      );
+      parent = parent.parentElement?.closest<HTMLElement>("li.menu-item");
+    }
+  });
+}
+
 /** Enables Blocksy mobile menu and desktop dropdowns without WordPress JS. */
 export function WpInteractions() {
   useEffect(() => {
     const offcanvas = document.getElementById("offcanvas");
 
+    // IMPORTANT: do NOT match aria-label*="menu" — submenu chevrons use
+    // "Expand dropdown menu" and would steal hamburger open/close.
     const openers = Array.from(
       document.querySelectorAll<HTMLElement>(
-        '[data-toggle-panel="#offcanvas"], .ct-header-trigger, button[aria-label*="menu" i], .ct-toggle-button',
+        '[data-toggle-panel="#offcanvas"], .ct-header-trigger[data-toggle-panel="#offcanvas"]',
       ),
+    ).filter(
+      (el) =>
+        !el.classList.contains("ct-toggle-dropdown-mobile") &&
+        !el.closest("#offcanvas"),
     );
 
     const setOpenerState = (isOpen: boolean) => {
@@ -386,6 +472,7 @@ export function WpInteractions() {
         el.setAttribute("aria-expanded", isOpen ? "true" : "false");
         el.classList.toggle("renacon-menu-open", isOpen);
       });
+      document.documentElement.classList.toggle("ct-panel-open", isOpen);
     };
 
     const open = () => {
@@ -393,7 +480,6 @@ export function WpInteractions() {
       offcanvas.classList.add("is-open", "active");
       offcanvas.removeAttribute("inert");
       offcanvas.setAttribute("aria-hidden", "false");
-      // Neutralize Blocksy left-side reveal offset on the inner panel
       const inner = offcanvas.querySelector<HTMLElement>(".ct-panel-inner");
       if (inner) {
         inner.style.transform = "none";
@@ -402,7 +488,11 @@ export function WpInteractions() {
         inner.style.maxWidth = "100%";
         inner.style.width = "100%";
       }
-      document.documentElement.classList.add("ct-panel-open");
+      offcanvas
+        .querySelectorAll<HTMLElement>(".ct-panel-content[data-device='mobile']")
+        .forEach((el) => {
+          el.style.display = "block";
+        });
       document.body.style.overflow = "hidden";
       setOpenerState(true);
     };
@@ -411,9 +501,18 @@ export function WpInteractions() {
       offcanvas.classList.remove("is-open", "active");
       offcanvas.setAttribute("inert", "");
       offcanvas.setAttribute("aria-hidden", "true");
-      document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";
       setOpenerState(false);
+      offcanvas
+        .querySelectorAll<HTMLElement>(
+          ".dropdown-active, .menu-item-has-children.ct-active",
+        )
+        .forEach((item) => {
+          item.classList.remove("dropdown-active", "ct-active");
+        });
+      offcanvas
+        .querySelectorAll<HTMLElement>(".ct-toggle-dropdown-mobile")
+        .forEach((btn) => btn.setAttribute("aria-expanded", "false"));
     };
 
     const onOpenerClick = (e: Event) => {
@@ -427,46 +526,9 @@ export function WpInteractions() {
     setOpenerState(false);
     openers.forEach((el) => el.addEventListener("click", onOpenerClick));
 
-    const onOffcanvasClick = (e: Event) => {
-      const t = e.target as HTMLElement;
-      if (t.closest(".ct-toggle-close, [data-close]")) {
-        e.preventDefault();
-        close();
-        return;
-      }
-      if (t === offcanvas) {
-        close();
-        return;
-      }
-      const link = t.closest("a");
-      if (link && !link.getAttribute("href")?.startsWith("#")) {
-        close();
-      }
-    };
-    offcanvas?.addEventListener("click", onOffcanvasClick);
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && offcanvas?.classList.contains("is-open")) {
-        close();
-      }
-    };
-    document.addEventListener("keydown", onKeyDown);
-
-    const mobileToggles = Array.from(
-      document.querySelectorAll<HTMLElement>(".ct-toggle-dropdown-mobile"),
-    );
-
-    const onMobileToggle = (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const btn = e.currentTarget as HTMLElement;
-      const item = btn.closest<HTMLElement>(
-        ".menu-item-has-children, [class*='children']",
-      );
-      if (!item) return;
-      const willOpen = !item.classList.contains("dropdown-active");
+    const setMobileItemOpen = (item: HTMLElement, willOpen: boolean) => {
       const parentList = item.parentElement;
-      if (parentList) {
+      if (parentList && willOpen) {
         Array.from(parentList.children).forEach((sib) => {
           if (!(sib instanceof HTMLElement) || sib === item) return;
           if (
@@ -484,13 +546,78 @@ export function WpInteractions() {
       }
       item.classList.toggle("dropdown-active", willOpen);
       item.classList.toggle("ct-active", willOpen);
-      btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      item
+        .querySelectorAll<HTMLElement>(
+          ":scope > .ct-sub-menu-parent .ct-toggle-dropdown-mobile",
+        )
+        .forEach((b) =>
+          b.setAttribute("aria-expanded", willOpen ? "true" : "false"),
+        );
     };
 
+    const onOffcanvasClick = (e: Event) => {
+      const t = e.target as HTMLElement;
+      if (t.closest(".ct-toggle-close, [data-close]")) {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+        return;
+      }
+      if (t === offcanvas) {
+        close();
+        return;
+      }
+
+      const toggleBtn = t.closest<HTMLElement>(".ct-toggle-dropdown-mobile");
+      if (toggleBtn && offcanvas?.contains(toggleBtn)) {
+        e.preventDefault();
+        e.stopPropagation();
+        const item = toggleBtn.closest<HTMLElement>(
+          ".menu-item-has-children, [class*='children']",
+        );
+        if (!item) return;
+        setMobileItemOpen(item, !item.classList.contains("dropdown-active"));
+        return;
+      }
+
+      const link = t.closest("a");
+      if (!link || !offcanvas?.contains(link)) return;
+
+      const href = link.getAttribute("href") || "";
+      if (href === "#" || href.startsWith("#")) {
+        const item = link.closest<HTMLElement>(
+          ".menu-item-has-children, [class*='children']",
+        );
+        if (item && item.querySelector(":scope > .sub-menu")) {
+          e.preventDefault();
+          e.stopPropagation();
+          setMobileItemOpen(item, !item.classList.contains("dropdown-active"));
+        }
+        return;
+      }
+
+      close();
+    };
+    offcanvas?.addEventListener("click", onOffcanvasClick);
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && offcanvas?.classList.contains("is-open")) {
+        close();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+
+    const mobileToggles = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        "#offcanvas .ct-toggle-dropdown-mobile",
+      ),
+    );
     mobileToggles.forEach((btn) => {
       btn.setAttribute("aria-expanded", "false");
-      btn.addEventListener("click", onMobileToggle);
+      btn.setAttribute("type", "button");
     });
+
+    markActiveNav(window.location.pathname);
 
     const parents = Array.from(
       document.querySelectorAll<HTMLElement>(
@@ -837,9 +964,6 @@ export function WpInteractions() {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);
       document.removeEventListener("keydown", onKeyDown);
-      mobileToggles.forEach((btn) =>
-        btn.removeEventListener("click", onMobileToggle),
-      );
       cleanups.forEach((fn) => fn());
       document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";

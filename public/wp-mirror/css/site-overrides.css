@@ -138,6 +138,21 @@ textarea:focus-visible {
   pointer-events: auto !important;
 }
 
+/* Drawer must show mobile menu content on ALL widths (tablet/desktop too). */
+.renacon-mirror #offcanvas.is-open .ct-panel-content[data-device="mobile"],
+.renacon-mirror #offcanvas.active .ct-panel-content[data-device="mobile"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content[data-device="desktop"],
+.renacon-mirror #offcanvas.active .ct-panel-content[data-device="desktop"] {
+  display: none !important;
+}
+
 /* Kill Blocksy side-panel reveal offset that clipped labels on the left */
 .renacon-mirror #offcanvas.is-open .ct-panel-inner,
 .renacon-mirror #offcanvas.active .ct-panel-inner,
@@ -332,17 +347,36 @@ html.ct-panel-open #offcanvas * {
   transform: rotate(180deg);
 }
 
-/* Accordion: hide nested menus until opened */
-.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children > .sub-menu {
-  display: none;
-  list-style: none;
-  margin: 0 0 0.5rem;
-  padding: 0 0 0.35rem 0.85rem;
+/* Accordion: hide nested menus until opened.
+   MUST override desktop `.ct-header .menu-container .sub-menu { position:absolute }`
+   — #offcanvas also has .ct-header, so absolute submenus were clipped by overflow. */
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children > .sub-menu,
+.renacon-mirror #offcanvas .menu-container .sub-menu,
+.renacon-mirror #offcanvas .mobile-menu .sub-menu {
+  display: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  list-style: none !important;
+  margin: 0 0 0.5rem !important;
+  padding: 0 0 0.35rem 0.85rem !important;
+  z-index: auto !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .sub-menu,
 .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .sub-menu {
-  display: block;
+  display: block !important;
   animation: renacon-accordion-in 0.2s ease-out;
 }
 
@@ -426,8 +460,9 @@ html.ct-panel-open #offcanvas * {
   }
 }
 
-/* Ensure desktop menu items are visible even without Blocksy JS */
-.ct-header .menu-container > .menu {
+/* Ensure desktop menu items are visible even without Blocksy JS.
+   Scoped to #header so rules do NOT leak into #offcanvas (also .ct-header). */
+#header.ct-header .menu-container > .menu {
   display: flex !important;
   flex-wrap: wrap;
   gap: 0.35rem 1rem;
@@ -436,10 +471,10 @@ html.ct-panel-open #offcanvas * {
   margin: 0;
   padding: 0;
 }
-.ct-header .menu-container > .menu > li {
+#header.ct-header .menu-container > .menu > li {
   position: relative;
 }
-.ct-header .menu-container > .menu > li > a {
+#header.ct-header .menu-container > .menu > li > a {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
@@ -449,7 +484,7 @@ html.ct-panel-open #offcanvas * {
   font-weight: 500;
   white-space: nowrap;
 }
-.ct-header .menu-container .sub-menu {
+#header.ct-header .menu-container .sub-menu {
   display: none;
   position: absolute;
   top: 100%;
@@ -461,21 +496,21 @@ html.ct-panel-open #offcanvas * {
   z-index: 1000;
   list-style: none;
 }
-.ct-header .menu-container > .menu > li:hover > .sub-menu,
-.ct-header .menu-container > .menu > li:focus-within > .sub-menu {
+#header.ct-header .menu-container > .menu > li:hover > .sub-menu,
+#header.ct-header .menu-container > .menu > li:focus-within > .sub-menu {
   display: block;
 }
-.ct-header .menu-container .sub-menu a {
+#header.ct-header .menu-container .sub-menu a {
   display: block;
   padding: 0.55rem 1rem;
   color: #1a1e21;
   text-decoration: none;
 }
-.ct-header .menu-container .sub-menu a:hover {
+#header.ct-header .menu-container .sub-menu a:hover {
   background: #f3faf6;
   color: #0b3d2c;
 }
-.ct-header .menu-container .sub-menu .sub-menu {
+#header.ct-header .menu-container .sub-menu .sub-menu {
   left: 100%;
   top: 0;
 }
@@ -498,7 +533,7 @@ html.ct-panel-open #offcanvas * {
   position: relative !important;
 }
 
-.ct-header [class*="animated-submenu"] > .sub-menu {
+#header.ct-header [class*="animated-submenu"] > .sub-menu {
   display: block !important;
   position: absolute !important;
   top: 100% !important;
@@ -511,28 +546,28 @@ html.ct-panel-open #offcanvas * {
   list-style: none !important;
 }
 
-.ct-header [class*="animated-submenu"]:not(.ct-active) > .sub-menu {
+#header.ct-header [class*="animated-submenu"]:not(.ct-active) > .sub-menu {
   opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
 }
 
-.ct-header [class*="animated-submenu"].ct-active > .sub-menu,
-.ct-header [class*="animated-submenu"]:hover > .sub-menu,
-.ct-header [class*="animated-submenu"]:focus-within > .sub-menu {
+#header.ct-header [class*="animated-submenu"].ct-active > .sub-menu,
+#header.ct-header [class*="animated-submenu"]:hover > .sub-menu,
+#header.ct-header [class*="animated-submenu"]:focus-within > .sub-menu {
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
   transform: none !important;
 }
 
-.ct-header [class*="animated-submenu"].ct-active > .sub-menu > li,
-.ct-header [class*="animated-submenu"]:hover > .sub-menu > li {
+#header.ct-header [class*="animated-submenu"].ct-active > .sub-menu > li,
+#header.ct-header [class*="animated-submenu"]:hover > .sub-menu > li {
   opacity: 1 !important;
   transform: none !important;
 }
 
-.ct-header .menu .sub-menu .menu-item-has-children > .sub-menu {
+#header.ct-header .menu .sub-menu .menu-item-has-children > .sub-menu {
   left: 100% !important;
   top: 0 !important;
 }
@@ -1610,17 +1645,34 @@ button[type="submit"]:hover {
   }
 }
 
-/* Offcanvas link hover / focus polish */
+/* Offcanvas link hover / focus / active polish */
 .renacon-mirror #offcanvas .mobile-menu .ct-menu-link:hover,
 .renacon-mirror #offcanvas .mobile-menu .ct-menu-link:focus-visible {
-  color: #b8f5d0 !important;
+  color: var(--renacon-yellow, #f4c709) !important;
   padding-inline-start: 0.35rem;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current_page_item > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .renacon-nav-active > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-sub-menu-parent > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current-menu-ancestor > .ct-sub-menu-parent > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .renacon-nav-active > .ct-sub-menu-parent > .ct-menu-link {
+  color: var(--renacon-yellow, #f4c709) !important;
+  font-weight: 700 !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:hover,
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:focus-visible {
   background: rgba(255, 255, 255, 0.12);
-  border-color: #b8f5d0;
+  border-color: var(--renacon-yellow, #f4c709);
+  color: var(--renacon-yellow, #f4c709);
+}
+
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile,
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile {
+  border-color: var(--renacon-yellow, #f4c709);
+  color: var(--renacon-yellow, #f4c709);
 }
 
 /* Sticky header subtle elevation once scrolled (class toggled in WpInteractions) */
@@ -2014,14 +2066,29 @@ button[type="submit"]:hover {
 
 .ct-header .menu-container > .menu > li > a:hover,
 .ct-header .menu-container > .menu > li.current-menu-item > a,
+.ct-header .menu-container > .menu > li.current_page_item > a,
+.ct-header .menu-container > .menu > li.current-menu-ancestor > a,
+.ct-header .menu-container > .menu > li.renacon-nav-active > a,
 .ct-header .menu-container > .menu > li.ct-active > a {
-  color: var(--renacon-green) !important;
+  color: var(--renacon-green-mid, #1b7a3d) !important;
 }
 
 .ct-header .menu-container > .menu > li > a:hover::after,
 .ct-header .menu-container > .menu > li.current-menu-item > a::after,
+.ct-header .menu-container > .menu > li.current_page_item > a::after,
+.ct-header .menu-container > .menu > li.current-menu-ancestor > a::after,
+.ct-header .menu-container > .menu > li.renacon-nav-active > a::after,
 .ct-header .menu-container > .menu > li.ct-active > a::after {
   transform: scaleX(1);
+  background: var(--renacon-yellow, #f4c709);
+}
+
+#header.ct-header .menu-container .sub-menu a:hover,
+#header.ct-header .menu-container .sub-menu .current-menu-item > a,
+#header.ct-header .menu-container .sub-menu .renacon-nav-active > a {
+  background: #f3faf6;
+  color: var(--renacon-green-mid, #1b7a3d) !important;
+  font-weight: 600;
 }
 
 @media (max-width: 999px) {
