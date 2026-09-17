@@ -154,6 +154,104 @@ export function WpInteractions() {
     window.addEventListener("scroll", onScroll, { passive: true });
     cleanups.push(() => window.removeEventListener("scroll", onScroll));
 
+    // About Us: scroll-reveal + soft image lift (CSS handles reduced-motion)
+    const aboutRoot = document.getElementById("post-4487");
+    if (aboutRoot) {
+      aboutRoot.classList.add("renacon-about-interactive");
+      const revealSelector = [
+        ".wp-block-media-text",
+        ".entry-content > p",
+        ".entry-content > h2",
+        ".entry-content > h1",
+        ".wp-block-stackable-columns",
+        ".wp-block-getwid-image-box",
+        ".wp-block-pullquote",
+        ".wp-block-stackable-accordion",
+        ".ugb-container",
+        ".stk-block-column.stk-9ca72ed",
+        ".stk-block-column.stk-b9aef73",
+        ".stk-block-column.stk-ad91ac3",
+      ].join(", ");
+
+      const candidates = Array.from(
+        aboutRoot.querySelectorAll<HTMLElement>(revealSelector),
+      ).filter((el) => {
+        // Prefer leaf-ish blocks; skip nested duplicates already marked
+        if (el.classList.contains("renacon-reveal")) return false;
+        // Skip spacers / empty wrappers
+        if (el.classList.contains("wp-block-spacer")) return false;
+        return true;
+      });
+
+      // Deduplicate nested: if a parent is also a candidate, keep the parent only
+      const revealEls = candidates.filter((el) => {
+        return !candidates.some(
+          (other) => other !== el && other.contains(el),
+        );
+      });
+
+      revealEls.forEach((el, i) => {
+        el.classList.add("renacon-reveal");
+        el.style.setProperty("--renacon-reveal-delay", `${Math.min(i * 40, 280)}ms`);
+      });
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      if (reduceMotion) {
+        revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+      } else if (typeof IntersectionObserver !== "undefined") {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              el.classList.add("renacon-reveal-in");
+              io.unobserve(el);
+            });
+          },
+          { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+        );
+        revealEls.forEach((el) => io.observe(el));
+        cleanups.push(() => io.disconnect());
+      } else {
+        revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+      }
+
+      // Soft parallax-ish lift on hero / founder images while scrolling (very light)
+      const mediaImgs = Array.from(
+        aboutRoot.querySelectorAll<HTMLElement>(
+          ".wp-block-media-text__media img, .wp-block-getwid-image-box__image",
+        ),
+      );
+      if (!reduceMotion && mediaImgs.length) {
+        let ticking = false;
+        const onAboutScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const mid = window.innerHeight * 0.5;
+            mediaImgs.forEach((img) => {
+              const rect = img.getBoundingClientRect();
+              const delta = (rect.top + rect.height / 2 - mid) / window.innerHeight;
+              const y = Math.max(-8, Math.min(8, delta * -12));
+              img.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+            });
+            ticking = false;
+          });
+        };
+        onAboutScroll();
+        window.addEventListener("scroll", onAboutScroll, { passive: true });
+        cleanups.push(() => {
+          window.removeEventListener("scroll", onAboutScroll);
+          mediaImgs.forEach((img) => {
+            img.style.transform = "";
+          });
+        });
+      }
+    }
+
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);

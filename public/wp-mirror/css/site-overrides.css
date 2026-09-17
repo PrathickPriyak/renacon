@@ -1458,3 +1458,234 @@ button[type="submit"]:hover {
   }
 }
 
+/* ---------- About Us (/about-us): interactive polish ---------- */
+#post-4487.renacon-about-interactive {
+  --renacon-green: #0b3d2c;
+  --renacon-green-deep: #123528;
+  --renacon-teal: #167278;
+  --renacon-yellow: #f4c709;
+  --renacon-yellow-bright: #ffcb2d;
+}
+
+/* Scroll-reveal (class toggled in WpInteractions) */
+#post-4487 .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.1rem, 0);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+#post-4487 .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Hero media + founder image hover */
+#post-4487 .wp-block-media-text__media,
+#post-4487 .wp-block-getwid-image-box__image-wrapper {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+#post-4487 .wp-block-media-text__media img,
+#post-4487 .wp-block-getwid-image-box__image {
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.35s ease,
+    box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487 .wp-block-media-text__media:hover img,
+  #post-4487 .wp-block-getwid-image-box__image-wrapper:hover .wp-block-getwid-image-box__image {
+    transform: scale(1.03) !important;
+    filter: saturate(1.05);
+    box-shadow: 0 10px 28px rgba(11, 61, 44, 0.18);
+  }
+}
+
+/* Founder column + pullquote */
+#post-4487 #erp .stk-block-column,
+#post-4487 .wp-block-pullquote {
+  transition:
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487 #erp .stk-block-column:hover {
+    box-shadow: 0 12px 32px rgba(11, 61, 44, 0.1);
+    transform: translateY(-2px);
+  }
+
+  #post-4487 .wp-block-pullquote:hover {
+    border-inline-start: 3px solid var(--renacon-yellow, #f4c709);
+    box-shadow: 0 8px 22px rgba(244, 199, 9, 0.12);
+  }
+}
+
+#post-4487 .wp-block-pullquote {
+  border-inline-start: 3px solid transparent;
+  padding-inline-start: 1rem;
+}
+
+/* Vision 2030 accordion headings */
+#post-4487 .wp-block-stackable-accordion {
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+#post-4487 .wp-block-stackable-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+#post-4487 .wp-block-stackable-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+#post-4487 .wp-block-stackable-accordion .stk-block-icon {
+  transition: transform 0.3s ease, color 0.25s ease;
+  color: var(--renacon-green, #0b3d2c);
+}
+
+#post-4487 .wp-block-stackable-accordion[open] .stk-block-icon {
+  transform: rotate(180deg);
+  color: var(--renacon-yellow-bright, #ffcb2d);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487 .wp-block-stackable-accordion summary:hover {
+    background-color: rgba(11, 61, 44, 0.04);
+  }
+
+  #post-4487 .wp-block-stackable-accordion:hover {
+    box-shadow: 0 6px 18px rgba(11, 61, 44, 0.08);
+  }
+}
+
+#post-4487 .wp-block-stackable-accordion[open] {
+  background: linear-gradient(180deg, rgba(243, 250, 246, 0.9), rgba(255, 255, 255, 0.4));
+  box-shadow: inset 0 0 0 1px rgba(11, 61, 44, 0.08);
+}
+
+#post-4487 .wp-block-stackable-accordion .stk-block-accordion__content {
+  animation: renacon-about-accordion-in 0.28s ease-out;
+}
+
+@keyframes renacon-about-accordion-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Vision / Mission / We Serve cards */
+#post-4487 .ugb-a10dec0 .stk-block-column {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    background-color 0.35s ease;
+  border-radius: 6px;
+  padding: 0.75rem 0.5rem;
+}
+
+#post-4487 .ugb-a10dec0 .stk-block-icon {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+  color: var(--renacon-teal, #167278);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487 .ugb-a10dec0 .stk-block-column:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(11, 61, 44, 0.12);
+    background-color: rgba(243, 250, 246, 0.85);
+  }
+
+  #post-4487 .ugb-a10dec0 .stk-block-column:hover .stk-block-icon {
+    transform: scale(1.08) translateY(-2px);
+    color: var(--renacon-green, #0b3d2c);
+  }
+}
+
+/* Stats line under “We Serve with” — brand underline once revealed / on hover */
+#post-4487 .stk-ad91ac3 p.has-text-align-center {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+#post-4487 .stk-ad91ac3 p.has-text-align-center::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 0;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-green, #0b3d2c),
+    var(--renacon-yellow, #f4c709)
+  );
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-4487 .renacon-reveal-in .stk-ad91ac3 p.has-text-align-center::after,
+#post-4487 .stk-ad91ac3.renacon-reveal-in p.has-text-align-center::after,
+#post-4487 .ugb-a10dec0 .stk-ad91ac3:hover p.has-text-align-center::after {
+  width: min(8rem, 55%);
+}
+
+/* Mobile: slightly tighter reveals, larger tap targets on accordions */
+@media (max-width: 689px) {
+  #post-4487 .renacon-reveal {
+    transform: translate3d(0, 0.65rem, 0);
+  }
+
+  #post-4487 .wp-block-stackable-accordion summary {
+    min-height: 48px;
+    padding-block: 0.35rem;
+  }
+
+  #post-4487 .ugb-a10dec0 .stk-block-column {
+    padding: 1rem 0.65rem;
+  }
+
+  #post-4487 .wp-block-media-text {
+    gap: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #post-4487 .renacon-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  #post-4487 .wp-block-media-text__media img,
+  #post-4487 .wp-block-getwid-image-box__image,
+  #post-4487 #erp .stk-block-column,
+  #post-4487 .wp-block-pullquote,
+  #post-4487 .ugb-a10dec0 .stk-block-column,
+  #post-4487 .ugb-a10dec0 .stk-block-icon,
+  #post-4487 .wp-block-stackable-accordion .stk-block-icon {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  #post-4487 .wp-block-stackable-accordion .stk-block-accordion__content {
+    animation: none !important;
+  }
+}
+
