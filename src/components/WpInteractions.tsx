@@ -157,7 +157,11 @@ function classifyHomeChild(el: HTMLElement): string | null {
   ) {
     return "products";
   }
-  if (el.classList.contains("stk-ee3acf8")) {
+  if (
+    el.classList.contains("stk-ee3acf8") ||
+    (el.matches("h1.wp-block-heading") &&
+      /our services/i.test(el.textContent || ""))
+  ) {
     return "services";
   }
   if (el.classList.contains("wp-block-getwid-image-hotspot")) {
@@ -225,6 +229,13 @@ function wrapHomeBands(
     const wrap = document.createElement("div");
     wrap.className = `renacon-home-band renacon-home-band--${band.name}`;
     wrap.setAttribute("data-renacon-band", band.name);
+    wrap.setAttribute("data-renacon-premium", "sep2026");
+    // Force vertical page flow — prevent mirror CSS from flexing bands sideways
+    wrap.style.display = "block";
+    wrap.style.width = "100%";
+    wrap.style.maxWidth = "none";
+    wrap.style.clear = "both";
+    wrap.style.float = "none";
     first.before(wrap);
     band.els.forEach((node) => wrap.appendChild(node));
     wrappers.push(wrap);
