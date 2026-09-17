@@ -1,1 +1,33 @@
+/* Mirrored from https://renacon.in/renafix-201-tile-adhesive/ */
+
+.eplus-styles-uid-65f3fa img{z-index:0}@media (max-width:981px){.eplus-styles-uid-65f3fa img{z-index:0}}@media (max-width:600px){.eplus-styles-uid-65f3fa img{z-index:0}}.eplus-styles-uid-65f3fa img:hover{z-index:0}.eplus-styles-uid-17de4e{font-size:15px;color:#000000}.eplus-styles-uid-a99aa9{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-a99aa9{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-a99aa9{list-style-type:}}.eplus-styles-uid-a99aa9:hover{list-style-type:}.eplus-styles-uid-cb829c{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-cb829c{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-cb829c{list-style-type:}}.eplus-styles-uid-cb829c:hover{list-style-type:}.eplus-styles-uid-0b1dab{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-0b1dab{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-0b1dab{list-style-type:}}.eplus-styles-uid-0b1dab:hover{list-style-type:}.eplus-styles-uid-c10e81{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-c10e81{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-c10e81{list-style-type:}}.eplus-styles-uid-c10e81:hover{list-style-type:}.eplus-styles-uid-81565c{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-81565c{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-81565c{list-style-type:}}.eplus-styles-uid-81565c:hover{list-style-type:}
+
 .stk-4f65769-column{--stk-column-gap:10px !important;row-gap:10px !important;}.stk-17701ac{background-image:url(https://renacon.in/wp-content/uploads/2023/02/3d-rendering-modern-dining-room-living-room-with-luxury-decor.jpg) !important;background-position:center center !important;background-repeat:no-repeat !important;background-size:cover !important;}.stk-dde9403,.stk-2454d1a,.stk-725958b{margin-bottom:0px !important;}:is(.stk-cc2942b, .stk-4c34846, .stk-46e7d42) .stk-block-heading__text{color:#000000 !important;text-transform:uppercase !important;}:is(.stk-97d2c48, .stk-1a93727, .stk-8ff447f) .stk--svg-wrapper .stk--inner-svg svg:last-child,:is(.stk-97d2c48, .stk-1a93727, .stk-8ff447f) .stk--svg-wrapper .stk--inner-svg svg:last-child :is(g, path, rect, polygon, ellipse){fill:var(--theme-palette-color-8, #ffffff) !important;}:is(.stk-97d2c48, .stk-1a93727, .stk-8ff447f) .stk--svg-wrapper .stk--inner-svg{background-color:#00984a !important;padding:10px !important;}@media screen and (min-width:690px){.stk-b745e0f{flex:var(--stk-flex-grow, 1) 1 calc(55.8% - var(--stk-column-gap, 0px) * 1 / 2 ) !important;}.stk-17701ac{flex:var(--stk-flex-grow, 1) 1 calc(44.2% - var(--stk-column-gap, 0px) * 1 / 2 ) !important;}}
+
+
+body:has(#post-6785) .renacon-site-header{
+  position:sticky !important; top:0 !important; z-index:10050 !important; background:#ffffff !important;
+}
+body:has(#post-6785) #header.ct-header{position:relative !important; background:#ffffff !important;}
+body:has(#post-6785) #main.site-main, body:has(#post-6785) .site-main{padding-top:0 !important;}
+@media (min-width:1000px){
+  body:has(#post-6785) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body:has(#post-6785) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+#post-6785 .entry-content > .wp-block-image.alignfull:first-child{
+  margin-top:0 !important; max-width:none !important; width:100% !important;
+}
+#post-6785 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline; width:100%; height:auto; max-height:none; object-fit:fill; transform:none !important;
+}
+#post-6785 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important; width:min(1290px,90vw) !important; margin-left:auto !important; margin-right:auto !important;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

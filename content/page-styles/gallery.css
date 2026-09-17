@@ -1,0 +1,78 @@
+/* Phase 5 — Gallery hub chrome (custom React hub matching Blocksy container) */
+body.renacon-page-gallery .renacon-site-header,
+body:has(main.gallery-hub) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body.renacon-page-gallery #header.ct-header,
+body:has(main.gallery-hub) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body.renacon-page-gallery #main.site-main,
+body:has(main.gallery-hub) #main.site-main,
+body:has(main.gallery-hub) .site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body.renacon-page-gallery #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(main.gallery-hub) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-gallery #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(main.gallery-hub) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+main.gallery-hub .hero-section{
+  max-width:1290px;
+  width:min(1290px,90vw);
+  margin:24px auto 12px;
+}
+main.gallery-hub .page-title{
+  font-family:Roboto,sans-serif;
+  font-size:30px;
+  line-height:45px;
+  font-weight:700;
+  color:#1a1e21;
+  margin:0 0 8px;
+}
+main.gallery-hub .gallery-hub-lead{
+  font-size:15px;
+  line-height:24.75px;
+  color:#484b4d;
+  margin:0 0 24px;
+}
+main.gallery-hub .gallery-hub-links{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+  max-width:1290px;
+  width:min(1290px,90vw);
+  margin:0 auto 32px;
+}
+main.gallery-hub .gallery-hub-card{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:24px;
+  background:#f4f4f4;
+  color:#1a1e21;
+  text-decoration:none;
+  border-radius:0;
+}
+main.gallery-hub .gallery-hub-card strong{
+  font-size:18px;
+  text-transform:uppercase;
+  color:#01953f;
+}
+main.gallery-hub .gallery-hub-card span{font-size:14px; color:#484b4d;}
+main.gallery-hub .gallery-hub-card:hover{background:#ebebeb;}
+@media (max-width:689px){
+  main.gallery-hub .gallery-hub-links{grid-template-columns:1fr; width:calc(100% - 47px);}
+}
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

@@ -1,0 +1,113 @@
+/* Mirrored from https://renacon.in/contact-us/ — Editor Plus + Stackable */
+
+/* source:editorplus-generated-styles-header */
+.eplus-styles-uid-341832{font-size:25px}.eplus-styles-uid-eb50a4{color:#000000}
+
+/* source:stk-block-styles */
+.stk-45e988b,.stk-e3c24fc,.stk-694bee4,.stk-07e1083,.stk-b86aa6d,.stk-a243f8f{margin-bottom:0px !important;}:is(.stk-e3c24fc, .stk-694bee4, .stk-07e1083, .stk-b86aa6d, .stk-a243f8f) .stk--svg-wrapper .stk--inner-svg svg:last-child,:is(.stk-e3c24fc, .stk-694bee4, .stk-07e1083, .stk-b86aa6d, .stk-a243f8f) .stk--svg-wrapper .stk--inner-svg svg:last-child :is(g, path, rect, polygon, ellipse){fill:#ffffff !important;}:is(.stk-e3c24fc, .stk-694bee4, .stk-07e1083, .stk-b86aa6d, .stk-a243f8f) .stk--svg-wrapper .stk--inner-svg{background-color:#04a354 !important;border-radius:100% !important;padding:19px !important;}.stk-bd46dff{padding-top:10px !important;}.stk-9ca72ed-container,.stk-b9aef73-container,.stk-ad91ac3-container{border-radius:10px !important;overflow:hidden !important;}
+
+
+/* Phase 5 — in-flow sticky header (no overlay hero pull-under) */
+body.renacon-page-contact-us .renacon-site-header,
+body:has(#post-4301) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body.renacon-page-contact-us #header.ct-header,
+body:has(#post-4301) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body.renacon-page-contact-us #main.site-main,
+body.renacon-page-contact-us .site-main,
+body:has(#post-4301) #main.site-main,
+body:has(#post-4301) .site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body.renacon-page-contact-us #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-4301) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-contact-us #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-4301) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+body.renacon-page-contact-us #header.ct-header [data-row*="middle"],
+body:has(#post-4301) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+body.renacon-page-contact-us,
+body:has(#post-4301){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+#post-4301{
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+/* Full-bleed first hero — sit below in-flow header */
+body.renacon-page-contact-us .entry-content > .wp-block-image.alignfull:first-child,
+body.renacon-page-contact-us .entry-content > .wp-block-cover.alignfull:first-child,
+body:has(#post-4301) .entry-content > .wp-block-image.alignfull:first-child,
+body:has(#post-4301) .entry-content > .wp-block-cover.alignfull:first-child,
+#post-4301 .entry-content > .wp-block-image.alignfull:first-child,
+#post-4301 .entry-content > .wp-block-cover.alignfull:first-child{
+  margin-top:0 !important;
+  max-width:none !important;
+  width:100% !important;
+}
+#post-4301 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:fill;
+  transform:none !important;
+}
+#post-4301 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+@media screen and (max-width:689px){
+  #post-4301 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+    width:calc(100% - 47px) !important;
+  }
+}
+
+
+#post-4301 h3.eplus-styles-uid-341832{
+  font-size:25px !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  margin:1em auto 0.75em !important;
+}
+#post-4301 .stk--inner-svg{
+  background-color:#04a354 !important;
+  border-radius:100% !important;
+  padding:19px !important;
+}
+#post-4301 .stk--inner-svg svg:last-child,
+#post-4301 .stk--inner-svg svg:last-child :is(g, path, rect, polygon, ellipse){
+  fill:#ffffff !important;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

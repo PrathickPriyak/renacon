@@ -1,1 +1,33 @@
+/* Mirrored from https://renacon.in/renafix-tile-adhesive-444/ */
+
+.eplus-styles-uid-bbbe9a{font-size:15px;color:#000000!important}.eplus-styles-uid-8f23e4{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-8f23e4{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-8f23e4{list-style-type:}}.eplus-styles-uid-8f23e4:hover{list-style-type:}.eplus-styles-uid-62bc9d{color:#050000}.eplus-styles-uid-148c27{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-148c27{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-148c27{list-style-type:}}.eplus-styles-uid-148c27:hover{list-style-type:}.eplus-styles-uid-3504ed{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-3504ed{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-3504ed{list-style-type:}}.eplus-styles-uid-3504ed:hover{list-style-type:}.eplus-styles-uid-14316a{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-14316a{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-14316a{list-style-type:}}.eplus-styles-uid-14316a:hover{list-style-type:}
+
 .stk-4f65769-column{--stk-column-gap:10px !important;row-gap:10px !important}.stk-17701ac{background-image:url(https://renacon.in/wp-content/uploads/2023/06/minimalist-exterior-this-building-belies-intricate-details-sophisticated-technology-inside-ai-generated.jpg) !important;background-position:center center !important;background-repeat:no-repeat !important;background-size:cover !important}.stk-575f9ff{margin-bottom:0px !important}.stk-575f9ff-column{--stk-column-gap:40px !important}.stk-6d76a5e-container,.stk-8ab3f31-container,.stk-db7137f-container{margin-top:0px !important;margin-right:0px !important;margin-bottom:0px !important;margin-left:0px !important}.stk-6d76a5e,.stk-8ab3f31,.stk-db7137f{background-color:var(--theme-palette-color-8,#ffffff) !important;border-radius:20px !important;border-style:solid !important;border-color:var(--theme-palette-color-5,#E6F0EE) !important;border-top-width:2px !important;border-right-width:2px !important;border-bottom-width:2px !important;border-left-width:2px !important;padding-top:0px !important;padding-right:45px !important;padding-left:45px !important;overflow:visible !important}.stk-6d76a5e:before,.stk-8ab3f31:before,.stk-db7137f:before{background-color:var(--theme-palette-color-8,#ffffff) !important}:is(.stk-6d76a5e, .stk-8ab3f31, .stk-db7137f) .stk-container{overflow:visible !important}.stk-9a7350d,.stk-f1b3c63,.stk-21e18d1{background-color:#02a554 !important;border-radius:100px !important;overflow:hidden !important;box-shadow:0px 20px 50px 0px #192c2733 !important;border-style:solid !important;border-color:var(--theme-palette-color-8,#ffffff) !important;border-top-width:4px !important;border-right-width:4px !important;border-bottom-width:4px !important;border-left-width:4px !important;max-width:90px !important;padding-top:0px !important;padding-right:0px !important;padding-bottom:0px !important;padding-left:0px !important;margin-top:-45px !important;margin-right:auto !important;margin-bottom:20px !important;margin-left:auto !important}.stk-9a7350d:before,.stk-f1b3c63:before,.stk-21e18d1:before{background-color:#02a554 !important}.stk-f0d6911,.stk-441de13,.stk-261aa02{margin-bottom:20px !important}:is(.stk-f0d6911, .stk-441de13, .stk-261aa02) hr.stk-block-divider__hr{background:var(--theme-palette-color-5,#E6F0EE) !important;width:100% !important}@media screen and (min-width:690px){.stk-b745e0f{flex:var(--stk-flex-grow,1) 1 calc(55.8% - var(--stk-column-gap,0px) * 1 / 2 ) !important}.stk-17701ac{flex:var(--stk-flex-grow,1) 1 calc(44.2% - var(--stk-column-gap,0px) * 1 / 2 ) !important}}@media screen and (max-width:999px){.stk-575f9ff-column{--stk-column-gap:30px !important;row-gap:80px !important}.stk-6d76a5e,.stk-8ab3f31,.stk-db7137f{padding-right:35px !important;padding-bottom:35px !important;padding-left:35px !important}}
+
+
+body:has(#post-7057) .renacon-site-header{
+  position:sticky !important; top:0 !important; z-index:10050 !important; background:#ffffff !important;
+}
+body:has(#post-7057) #header.ct-header{position:relative !important; background:#ffffff !important;}
+body:has(#post-7057) #main.site-main, body:has(#post-7057) .site-main{padding-top:0 !important;}
+@media (min-width:1000px){
+  body:has(#post-7057) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body:has(#post-7057) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+#post-7057 .entry-content > .wp-block-image.alignfull:first-child{
+  margin-top:0 !important; max-width:none !important; width:100% !important;
+}
+#post-7057 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline; width:100%; height:auto; max-height:none; object-fit:fill; transform:none !important;
+}
+#post-7057 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important; width:min(1290px,90vw) !important; margin-left:auto !important; margin-right:auto !important;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

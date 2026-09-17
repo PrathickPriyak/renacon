@@ -1,1 +1,33 @@
+/* Mirrored from https://renacon.in/renafix-gp-grout/ */
+
+.eplus-styles-uid-65f3fa img{z-index:0}@media (max-width:981px){.eplus-styles-uid-65f3fa img{z-index:0}}@media (max-width:600px){.eplus-styles-uid-65f3fa img{z-index:0}}.eplus-styles-uid-65f3fa img:hover{z-index:0}.eplus-styles-uid-17de4e{font-size:15px;color:#000000}.eplus-styles-uid-c5fd72{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-c5fd72{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-c5fd72{list-style-type:}}.eplus-styles-uid-c5fd72:hover{list-style-type:}.eplus-styles-uid-f53960{grid-template-columns:repeat(1,1fr);list-style-type:disc}@media (max-width:981px){.eplus-styles-uid-f53960{list-style-type:}}@media (max-width:600px){.eplus-styles-uid-f53960{list-style-type:}}.eplus-styles-uid-f53960:hover{list-style-type:}
+
 .stk-4f65769-column{--stk-column-gap:10px !important;row-gap:10px !important}.stk-17701ac{background-image:url(https://renacon.in/wp-content/uploads/2023/02/low-angle-view-concrete-bridge-surrounded-by-greenery-sunlight-1.jpg) !important;background-position:center center !important;background-repeat:no-repeat !important;background-size:cover !important}.stk-f32da84{margin-bottom:0px !important}.stk-9db078c .stk-block-heading__text{color:#000000 !important}.stk-64d9286 .stk--svg-wrapper .stk--inner-svg svg:last-child,.stk-64d9286 .stk--svg-wrapper .stk--inner-svg svg:last-child :is(g,path,rect,polygon,ellipse){fill:var(--theme-palette-color-8,#ffffff) !important}.stk-64d9286 .stk--svg-wrapper .stk--inner-svg{background-color:#00984a !important;padding:10px !important}@media screen and (min-width:690px){.stk-b745e0f{flex:var(--stk-flex-grow,1) 1 calc(55.8% - var(--stk-column-gap,0px) * 1 / 2 ) !important}.stk-17701ac{flex:var(--stk-flex-grow,1) 1 calc(44.2% - var(--stk-column-gap,0px) * 1 / 2 ) !important}}
+
+
+body:has(#post-867) .renacon-site-header{
+  position:sticky !important; top:0 !important; z-index:10050 !important; background:#ffffff !important;
+}
+body:has(#post-867) #header.ct-header{position:relative !important; background:#ffffff !important;}
+body:has(#post-867) #main.site-main, body:has(#post-867) .site-main{padding-top:0 !important;}
+@media (min-width:1000px){
+  body:has(#post-867) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body:has(#post-867) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+#post-867 .entry-content > .wp-block-image.alignfull:first-child{
+  margin-top:0 !important; max-width:none !important; width:100% !important;
+}
+#post-867 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline; width:100%; height:auto; max-height:none; object-fit:fill; transform:none !important;
+}
+#post-867 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important; width:min(1290px,90vw) !important; margin-left:auto !important; margin-right:auto !important;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */
