@@ -1,0 +1,5110 @@
+/* renacon-mobile-nav-active-v1 — offcanvas toggles + active nav colors */
+
+:root {
+  --renacon-header-pad-y: 1.35rem;
+  --renacon-header-min-h: 110px;
+  --renacon-logo-max: 84px;
+  --renacon-social-size: 38px;
+  --renacon-nav-size: 0.9rem;
+  --renacon-green: #0b3d2c;
+  --renacon-green-mid: #1b7a3d;
+  --renacon-yellow: #e8b923;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.renacon-mirror {
+  margin: 0;
+  background: #fff;
+  color: #1a1e21;
+  font-family: Roboto, "Open Sans", Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+#main,
+.site-main {
+  min-height: 50vh;
+}
+
+.ct-header .ct-container,
+.ct-footer .ct-container {
+  width: min(1290px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+/* Content: full-bleed root so alignfull heroes can span the viewport */
+.entry-content,
+.entry-content.is-layout-constrained {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+}
+
+/* Keep regular (non-full) blocks centered */
+.entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)) {
+  max-width: min(1290px, calc(100% - 2rem));
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+.entry-content > .wp-block-columns:not(.alignfull),
+.entry-content > .wp-block-group:not(.alignfull),
+.entry-content > .stk-block-columns:not(.alignfull) {
+  max-width: min(1290px, calc(100% - 2rem));
+  margin-inline: auto;
+  padding-inline: 1rem;
+  box-sizing: border-box;
+}
+
+.entry-content.alignfull,
+.entry-content .alignfull,
+.entry-content > .alignfull,
+.wp-block-getwid-section.alignfull,
+.wp-block-stackable-columns.alignfull,
+.stk-block-columns.alignfull {
+  max-width: none !important;
+  width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.sgb-item img,
+.wp-block-image img,
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* ---------- Interactive affordances ---------- */
+a,
+button,
+.ct-menu-link,
+.news-card,
+.gallery-hub-card,
+.page-numbers,
+.forminator-button,
+.wpforms-submit {
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+a:focus-visible,
+button:focus-visible,
+.ct-menu-link:focus-visible,
+.page-numbers:focus-visible,
+.news-card-link:focus-visible,
+.gallery-hub-card:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #0b3d2c;
+  outline-offset: 2px;
+}
+
+/* ---------- Mobile offcanvas ---------- */
+/* Blocksy left-side keeps translate3d(-20%) even when .active (equal specificity
+   after the active rule). Force a full-viewport readable drawer. */
+.renacon-mirror #offcanvas[inert] {
+  display: none !important;
+}
+
+.renacon-mirror #offcanvas.is-open,
+.renacon-mirror #offcanvas.active {
+  display: flex !important;
+  flex-direction: column !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 100000 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  background: rgba(10, 30, 20, 0.96) !important;
+  color: #fff;
+  overflow: hidden;
+  padding: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+  pointer-events: auto !important;
+}
+
+/* Drawer must show mobile menu content on ALL widths (tablet/desktop too). */
+.renacon-mirror #offcanvas.is-open .ct-panel-content[data-device="mobile"],
+.renacon-mirror #offcanvas.active .ct-panel-content[data-device="mobile"] {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content[data-device="desktop"],
+.renacon-mirror #offcanvas.active .ct-panel-content[data-device="desktop"] {
+  display: none !important;
+}
+
+/* Kill Blocksy side-panel reveal offset that clipped labels on the left */
+.renacon-mirror #offcanvas.is-open .ct-panel-inner,
+.renacon-mirror #offcanvas.active .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="left-side"].is-open .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="left-side"].active .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="side"].is-open .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="side"].active .ct-panel-inner {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  align-self: stretch !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background-color: rgba(10, 30, 20, 0.98) !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content,
+.renacon-mirror #offcanvas.active .ct-panel-content,
+.renacon-mirror #offcanvas.is-open .ct-panel-content-inner,
+.renacon-mirror #offcanvas.active .ct-panel-content-inner {
+  width: 100% !important;
+  max-width: 100% !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content-inner,
+.renacon-mirror #offcanvas.active .ct-panel-content-inner {
+  overflow-y: auto !important;
+  padding: 0.85rem 1.5rem 2.25rem 1.75rem !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+}
+
+html.ct-panel-open #main,
+html.ct-panel-open .site-main,
+html.ct-panel-open footer {
+  pointer-events: none !important;
+}
+
+/* Hide hamburger while drawer is open (X must not overlap it) */
+html.ct-panel-open .ct-header-trigger,
+html.ct-panel-open .ct-toggle-button[data-toggle-panel="#offcanvas"],
+html.ct-panel-open [data-toggle-panel="#offcanvas"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.ct-panel-open #header.ct-header {
+  pointer-events: none !important;
+}
+
+html.ct-panel-open #offcanvas,
+html.ct-panel-open #offcanvas * {
+  pointer-events: auto !important;
+}
+
+/* Hamburger always interactive on touch devices */
+#header .ct-header-trigger[data-toggle-panel="#offcanvas"] {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 10060;
+}
+
+.renacon-mirror #offcanvas.is-open a,
+.renacon-mirror #offcanvas.active a {
+  color: #fff;
+}
+
+.renacon-mirror #offcanvas .ct-panel-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.85rem 1rem 0.35rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.renacon-mirror #offcanvas .ct-toggle-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.55rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.renacon-mirror #offcanvas .ct-toggle-close .ct-icon,
+.renacon-mirror #offcanvas .ct-toggle-close svg {
+  fill: currentColor;
+  color: #fff;
+}
+
+.renacon-mirror #offcanvas .mobile-menu {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.renacon-mirror #offcanvas .mobile-menu > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.renacon-mirror #offcanvas .mobile-menu li {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .ct-menu-link {
+  display: block;
+  padding: 0.95rem 0.35rem;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .ct-sub-menu-parent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 4px;
+  color: #fff;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 2;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile .ct-icon {
+  transition: transform 0.2s ease;
+  fill: currentColor;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile .ct-icon,
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile .ct-icon {
+  transform: rotate(180deg);
+}
+
+/* Accordion: hide nested menus until opened.
+   MUST override desktop `.ct-header .menu-container .sub-menu { position:absolute }`
+   — #offcanvas also has .ct-header, so absolute submenus were clipped by overflow. */
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children > .sub-menu,
+.renacon-mirror #offcanvas .menu-container .sub-menu,
+.renacon-mirror #offcanvas .mobile-menu .sub-menu {
+  display: none !important;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+  list-style: none !important;
+  margin: 0 0 0.5rem !important;
+  padding: 0 0 0.35rem 0.85rem !important;
+  z-index: auto !important;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .sub-menu,
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .sub-menu {
+  display: block !important;
+  animation: renacon-accordion-in 0.2s ease-out;
+}
+
+@keyframes renacon-accordion-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.renacon-mirror #offcanvas .mobile-menu .sub-menu .ct-menu-link {
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.92;
+  padding: 0.55rem 0.15rem;
+  color: #e8fff4 !important;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .sub-menu .menu-item-has-children > .sub-menu {
+  padding-inline-start: 0.75rem;
+}
+
+.renacon-mirror #offcanvas .ct-header-socials,
+.renacon-mirror #offcanvas .ct-social-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding-inline: 0.15rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- Header: mobile / desktop ---------- */
+.ct-header [data-device="desktop"] {
+  display: block;
+}
+.ct-header [data-device="mobile"] {
+  display: none;
+}
+
+@media (max-width: 999px) {
+  .ct-header [data-device="desktop"] {
+    display: none !important;
+  }
+  .ct-header [data-device="mobile"] {
+    display: block !important;
+  }
+
+  .ct-header [data-id="logo"] .site-logo-container,
+  .ct-header [data-id="logo"] img {
+    max-height: var(--renacon-logo-max, 56px) !important;
+    width: auto !important;
+  }
+
+  .ct-header .ct-container,
+  .ct-header [data-row] > div {
+    width: min(100%, calc(100% - 1rem));
+    padding-inline: 0.5rem;
+  }
+
+  .ct-header-trigger,
+  .ct-toggle-button {
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .ct-header [data-id="logo"] .site-logo-container,
+  .ct-header [data-id="logo"] img {
+    max-height: var(--renacon-logo-max, 48px) !important;
+  }
+}
+
+/* Ensure desktop menu items are visible even without Blocksy JS.
+   Scoped to #header so rules do NOT leak into #offcanvas (also .ct-header). */
+#header.ct-header .menu-container > .menu {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#header.ct-header .menu-container > .menu > li {
+  position: relative;
+}
+#header.ct-header .menu-container > .menu > li > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.2rem;
+  color: #1a1e21;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+}
+#header.ct-header .menu-container .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 240px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem 0;
+  z-index: 1000;
+  list-style: none;
+}
+#header.ct-header .menu-container > .menu > li:hover > .sub-menu,
+#header.ct-header .menu-container > .menu > li:focus-within > .sub-menu {
+  display: block;
+}
+#header.ct-header .menu-container .sub-menu a {
+  display: block;
+  padding: 0.55rem 1rem;
+  color: #1a1e21;
+  text-decoration: none;
+}
+#header.ct-header .menu-container .sub-menu a:hover {
+  background: #f3faf6;
+  color: #0b3d2c;
+}
+#header.ct-header .menu-container .sub-menu .sub-menu {
+  left: 100%;
+  top: 0;
+}
+
+/* Desktop dropdown menus without Blocksy JS (Blocksy uses .ct-active) */
+#header.ct-header,
+.ct-header#header {
+  position: relative !important;
+  z-index: 10050 !important;
+  overflow: visible !important;
+}
+
+.ct-header .menu-container,
+.ct-header .ct-container,
+.ct-header .ct-sticky-container {
+  overflow: visible !important;
+}
+
+.ct-header .menu > .menu-item-has-children {
+  position: relative !important;
+}
+
+#header.ct-header [class*="animated-submenu"] > .sub-menu {
+  display: block !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  min-width: 260px !important;
+  background: #fff !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+  padding: 0.5rem 0 !important;
+  z-index: 10060 !important;
+  list-style: none !important;
+}
+
+#header.ct-header [class*="animated-submenu"]:not(.ct-active) > .sub-menu {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#header.ct-header [class*="animated-submenu"].ct-active > .sub-menu,
+#header.ct-header [class*="animated-submenu"]:hover > .sub-menu,
+#header.ct-header [class*="animated-submenu"]:focus-within > .sub-menu {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+#header.ct-header [class*="animated-submenu"].ct-active > .sub-menu > li,
+#header.ct-header [class*="animated-submenu"]:hover > .sub-menu > li {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+#header.ct-header .menu .sub-menu .menu-item-has-children > .sub-menu {
+  left: 100% !important;
+  top: 0 !important;
+}
+
+/* ---------- Simply gallery responsive ---------- */
+.sgb-square,
+.sgb-preloader,
+.pgc-sgb-cb:not(:has(img)) {
+  display: none !important;
+}
+
+.simply-gallery-amp,
+.pgc_sgb_slider {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.simply-gallery-amp .sgb-gallery,
+.pgc_sgb_slider .sgb-gallery,
+.sgb-gallery {
+  display: grid !important;
+  /* auto-fit collapses empty tracks so 3 hospital cards fill/center the row */
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  justify-content: center;
+  justify-items: stretch;
+  gap: 1.15rem 1.25rem;
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  /* Kill Simply Gallery absolute masonry leftovers */
+  transform: none !important;
+}
+
+/* Gallery pages: do NOT pad/clip entry-content — asymmetric padding +
+   overflow-x:clip + 100vw breakout was cutting PROJECTS/MEDIA banner titles
+   off the left edge (same class of bug as offcanvas label clipping). */
+#post-1192 .entry-content,
+#post-1067 .entry-content,
+.page-id-1192 .entry-content,
+.page-id-1067 .entry-content,
+.renacon-projects-gallery-ix .entry-content,
+.renacon-media-ix .entry-content {
+  padding-inline: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+  overflow-x: visible;
+  overflow: visible;
+}
+
+/* Blocksy article side inset left PROJECTS/MEDIA titles flush/clipped — neutralize */
+#post-1192,
+#post-1067,
+.page-id-1192 article,
+.page-id-1067 article,
+body.renacon-page-projects-2 article.post-1192,
+body.renacon-page-media article.post-1067,
+.renacon-projects-gallery-ix,
+.renacon-media-ix {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Heroes: full-width with safe inset so baked-in titles (PROJECTS/MEDIA) clear edges */
+#post-1192 .entry-content > .wp-block-image.alignfull,
+#post-1067 .entry-content > .wp-block-image.alignfull,
+.renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull,
+.renacon-media-ix .entry-content > .wp-block-image.alignfull,
+body.renacon-page-projects-2 .entry-content > .wp-block-image.alignfull,
+body.renacon-page-media .entry-content > .wp-block-image.alignfull {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  /* Safe inset: MEDIA title sits flush in the artwork; keep letterforms readable */
+  padding-inline: clamp(0.85rem, 2.8vw, 2.25rem) clamp(0.85rem, 4vw, 3.75rem) !important;
+  box-sizing: border-box !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  overflow: visible !important;
+  background-color: #e6f4ea;
+}
+
+#post-1192 .entry-content > .wp-block-image.alignfull img,
+#post-1067 .entry-content > .wp-block-image.alignfull img,
+.renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull img,
+.renacon-media-ix .entry-content > .wp-block-image.alignfull img,
+body.renacon-page-projects-2 .entry-content > .wp-block-image.alignfull img,
+body.renacon-page-media .entry-content > .wp-block-image.alignfull img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  display: block;
+  object-fit: contain;
+  object-position: left center;
+}
+
+#post-1192 .simply-gallery-amp,
+#post-1067 .simply-gallery-amp,
+#post-1192 .pgc_sgb_slider,
+#post-1067 .pgc_sgb_slider,
+#post-1192 .simply-gallery-amp.alignwide,
+#post-1067 .simply-gallery-amp.alignwide,
+.renacon-projects-gallery-ix .simply-gallery-amp,
+.renacon-projects-gallery-ix .pgc_sgb_slider,
+.renacon-projects-gallery-ix .simply-gallery-amp.alignwide,
+.renacon-media-ix .simply-gallery-amp,
+.renacon-media-ix .pgc_sgb_slider,
+.renacon-media-ix .simply-gallery-amp.alignwide,
+.page-id-1192 .simply-gallery-amp,
+.page-id-1067 .simply-gallery-amp,
+body.renacon-page-projects-2 .simply-gallery-amp,
+body.renacon-page-projects-2 .pgc_sgb_slider,
+body.renacon-page-media .simply-gallery-amp,
+body.renacon-page-media .pgc_sgb_slider,
+main.site-main .simply-gallery-amp.alignwide {
+  max-width: 1180px !important;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-block: 0.75rem 1.75rem;
+  /* Side-menu clearance lives on content rails, not on entry-content heroes */
+  padding-inline: 1rem max(1rem, 3.75rem) !important;
+  box-sizing: border-box !important;
+  float: none !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+}
+
+/* Keep headings on the same content rail as galleries */
+#post-1192 h1.wp-block-heading,
+#post-1067 h1.wp-block-heading,
+#post-1067 h2.wp-block-heading,
+.renacon-projects-gallery-ix h1.wp-block-heading,
+.renacon-media-ix h1.wp-block-heading,
+body.renacon-page-projects-2 main.site-main > h1.wp-block-heading,
+body.renacon-page-projects-2 .entry-content > h1.wp-block-heading,
+body.renacon-page-media h1.wp-block-heading,
+body.renacon-page-media h2.wp-block-heading {
+  margin-block: 1.5rem 0.75rem;
+  padding-inline: 1rem max(1rem, 3.75rem);
+  max-width: 1180px;
+  width: 100%;
+  margin-inline: auto;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Media VIDEOS — gutters between YouTube cards + no stuck title chrome */
+#post-1067 .stk-block-columns > .stk-row,
+.renacon-media-ix .stk-block-columns > .stk-row,
+body.renacon-page-media .stk-block-columns > .stk-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1.5rem 1.75rem !important;
+  column-gap: 1.75rem !important;
+  row-gap: 1.75rem !important;
+  --stk-column-gap: 1.75rem !important;
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 1rem max(1rem, 3.75rem);
+}
+
+#post-1067 .stk-block-columns .stk-block-column,
+.renacon-media-ix .stk-block-columns .stk-block-column,
+body.renacon-page-media .stk-block-columns .stk-block-column {
+  min-width: 0 !important;
+  flex: 1 1 calc(33.333% - 1.25rem) !important;
+  max-width: 100% !important;
+}
+
+#post-1067 .wp-block-embed,
+#post-1067 .wp-block-embed__wrapper,
+.renacon-media-ix .wp-block-embed,
+.renacon-media-ix .wp-block-embed__wrapper {
+  position: relative;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+/* Force 16:9 — HTML height="726" was keeping portrait iframes and eating gutters */
+#post-1067 .wp-block-embed.wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+.renacon-media-ix .wp-block-embed.wp-embed-aspect-16-9 .wp-block-embed__wrapper,
+body.renacon-page-media .wp-block-embed .wp-block-embed__wrapper {
+  aspect-ratio: 16 / 9 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  width: 100% !important;
+}
+
+#post-1067 .wp-block-embed iframe,
+.renacon-media-ix .wp-block-embed iframe,
+body.renacon-page-media .wp-block-embed iframe {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  aspect-ratio: auto !important;
+}
+
+/* Opacity-only reveal on embeds — transforms break iframe chrome / leave title ghosts */
+.renacon-media-ix .wp-block-embed.renacon-reveal,
+body.renacon-page-media .wp-block-embed.renacon-reveal {
+  transform: none !important;
+}
+
+.renacon-media-ix .wp-block-embed.renacon-reveal.renacon-reveal-in,
+body.renacon-page-media .wp-block-embed.renacon-reveal.renacon-reveal-in {
+  transform: none !important;
+}
+
+/* Hide orphan Tippy / hotspot title chrome on media (no hotspots here) */
+body.renacon-page-media .tippy-popper,
+body.renacon-page-media .tippy-tooltip,
+body.renacon-page-media .renacon-hotspot-tip,
+.renacon-media-ix .tippy-popper,
+.renacon-media-ix .tippy-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#post-1067 .wp-element-caption,
+.renacon-media-ix .wp-element-caption {
+  position: static !important;
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: #1a1e21;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 899px) {
+  #post-1067 .stk-block-columns .stk-block-column,
+  .renacon-media-ix .stk-block-columns .stk-block-column,
+  body.renacon-page-media .stk-block-columns .stk-block-column {
+    flex: 1 1 calc(50% - 0.75rem) !important;
+  }
+}
+
+@media (max-width: 599px) {
+  #post-1067 .stk-block-columns .stk-block-column,
+  .renacon-media-ix .stk-block-columns .stk-block-column,
+  body.renacon-page-media .stk-block-columns .stk-block-column {
+    flex: 1 1 100% !important;
+  }
+}
+
+.simply-gallery-amp .sgb-gallery .sgb-item,
+.sgb-gallery .sgb-item {
+  display: flex !important;
+  flex-direction: column !important;
+  max-width: none !important;
+  margin: 0 !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  float: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.sgb-item > a,
+.sgb-item figure {
+  display: block !important;
+  line-height: 0;
+  height: auto !important;
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  position: relative !important;
+}
+
+.sgb-item img {
+  height: 220px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  object-fit: cover;
+  border-radius: 4px;
+  transition: box-shadow 0.25s ease;
+  flex: none !important;
+  transform: none !important;
+}
+
+.sgb-item:hover img {
+  transform: none !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.sgb-item-caption,
+.sgb-gallery .sgb-item-caption {
+  display: block !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  margin: 0.45rem 0 0 !important;
+  min-height: 2.8em;
+  color: #1a1e21 !important;
+  background: transparent !important;
+  padding: 0.15rem 0.1rem 0 !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  text-align: left !important;
+  overflow-wrap: anywhere;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 1;
+}
+
+/* Cap very wide galleries so sparse rows (3 hospitals) don't look tiny */
+#post-1192 .sgb-gallery,
+#post-1067 .sgb-gallery,
+.renacon-projects-gallery-ix .sgb-gallery,
+.renacon-media-ix .sgb-gallery {
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  max-width: 100%;
+  margin-inline: auto;
+  justify-content: center;
+}
+
+/* Homepage projects: don't leave image boxes invisible/washed if observer lags */
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box.renacon-reveal {
+  opacity: 1;
+  transform: none;
+}
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-img {
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Qubely tabs (media page) */
+.qubely-block-tab .qubely-tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1rem;
+  margin: 1rem auto 1.25rem;
+  padding-inline: 0.5rem;
+}
+
+.qubely-block-tab .qubely-tab-item {
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  padding: 0.35rem 0.15rem;
+  color: #4a5560;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.qubely-block-tab .qubely-tab-item.qubely-active,
+.qubely-block-tab .qubely-tab-item:hover {
+  color: #0b3d2c;
+  border-bottom-color: #f4c709;
+}
+
+.qubely-block-tab .qubely-tab-body > .qubely-tab-content {
+  display: none;
+}
+
+.qubely-block-tab .qubely-tab-body > .qubely-tab-content.qubely-active {
+  display: block;
+}
+
+/* Superseded by 16:9 absolute-fill rules above (renacon-hero-clip-videos-v3) */
+#post-1067 .wp-block-embed,
+#post-1067 .wp-block-embed__wrapper {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  .simply-gallery-amp .sgb-gallery,
+  .pgc_sgb_slider .sgb-gallery,
+  .sgb-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem;
+  }
+
+  .sgb-item img {
+    height: 140px !important;
+  }
+
+  #post-1192 .simply-gallery-amp,
+  #post-1067 .simply-gallery-amp,
+  #post-1067 .stk-block-columns > .stk-row,
+  #post-1192 h1.wp-block-heading,
+  #post-1067 h1.wp-block-heading,
+  #post-1067 h2.wp-block-heading {
+    padding-inline: 1rem !important;
+  }
+
+  .sgb-item-caption,
+  .sgb-gallery .sgb-item-caption {
+    min-height: 2.6em;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .simply-gallery-amp .sgb-gallery,
+  .pgc_sgb_slider .sgb-gallery,
+  .sgb-gallery {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sgb-item img {
+    height: 200px !important;
+  }
+}
+
+/* ---------- News index + pagination ---------- */
+.news-index .page-title,
+.gallery-hub .page-title {
+  margin: 0;
+}
+
+.news-index-count,
+.gallery-hub-lead {
+  margin: 0.35rem 0 0;
+  color: #4a5560;
+}
+
+.news-index-wrap {
+  padding-block: 2rem 3rem;
+}
+
+.news-index-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 999px) {
+  .news-index-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.15rem;
+  }
+}
+
+@media (max-width: 599px) {
+  .news-index-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.news-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #e6ece9;
+  overflow: hidden;
+}
+
+.news-card:hover {
+  border-color: #c5d9cf;
+  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.08);
+  transform: translateY(-2px);
+}
+
+.news-card-media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #eef4f1;
+}
+
+.news-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: none !important;
+  transition: none;
+}
+
+.news-card:hover .news-card-media img {
+  transform: none !important;
+}
+
+.news-card-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e8f2ec, #d5e6dc);
+}
+
+.news-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem 1.2rem;
+  flex: 1;
+}
+
+.news-card-date {
+  font-size: 0.8rem;
+  color: #6b7780;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.news-card-title {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.news-card-title a {
+  color: #123528;
+  text-decoration: none;
+}
+
+.news-card-title a:hover {
+  color: #0b3d2c;
+}
+
+.news-card-excerpt {
+  margin: 0;
+  color: #4a5560;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.news-card-link {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  color: #0b3d2c;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.news-card-link:hover {
+  border-bottom-color: #0b3d2c;
+}
+
+.news-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2.25rem;
+}
+
+.news-pagination .page-numbers {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4rem;
+  min-height: 2.4rem;
+  padding: 0.35rem 0.7rem;
+  border: 1px solid #d5e0da;
+  color: #123528;
+  text-decoration: none;
+  font-weight: 500;
+  background: #fff;
+}
+
+.news-pagination .page-numbers:hover {
+  background: #f3faf6;
+  border-color: #0b3d2c;
+}
+
+.news-pagination .page-numbers.current {
+  background: #0b3d2c;
+  border-color: #0b3d2c;
+  color: #fff;
+  pointer-events: none;
+}
+
+.news-pagination .page-numbers.dots {
+  border: 0;
+  min-width: auto;
+  background: transparent;
+}
+
+.news-pagination .page-numbers.prev,
+.news-pagination .page-numbers.next {
+  padding-inline: 0.9rem;
+}
+
+/* ---------- Gallery hub ---------- */
+.gallery-hub-links {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-block: 1.5rem 0.5rem;
+}
+
+@media (max-width: 599px) {
+  .gallery-hub-links {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery-hub-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem 1.35rem;
+  text-decoration: none;
+  color: #123528;
+  background: linear-gradient(160deg, #f4faf7, #e8f3ed);
+  border: 1px solid #d5e6dc;
+}
+
+.gallery-hub-card:hover {
+  border-color: #0b3d2c;
+  box-shadow: 0 8px 22px rgba(11, 61, 44, 0.1);
+  transform: translateY(-2px);
+}
+
+.gallery-hub-card strong {
+  font-size: 1.15rem;
+}
+
+.gallery-hub-card span {
+  color: #4a5560;
+  font-size: 0.92rem;
+}
+
+.gallery-hub-preview {
+  padding-block: 1rem 2rem;
+}
+
+.gallery-hub-preview .hero-section,
+.gallery-hub-preview .entry-header {
+  display: none;
+}
+
+/* ---------- Forms (Vercel-safe UI) ---------- */
+form input,
+form select,
+form textarea,
+form button {
+  font: inherit;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="tel"],
+form input[type="url"],
+form input[type="number"],
+form select,
+form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid #c9d5ce;
+  border-radius: 4px;
+  background: #fff;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #0b3d2c;
+  box-shadow: 0 0 0 3px rgba(11, 61, 44, 0.12);
+}
+
+.wpforms-submit:not(.renacon-careers-submit),
+.forminator-button,
+button[type="submit"]:not(.renacon-careers-submit) {
+  cursor: pointer;
+  background: #0b3d2c;
+  color: #fff;
+  border: 0;
+  padding: 0.75rem 1.35rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.wpforms-submit:not(.renacon-careers-submit):hover,
+.forminator-button:hover,
+button[type="submit"]:not(.renacon-careers-submit):hover {
+  background: #0f5240;
+  transform: translateY(-1px);
+}
+
+.forminator-row,
+.wpforms-field {
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 767px) {
+  .forminator-row,
+  .forminator-col,
+  .wpforms-field-row {
+    display: block !important;
+    width: 100% !important;
+  }
+}
+
+/* ---------- Footer (full-width bar, readable contrast) ---------- */
+.ct-footer {
+  background: #052e1f;
+  color: #f3fff8;
+  margin-top: 0;
+  padding: 2.75rem 0 0;
+  width: 100%;
+}
+
+.ct-footer [data-row="middle"],
+.ct-footer [data-row="bottom"] {
+  width: 100%;
+}
+
+.ct-footer .ct-container {
+  width: min(1290px, calc(100% - 3rem)) !important;
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .ct-footer [data-row="middle"] .ct-container {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.5rem;
+    align-items: start;
+  }
+}
+
+.ct-footer .ct-widget p,
+.ct-footer .ct-widget li,
+.ct-footer .ct-widget a {
+  color: #f3fff8 !important;
+}
+
+.ct-footer .ct-widget strong,
+.ct-footer .ct-widget p:first-child,
+.ct-footer .ct-widget p strong {
+  color: #ffffff !important;
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.65rem;
+}
+
+.ct-footer .ct-widget p {
+  line-height: 1.55;
+  margin: 0 0 0.55rem;
+  opacity: 1;
+}
+
+.ct-footer a {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.ct-footer a:hover {
+  color: #b8f5d0 !important;
+  text-decoration: underline;
+}
+
+.ct-footer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0 0;
+}
+
+.ct-footer li {
+  margin: 0.45rem 0;
+}
+
+.ct-footer [data-row="bottom"] {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.ct-footer-copyright {
+  border-top: none;
+  margin-top: 0;
+  padding: 1rem 0 1.25rem;
+  text-align: center;
+  color: #d7ffe9 !important;
+}
+
+.ct-footer-copyright p,
+.ct-footer-copyright strong {
+  color: #d7ffe9 !important;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .ct-footer {
+    padding: 2rem 0 0;
+  }
+
+  .ct-footer .ct-container {
+    width: min(100%, calc(100% - 1.5rem)) !important;
+  }
+
+  .ct-footer [data-row="middle"] .ct-container {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* ---------- Hero / banner: true full-screen width ---------- */
+.ct-container-full,
+#main .ct-container-full,
+.site-main .ct-container-full {
+  width: 100% !important;
+  max-width: none !important;
+  padding-inline: 0 !important;
+  margin-inline: 0 !important;
+}
+
+/* Kill gap under header before hero video */
+.site-main > .ct-container-full,
+.entry-content > .wp-block-stackable-columns.alignfull:first-child,
+.entry-content > .alignfull:first-child {
+  margin-top: 0 !important;
+}
+
+.wp-block-getwid-section.alignfull,
+.wp-block-getwid-section.alignfull .wp-block-getwid-section__wrapper,
+.wp-block-getwid-section.alignfull .wp-block-getwid-section__inner-wrapper,
+.wp-block-getwid-section.alignfull .wp-block-getwid-section__background-holder,
+.wp-block-getwid-section.alignfull .wp-block-getwid-section__background,
+.wp-block-getwid-section.alignfull .wp-block-getwid-section__background-video-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.wp-block-getwid-section__background-video-wrapper,
+.wp-block-getwid-section__background-video {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.wp-block-getwid-section__background-video {
+  display: block;
+  width: 100% !important;
+  min-height: calc(100vh - var(--renacon-header-min-h, 92px));
+  height: calc(100vh - var(--renacon-header-min-h, 92px));
+  object-fit: cover;
+  object-position: center;
+}
+
+.wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
+.wp-block-getwid-section .wp-block-spacer[style*="640px"] {
+  height: calc(100vh - var(--renacon-header-min-h, 92px)) !important;
+}
+
+@media (max-width: 768px) {
+  .wp-block-getwid-section__background-video,
+  .wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
+  .wp-block-getwid-section .wp-block-spacer[style*="640px"] {
+    min-height: calc(100vh - var(--renacon-header-min-h, 72px));
+    height: calc(100vh - var(--renacon-header-min-h, 72px)) !important;
+  }
+}
+
+.getwid-background-video-controls {
+  z-index: 2;
+}
+
+/* ---------- Content / layout responsive helpers ---------- */
+@media (max-width: 999px) {
+  .entry-content > .wp-block-columns:not(.alignfull),
+  .entry-content > .stk-block-columns:not(.alignfull) {
+    padding-inline: 0.75rem;
+  }
+
+  .wp-block-columns {
+    flex-wrap: wrap !important;
+  }
+
+  .wp-block-column {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .hero-section .page-title,
+  .entry-header .page-title {
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 599px) {
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  iframe,
+  video,
+  embed {
+    max-width: 100%;
+  }
+}
+
+/* ---------- Match live Renacon chrome ---------- */
+.ct-header .menu-container > .menu > li > a {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+}
+
+.ct-header .site-logo-container img {
+  max-height: var(--renacon-logo-max, 72px);
+  width: auto;
+}
+
+/* Green square social icons like live site */
+.ct-header .ct-social-box a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: var(--renacon-social-size, 36px);
+  height: var(--renacon-social-size, 36px);
+  margin-inline: 2px;
+  border-radius: 5px;
+  background: #1b7a3d !important;
+  color: #fff !important;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ct-header .ct-social-box a:hover {
+  background: #0f5a2b !important;
+  transform: translateY(-1px);
+}
+
+.ct-header .ct-social-box svg,
+.ct-header .ct-social-box .ct-icon-container {
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+.ct-header .ct-social-box svg path,
+.ct-header .ct-social-box svg circle {
+  fill: currentColor !important;
+}
+
+/* Right-side quick menu (Enquire / WhatsApp / Calculator) */
+.renacon-side-menu {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 10040;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.renacon-side-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-decoration: none;
+  color: #fff;
+  background: #1b7a3d;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transition: background 0.2s ease, padding 0.2s ease;
+}
+
+.renacon-side-item .renacon-side-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+
+.renacon-side-item .renacon-side-label {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-right: 0;
+  transition: max-width 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+}
+
+.renacon-side-item:hover .renacon-side-label,
+.renacon-side-item:focus-visible .renacon-side-label {
+  max-width: 140px;
+  opacity: 1;
+  padding-right: 0.85rem;
+}
+
+.renacon-side-item.whatsapp {
+  background: #25d366;
+}
+
+.renacon-side-item.whatsapp:hover {
+  background: #1ebe57;
+}
+
+.renacon-side-item.enquire:hover,
+.renacon-side-item.calculator:hover {
+  background: #0f5a2b;
+}
+
+/* Circular WhatsApp FAB (bottom-right), as on live site */
+.renacon-whatsapp-fab {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 10045;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.renacon-whatsapp-fab:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.55);
+}
+
+@media (max-width: 768px) {
+  .renacon-side-menu {
+    display: none;
+  }
+
+  .renacon-whatsapp-fab {
+    right: 0.85rem;
+    bottom: 0.85rem;
+    width: 54px;
+    height: 54px;
+  }
+}
+
+/* ---------- Motion polish (respect reduced motion) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Offcanvas link hover / focus / active polish */
+.renacon-mirror #offcanvas .mobile-menu .ct-menu-link:hover,
+.renacon-mirror #offcanvas .mobile-menu .ct-menu-link:focus-visible {
+  color: var(--renacon-yellow, #f4c709) !important;
+  padding-inline-start: 0.35rem;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current_page_item > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .renacon-nav-active > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-sub-menu-parent > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .current-menu-ancestor > .ct-sub-menu-parent > .ct-menu-link,
+.renacon-mirror #offcanvas .mobile-menu .renacon-nav-active > .ct-sub-menu-parent > .ct-menu-link {
+  color: var(--renacon-yellow, #f4c709) !important;
+  font-weight: 700 !important;
+}
+
+.renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:hover,
+.renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--renacon-yellow, #f4c709);
+  color: var(--renacon-yellow, #f4c709);
+}
+
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile,
+.renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile {
+  border-color: var(--renacon-yellow, #f4c709);
+  color: var(--renacon-yellow, #f4c709);
+}
+
+/* Sticky header subtle elevation once scrolled (class toggled in WpInteractions) */
+#header.ct-header.renacon-header-scrolled,
+.ct-header.renacon-header-scrolled {
+  box-shadow: 0 8px 24px rgba(5, 46, 31, 0.12);
+  backdrop-filter: saturate(1.1) blur(6px);
+}
+
+/* Touch-friendly OTP controls on small screens */
+@media (max-width: 599px) {
+  .renacon-send-otp,
+  .renacon-verify-otp {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.55rem 1rem;
+    margin: 0.5rem 0.5rem 0.85rem 0;
+  }
+
+  .renacon-brochure-otp-form,
+  .renacon-lead-brochure {
+    max-width: 100%;
+    padding-inline: 0.15rem;
+  }
+
+  .renacon-otp-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    align-items: center;
+  }
+
+  .news-pagination .page-numbers {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
+/* Gallery item keyboard / hover affordance */
+.sgb-item a,
+.sgb-item {
+  cursor: zoom-in;
+}
+
+.sgb-item:focus-within img {
+  transform: none !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Tablet breakpoint: keep product grids readable */
+@media (max-width: 999px) and (min-width: 600px) {
+  .entry-content .wp-block-columns {
+    gap: 1rem !important;
+  }
+}
+
+/* ---------- Homepage exact mirror (renacon.in) — neutralize redesign ---------- */
+/* Marker: renacon-exact-home-mirror-sep2026
+   Restore Editor Plus + Stackable look. No atmosphere bands, mint sections,
+   or forced highlight chrome. home.css injects live page styles. */
+
+/* Highlights strip — match renacon.in exactly (equal 64px icons, eplus gray wash) */
+/* Prior `width:auto !important` blew 128px source icons past their inline 64px size. */
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
+#post-2306 .renacon-home-band--highlights .wp-block-columns {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  max-width: 1290px !important;
+  width: min(1290px, calc(100% - 2rem)) !important;
+  margin-inline: auto !important;
+  margin-block: 0 !important;
+  /* Exact Editor Plus rule from renacon.in — ~#f5f5f5 wash, not full-bleed */
+  background-color: transparent !important;
+  background-image: linear-gradient(rgba(204, 204, 204, 0.19), rgba(204, 204, 204, 0.19)) !important;
+  padding: 5% !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0 !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: center !important;
+  float: none !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  width: auto !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer {
+  /* 10px spacers between icon and copy — keep like live */
+  display: block !important;
+  height: 10px !important;
+  min-height: 10px !important;
+  flex-shrink: 0 !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image {
+  margin: 0 auto !important;
+  float: none !important;
+  width: 64px !important;
+  max-width: 64px !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
+  /* All three icons identical 64×64 — live renacon.in size */
+  width: 64px !important;
+  height: 64px !important;
+  max-width: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-inline: auto !important;
+  filter: none !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e p {
+  width: 100% !important;
+  margin: 0 !important;
+  text-align: center !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  color: #000000 !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e p strong,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p strong,
+.renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e p strong {
+  font-weight: 700 !important;
+  color: #000000 !important;
+}
+
+@media (max-width: 689px) {
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
+  .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e {
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+    gap: 1.25rem !important;
+  }
+
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* OUR SERVICES — match renacon.in Stackable exactly (side-by-side, not stacked) */
+/* Prior flex:unset !important on #post-2306 .stk-e01c6a5 overrode home.css 30/70 flex. */
+#post-2306 .stk-ee3acf8,
+.entry-content > .stk-ee3acf8 {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+  margin-bottom: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+#post-2306 .stk-ee3acf8-column {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  gap: 0 !important;
+}
+
+/* Left skyscraper panel — keep yellow icon (do NOT invert to white) */
+#post-2306 .stk-e01c6a5 {
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: #000000 !important;
+  background-image: url(https://renacon.in/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  padding: 90px 50px !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .stk-e01c6a5:before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: #000000 !important;
+  opacity: 0.6 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+#post-2306 .stk-e01c6a5 > .stk-column-wrapper,
+#post-2306 .stk-e01c6a5 .stk-e01c6a5-inner-blocks {
+  position: relative !important;
+  z-index: 2 !important;
+  justify-content: center !important;
+}
+
+#post-2306 .stk-e01c6a5 .has-palette-color-8-color,
+#post-2306 .stk-e01c6a5 .has-text-color,
+#post-2306 .stk-e01c6a5 h1,
+#post-2306 .stk-e01c6a5 p {
+  color: #ffffff !important;
+}
+
+#post-2306 .stk-e01c6a5 .wp-block-image img {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Right cards column */
+#post-2306 .stk-df90d5b {
+  background-color: #cccccc33 !important;
+  align-self: center !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .stk-df90d5b:before {
+  background-color: #cccccc33 !important;
+}
+
+#post-2306 .stk-57da9d5-column,
+#post-2306 .stk-473efc4-column {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  --stk-column-gap: 40px !important;
+  row-gap: 50px !important;
+}
+
+/* Thin dark green borders on service card shells (renacon.in #178a47) */
+#post-2306 .stk-b162ce9-container,
+#post-2306 .stk-0458ac2-container,
+#post-2306 .stk-2c3e48d-container,
+#post-2306 .stk-7623a40-container {
+  background-color: transparent !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #178a47 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+}
+
+#post-2306 .stk-b162ce9,
+#post-2306 .stk-0458ac2,
+#post-2306 .stk-2c3e48d,
+#post-2306 .stk-7623a40 {
+  padding: 10px !important;
+  box-shadow: none !important;
+}
+
+/* Inner white cards — no drop shadow */
+#post-2306 .stk-43533bb,
+#post-2306 .stk-f0223a1,
+#post-2306 .stk-e3c56a3,
+#post-2306 .stk-92754a5 {
+  background-color: #ffffff !important;
+  border-radius: 5px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+@media screen and (min-width: 1000px) {
+  /* Match renacon.in: never wrap the left panel under the cards on desktop */
+  #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+  #post-2306 .stk-ee3acf8-column {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+
+  #post-2306 .stk-e01c6a5 {
+    flex: var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    max-width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  #post-2306 .stk-df90d5b {
+    flex: var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    max-width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    min-width: 0 !important;
+  }
+
+  #post-2306 .stk-b162ce9,
+  #post-2306 .stk-0458ac2,
+  #post-2306 .stk-2c3e48d,
+  #post-2306 .stk-7623a40 {
+    flex: 1 1 calc(50% - 20px) !important;
+    max-width: calc(50% - 20px) !important;
+  }
+}
+
+@media screen and (min-width: 690px) and (max-width: 999px) {
+  #post-2306 .stk-e01c6a5,
+  #post-2306 .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  #post-2306 .stk-ee3acf8-column {
+    flex-wrap: wrap !important;
+    row-gap: 80px !important;
+  }
+
+  #post-2306 .stk-e01c6a5 {
+    padding: 60px 40px !important;
+  }
+
+  #post-2306 .stk-df90d5b {
+    padding-left: 0 !important;
+  }
+
+  #post-2306 .stk-57da9d5,
+  #post-2306 .stk-473efc4 {
+    margin-bottom: 50px !important;
+  }
+}
+
+@media screen and (max-width: 689px) {
+  #post-2306 .stk-e01c6a5,
+  #post-2306 .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Center service icons like renacon.in (aligncenter table + auto margins) */
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter {
+  display: table !important;
+  float: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter img {
+  display: inline !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ---------- Section icons above centered headings (OUR PROJECTS, etc.) ---------- */
+.entry-content > .wp-block-image.aligncenter,
+.renacon-home-band > .wp-block-image.aligncenter,
+#post-2306 .renacon-home-band .wp-block-image.aligncenter {
+  display: table !important;
+  float: none !important;
+  width: auto !important;
+  max-width: min(1290px, 100%) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 0.35rem !important;
+  text-align: center !important;
+}
+
+.entry-content > .wp-block-image.aligncenter img,
+.renacon-home-band > .wp-block-image.aligncenter img,
+#post-2306 .renacon-home-band .wp-block-image.aligncenter img {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Keep icon + title + subtitle as one centered unit */
+.entry-content > .wp-block-image.aligncenter:has(+ .wp-block-heading.has-text-align-center),
+.entry-content > .wp-block-heading.has-text-align-center:has(+ p.has-text-align-center),
+.renacon-home-band > .wp-block-image.aligncenter:has(+ .wp-block-heading.has-text-align-center),
+.renacon-home-band > .wp-block-heading.has-text-align-center:has(+ p.has-text-align-center) {
+  text-align: center;
+}
+
+.entry-content > .wp-block-heading.has-text-align-center,
+.renacon-home-band > .wp-block-heading.has-text-align-center {
+  margin-top: 0.25rem;
+}
+
+/* ---------- Header: taller premium bar (logo / nav / socials) ---------- */
+.ct-header [data-row*="middle"] .ct-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem 1.5rem;
+  width: min(1290px, calc(100% - 2rem));
+  min-height: var(--renacon-header-min-h);
+  padding-block: var(--renacon-header-pad-y) !important;
+}
+
+.ct-header [data-row*="middle"] {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(11, 61, 44, 0.06);
+}
+
+.ct-header [data-id="logo"] {
+  flex: 0 0 auto;
+}
+
+.ct-header [data-id="menu"] {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.ct-header [data-id="socials"] {
+  flex: 0 0 auto;
+  margin-inline-start: 0.25rem;
+}
+
+.ct-header .site-logo-container img,
+.ct-header [data-id="logo"] .site-logo-container img {
+  max-height: var(--renacon-logo-max) !important;
+  width: auto !important;
+}
+
+.ct-header .ct-social-box {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.28rem;
+  flex-wrap: nowrap;
+}
+
+.ct-header .ct-social-box a {
+  width: var(--renacon-social-size) !important;
+  height: var(--renacon-social-size) !important;
+  margin-inline: 0 !important;
+  border-radius: 5px;
+}
+
+.ct-header .menu-container > .menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ct-header .menu-container > .menu > li > a {
+  position: relative;
+  padding: 0.55rem 0.28rem !important;
+  font-size: var(--renacon-nav-size) !important;
+  letter-spacing: 0.04em;
+}
+
+.ct-header .menu-container > .menu > li > a::after {
+  content: "";
+  position: absolute;
+  left: 0.28rem;
+  right: 0.28rem;
+  bottom: 0.2rem;
+  height: 2px;
+  background: var(--renacon-yellow);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.22s ease;
+}
+
+.ct-header .menu-container > .menu > li > a:hover,
+.ct-header .menu-container > .menu > li.current-menu-item > a,
+.ct-header .menu-container > .menu > li.current_page_item > a,
+.ct-header .menu-container > .menu > li.current-menu-ancestor > a,
+.ct-header .menu-container > .menu > li.renacon-nav-active > a,
+.ct-header .menu-container > .menu > li.ct-active > a {
+  color: var(--renacon-green-mid, #1b7a3d) !important;
+}
+
+.ct-header .menu-container > .menu > li > a:hover::after,
+.ct-header .menu-container > .menu > li.current-menu-item > a::after,
+.ct-header .menu-container > .menu > li.current_page_item > a::after,
+.ct-header .menu-container > .menu > li.current-menu-ancestor > a::after,
+.ct-header .menu-container > .menu > li.renacon-nav-active > a::after,
+.ct-header .menu-container > .menu > li.ct-active > a::after {
+  transform: scaleX(1);
+  background: var(--renacon-yellow, #f4c709);
+}
+
+#header.ct-header .menu-container .sub-menu a:hover,
+#header.ct-header .menu-container .sub-menu .current-menu-item > a,
+#header.ct-header .menu-container .sub-menu .renacon-nav-active > a {
+  background: #f3faf6;
+  color: var(--renacon-green-mid, #1b7a3d) !important;
+  font-weight: 600;
+}
+
+@media (max-width: 999px) {
+  :root {
+    --renacon-header-pad-y: 0.75rem;
+    --renacon-header-min-h: 72px;
+    --renacon-logo-max: 56px;
+  }
+
+  .ct-header [data-row*="middle"] .ct-container {
+    justify-content: space-between !important;
+  }
+
+  .ct-header [data-id="menu"] {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --renacon-header-min-h: 64px;
+    --renacon-logo-max: 48px;
+  }
+}
+
+/* Keep hero flush under taller header */
+.wp-block-getwid-section__background-video {
+  min-height: calc(100vh - var(--renacon-header-min-h));
+  height: calc(100vh - var(--renacon-header-min-h));
+}
+
+.wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
+.wp-block-getwid-section .wp-block-spacer[style*="640px"] {
+  height: calc(100vh - var(--renacon-header-min-h)) !important;
+}
+
+/* renacon-ix-v2-sep2026 — About Us + Why Renacon interactive layer (obvious motion) */
+
+/* Shared reveal language for both scoped pages */
+#post-4487.renacon-ix-v2,
+#post-5659.renacon-ix-v2 {
+  --renacon-green: #0b3d2c;
+  --renacon-green-deep: #123528;
+  --renacon-teal: #167278;
+  --renacon-yellow: #f4c709;
+  --renacon-yellow-bright: #ffcb2d;
+  --renacon-mist: #f3faf6;
+}
+
+#post-4487.renacon-ix-v2 .renacon-reveal,
+#post-5659.renacon-ix-v2 .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 2.4rem, 0);
+  filter: blur(2px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.75s ease;
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
+}
+
+#post-4487.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+#post-5659.renacon-ix-v2 .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: none;
+}
+
+/* Staggered hero entrance pieces */
+#post-4487.renacon-ix-v2 .renacon-hero-piece,
+#post-5659.renacon-ix-v2 .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 1.6rem, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+#post-4487.renacon-ix-v2.renacon-hero-in .renacon-hero-piece,
+#post-5659.renacon-ix-v2.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Brand underline draw on primary titles */
+#post-4487.renacon-ix-v2 .stk-block-heading__text,
+#post-5659.renacon-ix-v2 h1.wp-block-heading {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+#post-4487.renacon-ix-v2 .stk-block-heading__text::after,
+#post-5659.renacon-ix-v2 h1.wp-block-heading::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 0;
+  margin-top: 0.45rem;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-green, #0b3d2c),
+    var(--renacon-yellow, #f4c709) 55%,
+    var(--renacon-yellow-bright, #ffcb2d)
+  );
+  transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.25s;
+}
+
+#post-4487.renacon-ix-v2.renacon-hero-in .stk-block-heading__text::after,
+#post-5659.renacon-ix-v2.renacon-hero-in h1.wp-block-heading::after {
+  width: min(11rem, 70%);
+}
+
+/* ---------- About Us (/about-us) ---------- */
+#post-4487.renacon-ix-v2 .wp-block-media-text__media,
+#post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper {
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 0 0 0 rgba(11, 61, 44, 0);
+  transition: box-shadow 0.4s ease;
+}
+
+#post-4487.renacon-ix-v2 .wp-block-media-text__media img,
+#post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image {
+  transition: filter 0.4s ease;
+  transform: none !important;
+  will-change: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487.renacon-ix-v2 .wp-block-media-text__media:hover,
+  #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper:hover {
+    box-shadow: 0 16px 36px rgba(11, 61, 44, 0.22);
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-media-text__media:hover img,
+  #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper:hover .wp-block-getwid-image-box__image {
+    transform: none !important;
+    filter: saturate(1.08) contrast(1.03);
+  }
+}
+
+#post-4487.renacon-ix-v2 .wp-block-media-text__media:active img,
+#post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper:active .wp-block-getwid-image-box__image {
+  transform: none !important;
+}
+
+#post-4487.renacon-ix-v2 #erp .stk-block-column,
+#post-4487.renacon-ix-v2 .wp-block-pullquote {
+  transition:
+    box-shadow 0.4s ease,
+    border-color 0.35s ease,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.35s ease;
+}
+
+#post-4487.renacon-ix-v2 .wp-block-pullquote {
+  border-inline-start: 4px solid transparent;
+  padding-inline-start: 1rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487.renacon-ix-v2 #erp .stk-block-column:hover {
+    box-shadow: 0 18px 40px rgba(11, 61, 44, 0.16);
+    transform: translateY(-6px);
+    background-color: rgba(243, 250, 246, 0.55);
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-pullquote:hover {
+    border-inline-start-color: var(--renacon-yellow, #f4c709);
+    box-shadow: 0 12px 28px rgba(244, 199, 9, 0.18);
+    transform: translateY(-3px);
+  }
+}
+
+#post-4487.renacon-ix-v2 #erp .stk-block-column:active {
+  transform: translateY(-2px);
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion {
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: box-shadow 0.35s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-icon {
+  transition: transform 0.35s ease, color 0.25s ease;
+  color: var(--renacon-green, #0b3d2c);
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion[open] .stk-block-icon {
+  transform: rotate(180deg);
+  color: var(--renacon-yellow-bright, #ffcb2d);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary:hover {
+    background-color: rgba(11, 61, 44, 0.06);
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-stackable-accordion:hover {
+    box-shadow: 0 10px 24px rgba(11, 61, 44, 0.12);
+    border-color: rgba(244, 199, 9, 0.45);
+  }
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion[open] {
+  background: linear-gradient(180deg, rgba(243, 250, 246, 0.95), rgba(255, 255, 255, 0.5));
+  box-shadow: inset 0 0 0 1px rgba(11, 61, 44, 0.1);
+  border-color: rgba(11, 61, 44, 0.12);
+}
+
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-accordion__content {
+  animation: renacon-ix-accordion-in 0.35s ease-out;
+}
+
+@keyframes renacon-ix-accordion-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s ease,
+    background-color 0.35s ease,
+    border-color 0.35s ease;
+  border-radius: 8px;
+  padding: 0.9rem 0.65rem;
+  border: 1px solid transparent;
+}
+
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-icon {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+  color: var(--renacon-teal, #167278);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(11, 61, 44, 0.16);
+    background-color: rgba(243, 250, 246, 0.95);
+    border-color: rgba(244, 199, 9, 0.55);
+  }
+
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:hover .stk-block-icon {
+    transform: scale(1.14) translateY(-3px);
+    color: var(--renacon-green, #0b3d2c);
+  }
+}
+
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:active {
+  transform: translateY(-3px);
+}
+
+#post-4487.renacon-ix-v2 .stk-ad91ac3 p.has-text-align-center {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+#post-4487.renacon-ix-v2 .stk-ad91ac3 p.has-text-align-center::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: 0;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-green, #0b3d2c),
+    var(--renacon-yellow, #f4c709)
+  );
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-4487.renacon-ix-v2 .renacon-reveal-in .stk-ad91ac3 p.has-text-align-center::after,
+#post-4487.renacon-ix-v2 .stk-ad91ac3.renacon-reveal-in p.has-text-align-center::after,
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-ad91ac3:hover p.has-text-align-center::after {
+  width: min(9rem, 60%);
+}
+
+#post-4487.renacon-ix-v2 a.wp-block-button__link,
+#post-4487.renacon-ix-v2 .wp-element-button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-4487.renacon-ix-v2 a.wp-block-button__link:hover,
+  #post-4487.renacon-ix-v2 .wp-element-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 22px rgba(11, 61, 44, 0.22);
+    filter: brightness(1.05);
+  }
+}
+
+#post-4487.renacon-ix-v2 a.wp-block-button__link:active,
+#post-4487.renacon-ix-v2 .wp-element-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 689px) {
+  #post-4487.renacon-ix-v2 .renacon-reveal {
+    transform: translate3d(0, 1.4rem, 0);
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary {
+    min-height: 48px;
+    padding-block: 0.4rem;
+  }
+
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column {
+    padding: 1.1rem 0.75rem;
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-media-text {
+    gap: 0.85rem;
+  }
+
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 > .stk-row {
+    flex-wrap: wrap;
+  }
+
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* ---------- Why Renacon (/why-renacon) ---------- */
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child {
+  margin-block: 0 1.35rem;
+  overflow: hidden;
+  position: relative;
+}
+
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 28%;
+  background: linear-gradient(180deg, transparent, rgba(11, 61, 44, 0.35));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#post-5659.renacon-ix-v2.renacon-hero-in .entry-content > .wp-block-image.alignfull:first-child::after {
+  opacity: 1;
+}
+
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(52vh, 28rem);
+  object-fit: cover;
+  transform: none;
+  transition: filter 0.45s ease;
+}
+
+#post-5659.renacon-ix-v2.renacon-hero-in .entry-content > .wp-block-image.alignfull:first-child img {
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child:hover img {
+    transform: none !important;
+    filter: saturate(1.08);
+  }
+}
+
+#post-5659.renacon-ix-v2 .stk-8eed3ae > .stk-row {
+  align-items: start;
+  gap: clamp(1rem, 2.5vw, 2rem);
+}
+
+#post-5659.renacon-ix-v2 h1.wp-block-heading {
+  color: var(--renacon-green-deep, #123528);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  margin-block: 0.35rem 0.75rem;
+  font-size: clamp(1.55rem, 1.2rem + 1.6vw, 2.35rem) !important;
+}
+
+#post-5659.renacon-ix-v2 .stk-72ab4ab > .stk-column-wrapper {
+  border-radius: 8px;
+  padding: 0.55rem 0.35rem;
+  transition:
+    background-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-5659.renacon-ix-v2 .stk-72ab4ab > .stk-column-wrapper:hover {
+    background-color: rgba(243, 250, 246, 0.9);
+    box-shadow: 0 14px 32px rgba(11, 61, 44, 0.12);
+    transform: translateY(-4px);
+  }
+
+  #post-5659.renacon-ix-v2 .stk-72ab4ab > .stk-column-wrapper:hover .wp-block-image img {
+    transform: none !important;
+  }
+}
+
+#post-5659.renacon-ix-v2 .stk-72ab4ab .wp-block-image img {
+  transition: none;
+  transform: none !important;
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list > li {
+  position: relative;
+  margin: 0;
+  padding: 0.65rem 0.85rem 0.65rem 1.95rem;
+  border-radius: 6px;
+  border-inline-start: 4px solid transparent;
+  background: transparent;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease;
+  cursor: default;
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list > li::before {
+  content: "";
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 1px;
+  background: var(--renacon-yellow, #f4c709);
+  box-shadow: 0 0 0 2px rgba(11, 61, 44, 0.14);
+  transform: translateY(-50%) rotate(45deg);
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list > li .stk-highlight {
+  color: var(--renacon-green-deep, #123528) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  background-image: linear-gradient(var(--renacon-yellow, #f4c709), var(--renacon-yellow, #f4c709));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 2px;
+  transition: background-size 0.3s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-5659.renacon-ix-v2 .ep-custom-list > li:hover {
+    background-color: rgba(11, 61, 44, 0.06);
+    border-inline-start-color: var(--renacon-green, #0b3d2c);
+    transform: translateX(8px);
+    box-shadow: 0 10px 22px rgba(11, 61, 44, 0.12);
+  }
+
+  #post-5659.renacon-ix-v2 .ep-custom-list > li:hover::before {
+    background: var(--renacon-green, #0b3d2c);
+    transform: translateY(-50%) rotate(45deg) scale(1.2);
+  }
+
+  #post-5659.renacon-ix-v2 .ep-custom-list > li:hover .stk-highlight {
+    background-size: 100% 2px;
+  }
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list > li:active {
+  transform: translateX(4px);
+  background-color: rgba(11, 61, 44, 0.05);
+}
+
+#post-5659.renacon-ix-v2 .ep-custom-list > li.renacon-why-benefit {
+  opacity: 0;
+  transform: translate3d(-1rem, 0.5rem, 0);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+  transition-delay: var(--renacon-benefit-delay, 0ms);
+}
+
+#post-5659.renacon-ix-v2.renacon-why-benefits-in .ep-custom-list > li.renacon-why-benefit,
+#post-5659.renacon-ix-v2 .stk-8eed3ae.renacon-reveal-in .ep-custom-list > li.renacon-why-benefit {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+#post-5659.renacon-ix-v2 .wp-block-embed-youtube {
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.14);
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  background: linear-gradient(145deg, var(--renacon-mist, #f3faf6), #fff);
+  border: 2px solid transparent;
+}
+
+#post-5659.renacon-ix-v2 .wp-block-embed-youtube .wp-block-embed__wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto !important;
+}
+
+#post-5659.renacon-ix-v2 .wp-block-embed-youtube iframe {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  border: 0;
+  display: block;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-5659.renacon-ix-v2 .wp-block-embed-youtube:hover {
+    box-shadow: 0 20px 42px rgba(11, 61, 44, 0.22);
+    transform: translateY(-6px);
+    border-color: rgba(244, 199, 9, 0.65);
+  }
+}
+
+#post-5659.renacon-ix-v2 .wp-block-embed-youtube:active {
+  transform: translateY(-2px);
+}
+
+#post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading {
+  color: var(--renacon-green, #0b3d2c);
+  font-size: clamp(1.05rem, 0.95rem + 0.55vw, 1.25rem) !important;
+  line-height: 1.35;
+  margin-block: 0.5rem 0.85rem;
+  position: relative;
+  padding-bottom: 0.55rem;
+}
+
+#post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  margin-top: 0.55rem;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--renacon-green, #0b3d2c),
+    var(--renacon-yellow, #f4c709)
+  );
+  transition: width 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#post-5659.renacon-ix-v2 .entry-content > h2.renacon-reveal-in::after {
+  width: min(8rem, 45%);
+}
+
+#post-5659.renacon-ix-v2 .entry-content > p.eplus-wrapper {
+  max-width: 68ch;
+  line-height: 1.7;
+  color: #1a2e26;
+}
+
+#post-5659.renacon-ix-v2 .entry-content > p.eplus-wrapper + p.eplus-wrapper {
+  margin-top: 0.85rem;
+}
+
+@media (max-width: 1023px) {
+  #post-5659.renacon-ix-v2 .stk-8eed3ae > .stk-row {
+    flex-wrap: wrap;
+  }
+
+  #post-5659.renacon-ix-v2 .stk-8eed3ae .stk-block-column {
+    flex: 1 1 100%;
+    max-width: 100%;
+    width: 100%;
+  }
+
+  #post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child img {
+    max-height: min(42vh, 22rem);
+  }
+}
+
+@media (max-width: 689px) {
+  #post-5659.renacon-ix-v2 .renacon-reveal {
+    transform: translate3d(0, 1.35rem, 0);
+  }
+
+  #post-5659.renacon-ix-v2 .stk-8eed3ae {
+    padding-inline: 0.85rem;
+  }
+
+  #post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading,
+  #post-5659.renacon-ix-v2 .entry-content > p.eplus-wrapper {
+    padding-inline: 0.85rem;
+  }
+
+  #post-5659.renacon-ix-v2 h1.wp-block-heading {
+    font-size: clamp(1.4rem, 6.5vw, 1.85rem) !important;
+  }
+
+  #post-5659.renacon-ix-v2 .ep-custom-list > li {
+    padding: 0.75rem 0.75rem 0.75rem 1.85rem;
+  }
+
+  #post-5659.renacon-ix-v2 .stk-72ab4ab .wp-block-image.alignleft {
+    float: none;
+    margin: 0 0 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #post-4487.renacon-ix-v2 .renacon-reveal,
+  #post-5659.renacon-ix-v2 .renacon-reveal,
+  #post-4487.renacon-ix-v2 .renacon-hero-piece,
+  #post-5659.renacon-ix-v2 .renacon-hero-piece,
+  #post-5659.renacon-ix-v2 .ep-custom-list > li.renacon-why-benefit {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  #post-4487.renacon-ix-v2 .stk-block-heading__text::after,
+  #post-5659.renacon-ix-v2 h1.wp-block-heading::after,
+  #post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading::after {
+    width: min(11rem, 70%) !important;
+    transition: none !important;
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-media-text__media img,
+  #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image,
+  #post-4487.renacon-ix-v2 #erp .stk-block-column,
+  #post-4487.renacon-ix-v2 .wp-block-pullquote,
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column,
+  #post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-icon,
+  #post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-icon,
+  #post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child img,
+  #post-5659.renacon-ix-v2 .ep-custom-list > li,
+  #post-5659.renacon-ix-v2 .wp-block-embed-youtube {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  #post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-accordion__content {
+    animation: none !important;
+  }
+}
+
+/* ==========================================================================
+   Homepage (#post-2306): exact renacon.in mirror — hero bleed only
+   Marker: renacon-exact-home-mirror-sep2026
+   Atmosphere bands / mint products / mist services / reveal chrome REMOVED.
+   ========================================================================== */
+
+/* Full-bleed hero video plane; neutralize nested alignfull double-bleed smash */
+#post-2306 .entry-content > .stk-52d755f.alignfull,
+#post-2306 .entry-content > .stk-52d755f {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .stk-52d755f .stk-content-align,
+#post-2306 .stk-52d755f .stk-column-wrapper,
+#post-2306 .stk-52d755f .stk-block-column,
+#post-2306 .stk-52d755f .wp-block-getwid-section,
+#post-2306 .stk-52d755f .wp-block-getwid-section.alignfull,
+#post-2306 .stk-52d755f .wp-block-getwid-section__wrapper,
+#post-2306 .stk-52d755f .wp-block-getwid-section__inner-wrapper,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background-holder,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background-video-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  float: none !important;
+  transform: none !important;
+}
+
+/* If legacy band wrappers exist in cache, make them invisible structurally */
+#post-2306 .renacon-home-band {
+  display: contents;
+}
+
+/* Kill leftover atmosphere backgrounds from older renacon-all embeds */
+#post-2306.renacon-home-ix .renacon-home-band--highlights,
+#post-2306.renacon-home-ix .renacon-home-band--products,
+#post-2306.renacon-home-ix .renacon-home-band--services,
+#post-2306.renacon-home-ix .renacon-home-band--hotspot,
+#post-2306.renacon-home-ix .renacon-home-band--projects,
+#post-2306 .renacon-home-band--products,
+#post-2306 .renacon-home-band--services,
+#post-2306 .renacon-home-band--hotspot,
+#post-2306 .renacon-home-band--highlights {
+  background: transparent !important;
+  background-color: transparent !important;
+  padding-block: 0 !important;
+  padding-inline: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Product categories: use default Getwid has-image-left (50% image) — no crop */
+#post-2306 .wp-block-getwid-image-box.has-image-left,
+#post-2306 .wp-block-getwid-image-box {
+  /* revert prior flex/gap/object-fit overrides */
+  gap: unset !important;
+}
+
+#post-2306 .wp-block-getwid-image-box__image,
+#post-2306 .has-image-left .wp-block-getwid-image-box__image {
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+#post-2306 .has-image-left .wp-block-getwid-image-box__image-container {
+  /* Getwid default */
+  max-width: 50% !important;
+  width: auto !important;
+  flex: 1 0 auto !important;
+}
+
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17 {
+  /* Do not force custom 50% column grid; keep WP columns layout */
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  margin-inline: auto !important;
+  gap: unset !important;
+}
+
+/* No scroll-reveal hide on homepage */
+#post-2306 .renacon-reveal,
+#post-2306 .renacon-hero-piece {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ============================================================
+   Product pages — images + interactive polish (all products)
+   ============================================================ */
+article.renacon-product-page.renacon-ix-v2,
+article.renacon-product-page.renacon-product-ix {
+  --renacon-green: #00984a;
+  --renacon-green-deep: #0b3d2c;
+  --renacon-yellow: #f4c709;
+  --renacon-mist: #f3faf6;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(11, 61, 44, 0.18) 0%,
+    rgba(0, 152, 74, 0.08) 45%,
+    rgba(244, 199, 9, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.45s ease;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay.renacon-product-photo-in {
+    transition: none;
+  }
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover {
+    transform: none !important;
+  }
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover::before {
+    opacity: 0.72;
+  }
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.8rem, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 1.2rem, 0);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+article.renacon-product-page.renacon-ix-v2.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+article.renacon-product-page .renacon-product-media img {
+  transition: none;
+  transform: none !important;
+  transform-origin: center center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .renacon-product-media:hover img {
+    transform: none !important;
+    filter: none;
+  }
+}
+
+article.renacon-product-page details.renacon-product-accordion {
+  border-radius: 4px;
+  transition: box-shadow 0.35s ease, background-color 0.35s ease;
+}
+
+article.renacon-product-page details.renacon-product-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+article.renacon-product-page details.renacon-product-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+article.renacon-product-page details.renacon-product-accordion.renacon-product-accordion-open {
+  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.1);
+}
+
+article.renacon-product-page details.renacon-product-accordion summary:hover {
+  background-color: rgba(0, 152, 74, 0.06);
+}
+
+article.renacon-product-page details.renacon-product-accordion .stk-block-icon {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+article.renacon-product-page details.renacon-product-accordion[open] .stk-block-icon {
+  transform: rotate(180deg);
+}
+
+article.renacon-product-page .wpforms-submit,
+article.renacon-product-page button.wpforms-submit {
+  background-color: var(--renacon-green, #00984a) !important;
+  border-color: var(--renacon-green, #00984a) !important;
+  color: #fff !important;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .wpforms-submit:hover,
+  article.renacon-product-page button.wpforms-submit:hover {
+    background-color: var(--renacon-yellow, #f4c709) !important;
+    border-color: var(--renacon-yellow, #f4c709) !important;
+    color: var(--renacon-green-deep, #0b3d2c) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(244, 199, 9, 0.35) !important;
+  }
+}
+
+article.renacon-product-page .wpforms-submit:focus-visible {
+  outline: 3px solid var(--renacon-yellow, #f4c709);
+  outline-offset: 2px;
+}
+
+@media (max-width: 689px) {
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay {
+    min-height: 220px;
+    margin-top: 1rem;
+  }
+
+  article.renacon-product-page.renacon-ix-v2 .renacon-reveal {
+    transform: translate3d(0, 1.1rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  article.renacon-product-page.renacon-ix-v2 .renacon-reveal,
+  article.renacon-product-page.renacon-ix-v2 .renacon-hero-piece,
+  article.renacon-product-page .renacon-product-media img,
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay,
+  article.renacon-product-page .wpforms-submit {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+
+/* ============================================================
+   Our Products hub (#post-635) — equal-height cards + polish
+   Marker: data-renacon-products-ix="products-hub-v3"
+   ============================================================ */
+#post-635.renacon-our-products-ix,
+#post-635.renacon-ix-v2,
+#post-635[data-renacon-products-ix],
+body.renacon-page-our-products #post-635 {
+  --renacon-green: #00984a;
+  --renacon-green-deep: #0b3d2c;
+  --renacon-yellow: #f4c709;
+  --renacon-btn-green: #02a554;
+}
+
+/* Hero banner — full-bleed, no inset card treatment */
+#post-635.renacon-our-products-ix .entry-content > .wp-block-image.alignfull:first-child,
+#post-635[data-renacon-products-ix] .entry-content > .wp-block-image.alignfull:first-child {
+  margin-inline: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+#post-635.renacon-our-products-ix .entry-content > .wp-block-image.alignfull:first-child img,
+#post-635[data-renacon-products-ix] .entry-content > .wp-block-image.alignfull:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Product grid rhythm */
+#post-635.renacon-our-products-ix .stk-f308afb,
+#post-635[data-renacon-products-ix] .stk-f308afb {
+  background-color: #ffffff !important;
+}
+
+#post-635.renacon-our-products-ix .stk-6c7f365 > .stk-row,
+#post-635.renacon-our-products-ix .stk-c602183 > .stk-row,
+#post-635[data-renacon-products-ix] .stk-6c7f365 > .stk-row,
+#post-635[data-renacon-products-ix] .stk-c602183 > .stk-row {
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+/* Equal-height product cards — flex stretch (no height:100% — that blocks row stretch) */
+#post-635.renacon-our-products-ix .renacon-product-hub-card,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  height: auto !important;
+  min-height: 0 !important;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-column__content,
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-block-content,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-column__content,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-block-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Nested content column (title / copy / CTA) fills remaining height */
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  margin-top: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  align-items: stretch !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper,
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Consistent product image frame (override uneven page-CSS widths) */
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-image,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-image {
+  width: 100% !important;
+  margin-bottom: 1rem !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img-wrapper,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-inline: auto !important;
+  width: min(100%, 260px) !important;
+  max-width: 260px !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  overflow: hidden;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img {
+  margin-inline: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card h3.wp-block-heading,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-heading__text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card h3.wp-block-heading,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-heading__text {
+  color: #111111 !important;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  min-height: 3.1em;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 0.65rem !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-text {
+  flex: 1 1 auto !important;
+  margin-bottom: 1rem !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-text__text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-text__text {
+  color: #000000 !important;
+  line-height: 1.55;
+}
+
+/* Pin Read more to card bottom so row bottoms align */
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-button-group,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-9bff2c4,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-6804005,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-406bfd4,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-13952d9,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-708e58a,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-af2a390,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-64c20df,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-button-group {
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+  width: 100%;
+  flex: 0 0 auto !important;
+}
+
+/* Nested content stack must fill stretched card so margin-top:auto has free space */
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks {
+  flex: 1 1 auto !important;
+  min-height: 100% !important;
+  height: 100% !important;
+}
+
+/* Brand green CTAs (Stackable buttons already green via page CSS; harden focus) */
+#post-635.renacon-our-products-ix a.stk-button,
+#post-635[data-renacon-products-ix] a.stk-button {
+  background: var(--renacon-btn-green) !important;
+}
+
+#post-635.renacon-our-products-ix a.stk-button:focus-visible,
+#post-635.renacon-our-products-ix a.stk-img-wrapper:focus-visible,
+#post-635.renacon-our-products-ix .renacon-product-hub-card a:focus-visible,
+#post-635[data-renacon-products-ix] a.stk-button:focus-visible,
+#post-635[data-renacon-products-ix] a.stk-img-wrapper:focus-visible {
+  outline: 3px solid var(--renacon-yellow);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scroll reveal */
+#post-635.renacon-our-products-ix .renacon-reveal,
+#post-635.renacon-ix-v2 .renacon-reveal,
+#post-635[data-renacon-products-ix] .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.25rem, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+#post-635.renacon-our-products-ix .renacon-reveal.renacon-reveal-in,
+#post-635.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+#post-635[data-renacon-products-ix] .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+#post-635.renacon-our-products-ix .renacon-hero-piece,
+#post-635[data-renacon-products-ix] .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+#post-635.renacon-our-products-ix.renacon-hero-in .renacon-hero-piece,
+#post-635[data-renacon-products-ix].renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hover lift — product cards only (page-scoped) */
+#post-635.renacon-our-products-ix .renacon-product-hub-card,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img {
+  transition: none;
+  transform: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  #post-635.renacon-our-products-ix .renacon-product-hub-card:hover,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(11, 61, 44, 0.1);
+  }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card:hover .stk-img,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover .stk-img {
+    transform: none !important;
+    filter: none;
+  }
+
+  #post-635.renacon-our-products-ix a.stk-button:hover .stk-button__inner-text,
+  #post-635[data-renacon-products-ix] a.stk-button:hover .stk-button__inner-text {
+    color: #000000 !important;
+  }
+}
+
+@media (max-width: 999px) {
+  #post-635.renacon-our-products-ix .stk-6c7f365 > .stk-row,
+  #post-635.renacon-our-products-ix .stk-c602183 > .stk-row,
+  #post-635[data-renacon-products-ix] .stk-6c7f365 > .stk-row,
+  #post-635[data-renacon-products-ix] .stk-c602183 > .stk-row {
+    flex-wrap: wrap !important;
+  }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 689px) {
+  #post-635.renacon-our-products-ix .stk-block-columns > .stk-row,
+  #post-635.renacon-our-products-ix .stk-row,
+  #post-635[data-renacon-products-ix] .stk-block-columns > .stk-row,
+  #post-635[data-renacon-products-ix] .stk-row {
+    flex-wrap: wrap !important;
+  }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card h3.wp-block-heading,
+  #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-heading__text,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card h3.wp-block-heading,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-heading__text {
+    min-height: 0;
+  }
+
+  #post-635.renacon-our-products-ix .renacon-reveal,
+  #post-635[data-renacon-products-ix] .renacon-reveal {
+    transform: translate3d(0, 1rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #post-635.renacon-our-products-ix .renacon-reveal,
+  #post-635.renacon-our-products-ix .renacon-hero-piece,
+  #post-635.renacon-our-products-ix .renacon-product-hub-card,
+  #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
+  #post-635[data-renacon-products-ix] .renacon-reveal,
+  #post-635[data-renacon-products-ix] .renacon-hero-piece,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    filter: none !important;
+    will-change: auto !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ============================================================
+   Projects gallery lightbox
+   ============================================================ */
+.renacon-gallery-trigger {
+  cursor: zoom-in;
+  display: block;
+}
+
+.renacon-gallery-item img {
+  transition: none;
+  transform: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-gallery-item:hover img {
+    transform: none !important;
+    filter: none;
+  }
+}
+
+.renacon-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(5, 30, 22, 0.88);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.renacon-lightbox.is-open {
+  opacity: 1;
+}
+
+.renacon-lightbox-figure {
+  margin: 0;
+  max-width: min(1100px, 96vw);
+  max-height: 90vh;
+  text-align: center;
+}
+
+.renacon-lightbox-img {
+  display: block;
+  max-width: 100%;
+  max-height: min(82vh, 900px);
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 4px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  background: #0b3d2c;
+}
+
+.renacon-lightbox-caption {
+  margin-top: 0.75rem;
+  color: #f3faf6;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.renacon-lightbox-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.85rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.renacon-lightbox-close:hover,
+.renacon-lightbox-close:focus-visible {
+  background: #00984a;
+  outline: none;
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   Contact page — premium interactive polish (green/yellow brand)
+   Marker: data-renacon-contact-ix="contact-premium-v1"
+   ============================================================ */
+.renacon-contact-ix,
+#post-4301.renacon-contact-ix,
+body.renacon-page-contact-us #post-4301 {
+  --renacon-contact-green: #008037;
+  --renacon-contact-green-deep: #00662c;
+  --renacon-contact-green-bright: #00a045;
+  --renacon-contact-yellow: #e8b923;
+  --renacon-contact-yellow-soft: #f7e7a8;
+  --renacon-contact-ink: #1a2e22;
+  --renacon-contact-muted: #5a6b60;
+  --renacon-contact-line: #c9d5cc;
+  --renacon-contact-surface: #f3f9f5;
+}
+
+/* Office / location columns — subtle premium hover */
+.renacon-contact-ix .stk-block-column.stk-column {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .stk-45e988b > .stk-row > .stk-block-column:hover,
+  .renacon-contact-ix .stk-bd46dff > .stk-row > .stk-block-column:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.renacon-contact-ix .stk-block-icon .stk--inner-svg svg {
+  transition: transform 0.35s ease, color 0.25s ease;
+  color: var(--renacon-contact-green);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .stk-block-column:hover .stk-block-icon .stk--inner-svg svg {
+    transform: translateY(-2px) scale(1.06);
+    color: var(--renacon-contact-green-deep);
+  }
+}
+
+/* Enquiry form shell */
+.renacon-contact-ix .stk-39d8173,
+.renacon-contact-ix .ep_tabs_root {
+  --renacon-contact-green: #008037;
+}
+
+.renacon-contact-ix .ep_tabs_wrapper,
+.renacon-contact-ix .ep_tab_item_wrapper {
+  border-radius: 2px;
+}
+
+.renacon-contact-ix .ep_label_main {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .ep_label_main:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+}
+
+.renacon-contact-ix .ep_label_main:focus-visible {
+  outline: 2px solid var(--renacon-contact-yellow);
+  outline-offset: 3px;
+}
+
+/* Form fields — premium spacing + brand focus rings */
+.renacon-contact-ix .forminator-field,
+.renacon-contact-form .forminator-field {
+  margin-bottom: 0.35rem;
+}
+
+.renacon-contact-ix .forminator-label,
+.renacon-contact-form .forminator-label {
+  color: var(--renacon-contact-ink) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.45rem !important;
+}
+
+.renacon-contact-ix .forminator-row {
+  margin-bottom: 1.05rem !important;
+}
+
+.renacon-contact-ix .forminator-input,
+.renacon-contact-ix .forminator-textarea,
+.renacon-contact-ix select.forminator-select--field,
+.renacon-contact-form .forminator-input,
+.renacon-contact-form .forminator-textarea,
+.renacon-contact-form select.forminator-select--field {
+  border: 1px solid var(--renacon-contact-line) !important;
+  border-radius: 2px !important;
+  background: #fff !important;
+  color: var(--renacon-contact-ink) !important;
+  padding: 0.85rem 1rem !important;
+  min-height: 3rem;
+  box-shadow: none !important;
+  transition:
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    background-color 0.28s ease,
+    transform 0.28s ease !important;
+}
+
+.renacon-contact-ix .forminator-textarea,
+.renacon-contact-form .forminator-textarea {
+  min-height: 7.5rem;
+  line-height: 1.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .forminator-input:hover,
+  .renacon-contact-ix .forminator-textarea:hover,
+  .renacon-contact-ix select.forminator-select--field:hover,
+  .renacon-contact-form .forminator-input:hover,
+  .renacon-contact-form .forminator-textarea:hover,
+  .renacon-contact-form select.forminator-select--field:hover {
+    border-color: #9bb5a4 !important;
+    background: var(--renacon-contact-surface) !important;
+  }
+}
+
+.renacon-contact-ix .forminator-input:focus,
+.renacon-contact-ix .forminator-textarea:focus,
+.renacon-contact-ix select.forminator-select--field:focus,
+.renacon-contact-form .forminator-input:focus,
+.renacon-contact-form .forminator-textarea:focus,
+.renacon-contact-form select.forminator-select--field:focus,
+.renacon-contact-ix .renacon-field-focus,
+.renacon-contact-form .renacon-field-focus {
+  border-color: var(--renacon-contact-green) !important;
+  box-shadow:
+    0 0 0 3px rgba(0, 128, 55, 0.16),
+    0 0 0 1px var(--renacon-contact-yellow-soft) !important;
+  outline: none !important;
+  background: #fff !important;
+}
+
+.renacon-field-invalid {
+  border-color: #c0392b !important;
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.18) !important;
+}
+
+/* Submit CTAs — Renacon green with yellow focus accent */
+.renacon-contact-ix .forminator-button-submit,
+.renacon-contact-form .forminator-button-submit,
+.renacon-contact-ix button.forminator-button-submit {
+  background: linear-gradient(
+    180deg,
+    var(--renacon-contact-green-bright) 0%,
+    var(--renacon-contact-green) 55%,
+    var(--renacon-contact-green-deep) 100%
+  ) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 2px !important;
+  padding: 0.95rem 1.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 var(--renacon-contact-yellow) !important;
+  transition:
+    background 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease,
+    filter 0.25s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .forminator-button-submit:hover,
+  .renacon-contact-form .forminator-button-submit:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+    box-shadow: 4px 5px 0 var(--renacon-contact-yellow) !important;
+  }
+}
+
+.renacon-contact-ix .forminator-button-submit:focus-visible,
+.renacon-contact-form .forminator-button-submit:focus-visible {
+  outline: 2px solid var(--renacon-contact-yellow);
+  outline-offset: 3px;
+}
+
+.renacon-contact-ix .forminator-button-submit:active,
+.renacon-contact-form .forminator-button-submit:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--renacon-contact-yellow) !important;
+}
+
+.renacon-submit-busy {
+  opacity: 0.78 !important;
+  cursor: wait !important;
+}
+
+.renacon-otp-status,
+.renacon-contact-form .renacon-otp-status,
+.renacon-contact-ix .renacon-form-status,
+.renacon-contact-form .renacon-form-status {
+  margin: 0.85rem 0;
+  padding: 0.75rem 0.95rem;
+  border-radius: 2px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  border-left: 3px solid transparent;
+}
+
+.renacon-otp-status[data-kind="info"],
+.renacon-form-status[data-kind="info"] {
+  background: #eef7f1;
+  color: var(--renacon-contact-ink);
+  border-left-color: var(--renacon-contact-yellow);
+}
+
+.renacon-otp-status[data-kind="error"],
+.renacon-form-status[data-kind="error"] {
+  background: #fdecea;
+  color: #8a1f14;
+  border-left-color: #c0392b;
+}
+
+.renacon-otp-status[data-kind="ok"],
+.renacon-form-status[data-kind="ok"] {
+  background: #e6f6ec;
+  color: var(--renacon-contact-green-deep);
+  border-left-color: var(--renacon-contact-green);
+  border: 1px solid rgba(0, 152, 74, 0.35);
+  border-left-width: 3px;
+}
+
+.renacon-contact-form.renacon-form-success .forminator-button-submit {
+  box-shadow: 3px 3px 0 var(--renacon-contact-yellow) !important;
+}
+
+/* Scroll reveal */
+.renacon-contact-ix .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.15rem, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.renacon-contact-ix .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+.renacon-contact-ix .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 0.7rem, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+.renacon-contact-ix.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 689px) {
+  .renacon-contact-ix .forminator-input,
+  .renacon-contact-ix .forminator-textarea,
+  .renacon-contact-ix select.forminator-select--field,
+  .renacon-contact-form .forminator-input,
+  .renacon-contact-form .forminator-textarea {
+    padding: 0.8rem 0.9rem !important;
+  }
+
+  .renacon-contact-ix .forminator-button-submit,
+  .renacon-contact-form .forminator-button-submit {
+    width: 100%;
+    box-shadow: 2px 2px 0 var(--renacon-contact-yellow) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-contact-ix .renacon-reveal,
+  .renacon-contact-ix .renacon-hero-piece,
+  .renacon-contact-ix .stk-block-column.stk-column,
+  .renacon-contact-ix .forminator-input,
+  .renacon-contact-ix .forminator-textarea,
+  .renacon-contact-ix select.forminator-select--field,
+  .renacon-contact-ix .forminator-button-submit,
+  .renacon-contact-ix .ep_label_main,
+  .renacon-contact-ix .stk-block-icon .stk--inner-svg svg {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    filter: none !important;
+  }
+}
+
+/* News — ensure images display */
+.renacon-news-ix .news-card-media img,
+.renacon-news-ix .entry-content img,
+article.post.type-post .entry-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.news-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Editor Plus tabs (contact) — show active panel/forms without WP plugin JS */
+.renacon-ep-tabs .ep_tabs_header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.renacon-ep-tabs .ep_label_main {
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.renacon-ep-tabs .ep_label_main.ep_active_tab,
+.renacon-ep-tabs .ep_active_tab .ep_label {
+  color: #00984a;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper {
+  display: none;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper.ep_active_tab {
+  display: block !important;
+}
+
+.renacon-ep-tabs .ep_tab_item_wrapper.ep_active_tab form {
+  display: block !important;
+}
+
+/* ============================================================
+   Projects-2 + Media — interactive gallery layer (scoped)
+   Brand: Renacon green (#00984a / #0b3d2c) + yellow (#f4c709)
+   Marker: data-renacon-gallery-ix + renacon-projects-media-ix-v2
+   ============================================================ */
+
+body.renacon-page-projects-2,
+body.renacon-page-media,
+.renacon-projects-gallery-ix[data-renacon-gallery-ix],
+.renacon-media-ix[data-renacon-gallery-ix] {
+  --renacon-green: #00984a;
+  --renacon-green-deep: #0b3d2c;
+  --renacon-yellow: #f4c709;
+}
+
+/* Scroll-reveal: headings, embeds, tab nav, gallery cards */
+.renacon-projects-gallery-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-media-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-projects-gallery-ix .renacon-reveal,
+.renacon-media-ix .renacon-reveal {
+  opacity: 0;
+  transform: translateY(1.15rem);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, var(--renacon-stagger-delay, 0ms));
+  will-change: opacity, transform;
+}
+
+.renacon-projects-gallery-ix.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+.renacon-media-ix.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+.renacon-projects-gallery-ix .renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Override masonry kill-switch so reveal/hover can animate cards */
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal {
+  opacity: 0 !important;
+  transform: translateY(1.1rem) !important;
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease !important;
+  transition-delay: var(--renacon-reveal-delay, var(--renacon-stagger-delay, 0ms));
+}
+
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Soft heading underline pulse on reveal (green → yellow) */
+.renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in,
+.renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in,
+.renacon-media-ix h1.wp-block-heading.renacon-reveal-in,
+.renacon-media-ix h2.wp-block-heading.renacon-reveal-in {
+  position: relative;
+}
+
+.renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+  content: "";
+  display: block;
+  width: min(4.5rem, 28%);
+  height: 3px;
+  margin: 0.55rem auto 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--renacon-green), var(--renacon-yellow));
+  transform-origin: center;
+  animation: renacon-gallery-rule-in 0.55s ease both;
+  animation-delay: var(--renacon-reveal-delay, 0ms);
+}
+
+@keyframes renacon-gallery-rule-in {
+  from {
+    transform: scaleX(0.25);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Hover scale/lift on project/media images */
+.renacon-projects-gallery-ix .sgb-item img,
+.renacon-media-ix .sgb-item img,
+body.renacon-page-projects-2 .sgb-item img,
+body.renacon-page-media .sgb-item img {
+  transition: box-shadow 0.35s ease, filter 0.35s ease !important;
+  transform: none !important;
+}
+
+.renacon-projects-gallery-ix .sgb-item > a,
+.renacon-media-ix .sgb-item > a {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-projects-gallery-ix .sgb-item.renacon-reveal-in:hover,
+  .renacon-media-ix .sgb-item.renacon-reveal-in:hover,
+  body.renacon-page-projects-2 .sgb-item.renacon-gallery-item:hover,
+  body.renacon-page-media .sgb-item.renacon-gallery-item:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 14px 28px rgba(11, 61, 44, 0.14);
+  }
+
+  .renacon-projects-gallery-ix .sgb-item:hover img,
+  .renacon-media-ix .sgb-item:hover img,
+  body.renacon-page-projects-2 .sgb-item:hover img,
+  body.renacon-page-media .sgb-item:hover img {
+    transform: none !important;
+    filter: none;
+    box-shadow: 0 10px 24px rgba(0, 152, 74, 0.18);
+  }
+
+  .renacon-projects-gallery-ix .sgb-item:hover .sgb-item-caption,
+  .renacon-media-ix .sgb-item:hover .sgb-item-caption {
+    color: var(--renacon-green-deep) !important;
+  }
+}
+
+/* Active/touch feedback — no image scale */
+.renacon-projects-gallery-ix .sgb-item:active img,
+.renacon-media-ix .sgb-item:active img {
+  transform: none !important;
+}
+
+/* Hero banner entrance */
+.renacon-projects-gallery-ix .renacon-hero-piece,
+.renacon-media-ix .renacon-hero-piece {
+  opacity: 0;
+  transform: translateY(0.75rem) scale(0.985);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+.renacon-projects-gallery-ix.renacon-hero-in .renacon-hero-piece,
+.renacon-media-ix.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+/* Lightbox polish — brand ring */
+.renacon-page-projects-2 .renacon-lightbox,
+.renacon-page-media .renacon-lightbox {
+  background: rgba(5, 30, 22, 0.9);
+}
+
+.renacon-page-projects-2 .renacon-lightbox-img,
+.renacon-page-media .renacon-lightbox-img {
+  box-shadow:
+    0 0 0 2px rgba(244, 199, 9, 0.35),
+    0 22px 55px rgba(0, 0, 0, 0.5);
+}
+
+.renacon-page-projects-2 .renacon-lightbox-close:hover,
+.renacon-page-media .renacon-lightbox-close:hover,
+.renacon-page-projects-2 .renacon-lightbox-close:focus-visible,
+.renacon-page-media .renacon-lightbox-close:focus-visible {
+  background: var(--renacon-green);
+  box-shadow: 0 0 0 2px var(--renacon-yellow);
+}
+
+/* Qubely tabs — interactive polish (media) */
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-nav,
+.renacon-page-media .renacon-qubely-tabs .qubely-tab-nav {
+  gap: 0.65rem 0.85rem;
+  margin-block: 1.15rem 1.35rem;
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item,
+.renacon-page-media .qubely-block-tab .qubely-tab-item {
+  position: relative;
+  padding: 0.45rem 0.85rem;
+  border-radius: 4px;
+  border-bottom: 0;
+  color: #4a5560;
+  background: transparent;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item:hover,
+.renacon-page-media .qubely-block-tab .qubely-tab-item:hover {
+  color: var(--renacon-green-deep);
+  background: rgba(0, 152, 74, 0.08);
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item.qubely-active,
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item.renacon-tab-active,
+.renacon-page-media .qubely-block-tab .qubely-tab-item.qubely-active {
+  color: var(--renacon-green-deep);
+  background: rgba(0, 152, 74, 0.12);
+  box-shadow: inset 0 -3px 0 var(--renacon-yellow);
+  transform: translateY(-1px);
+}
+
+.renacon-media-ix .renacon-qubely-tabs .qubely-tab-item:focus-visible {
+  outline: 2px solid var(--renacon-green);
+  outline-offset: 2px;
+}
+
+.renacon-media-ix .qubely-tab-content.renacon-tab-panel-in {
+  animation: renacon-tab-panel-fade 0.4s ease both;
+}
+
+@keyframes renacon-tab-panel-fade {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Mobile: keep motion subtle, preserve 2-col / 1-col grid */
+@media (max-width: 767px) {
+  .renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal {
+    transform: translateY(0.7rem) !important;
+  }
+
+  .renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+    width: min(3.25rem, 36%);
+  }
+
+  .renacon-media-ix .renacon-qubely-tabs .qubely-tab-item {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-projects-gallery-ix .renacon-reveal,
+  .renacon-media-ix .renacon-reveal,
+  .renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal,
+  .renacon-projects-gallery-ix .renacon-hero-piece,
+  .renacon-media-ix .renacon-hero-piece,
+  .renacon-projects-gallery-ix .sgb-item img,
+  .renacon-media-ix .sgb-item img,
+  .renacon-media-ix .qubely-tab-content.renacon-tab-panel-in,
+  .renacon-media-ix .renacon-qubely-tabs .qubely-tab-item {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+  .renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+    animation: none !important;
+  }
+}
+
+
+/* ============================================================
+   Careers apply form — premium panel (must beat generic form UI)
+   ============================================================ */
+.renacon-mirror .renacon-careers-form-wrap {
+  --renacon-careers-green: #008037;
+  --renacon-careers-green-deep: #00662c;
+  --renacon-careers-yellow: #e8b923;
+  --renacon-careers-yellow-soft: #f7e7a8;
+  --renacon-careers-ink: #1a2e22;
+  --renacon-careers-muted: #5a6b60;
+  --renacon-careers-line: #c9d5cc;
+  --renacon-careers-surface: #f3f9f5;
+  position: relative;
+  isolation: isolate;
+  max-width: min(1290px, calc(100% - 2rem));
+  width: 100%;
+  margin: 2.5rem auto 3.5rem;
+  padding: 2.15rem 1.85rem 1.85rem;
+  background:
+    linear-gradient(145deg, rgba(232, 185, 35, 0.16) 0%, transparent 32%),
+    linear-gradient(180deg, #f7fcf8 0%, #ffffff 42%, #ffffff 100%);
+  border: 1px solid rgba(0, 128, 55, 0.18);
+  border-radius: 2px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 18px 40px rgba(26, 46, 34, 0.08),
+    0 4px 12px rgba(26, 46, 34, 0.04);
+  overflow: hidden;
+}
+
+.renacon-mirror .renacon-careers-form-wrap::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--renacon-careers-yellow) 0%,
+    var(--renacon-careers-green) 42%,
+    var(--renacon-careers-green-deep) 100%
+  );
+  z-index: 1;
+}
+
+.renacon-mirror .renacon-careers-form-wrap::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  top: -28px;
+  width: 96px;
+  height: 96px;
+  background:
+    linear-gradient(135deg, var(--renacon-careers-yellow) 0 50%, transparent 50%),
+    linear-gradient(225deg, var(--renacon-careers-green) 0 50%, transparent 50%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.renacon-mirror .renacon-careers-form {
+  position: relative;
+  z-index: 1;
+}
+
+.renacon-mirror .renacon-careers-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.35rem;
+  border-bottom: 1px solid rgba(201, 213, 204, 0.9);
+}
+
+.renacon-mirror .renacon-careers-brand-mark {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: 0.15rem;
+  border-radius: 2px;
+  background:
+    linear-gradient(160deg, var(--renacon-careers-yellow) 0%, #f0d56a 46%, transparent 47%),
+    linear-gradient(200deg, var(--renacon-careers-green) 0%, var(--renacon-careers-green-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+    3px 3px 0 rgba(18, 53, 40, 0.18);
+}
+
+.renacon-mirror .renacon-careers-intro-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.renacon-mirror .renacon-careers-kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--renacon-careers-green);
+}
+
+.renacon-mirror .renacon-careers-form-title {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.55rem, 3vw, 1.95rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--renacon-careers-ink);
+  letter-spacing: 0.01em;
+}
+
+.renacon-mirror .renacon-careers-form-lead {
+  margin: 0;
+  color: var(--renacon-careers-muted);
+  font-size: 0.98rem;
+  line-height: 1.55;
+  max-width: 38rem;
+}
+
+.renacon-mirror .renacon-careers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.35rem 1.4rem;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field {
+  min-width: 0;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field-span {
+  grid-column: 1 / -1;
+}
+
+.renacon-mirror .renacon-careers-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--renacon-careers-ink);
+}
+
+.renacon-mirror .renacon-careers-form .req {
+  color: #c62828;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]),
+.renacon-mirror .renacon-careers-form select,
+.renacon-mirror .renacon-careers-form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.82rem 0.95rem;
+  border: 1px solid var(--renacon-careers-line) !important;
+  border-radius: 2px !important;
+  background: #fff !important;
+  color: var(--renacon-careers-ink);
+  font-size: 1rem;
+  line-height: 1.35;
+  outline: none;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]):hover,
+.renacon-mirror .renacon-careers-form select:hover,
+.renacon-mirror .renacon-careers-form textarea:hover {
+  border-color: #9bb5a4 !important;
+}
+
+.renacon-mirror .renacon-careers-form input:not([type="file"]):focus,
+.renacon-mirror .renacon-careers-form select:focus,
+.renacon-mirror .renacon-careers-form textarea:focus,
+.renacon-mirror .renacon-careers-form .renacon-field-focus {
+  border-color: var(--renacon-careers-green) !important;
+  box-shadow:
+    0 0 0 3px rgba(0, 128, 55, 0.16),
+    0 0 0 1px var(--renacon-careers-yellow-soft) !important;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-field-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12) !important;
+}
+
+.renacon-mirror .renacon-careers-form textarea {
+  min-height: 7.25rem;
+  resize: vertical;
+}
+
+.renacon-mirror .renacon-select-wrap {
+  position: relative;
+}
+
+.renacon-mirror .renacon-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 0.95rem;
+  top: 50%;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--renacon-careers-green-deep);
+  border-bottom: 2px solid var(--renacon-careers-green-deep);
+  transform: translateY(-65%) rotate(45deg);
+  pointer-events: none;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.4rem;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%) !important;
+  cursor: pointer;
+}
+
+.renacon-mirror .renacon-resume-dropzone {
+  position: relative;
+  border: 1.5px dashed #8fad9a !important;
+  border-radius: 2px;
+  background:
+    radial-gradient(ellipse at top, rgba(232, 185, 35, 0.12), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), var(--renacon-careers-surface)) !important;
+  min-height: 8.25rem;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.renacon-mirror .renacon-resume-dropzone:hover,
+.renacon-mirror .renacon-resume-dropzone:focus-within {
+  border-color: var(--renacon-careers-green) !important;
+  box-shadow: 0 0 0 3px rgba(0, 128, 55, 0.12);
+}
+
+.renacon-mirror .renacon-resume-dropzone.is-dragover {
+  border-color: var(--renacon-careers-yellow) !important;
+  border-style: solid !important;
+  background: rgba(247, 231, 168, 0.42) !important;
+  box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.28);
+  transform: scale(1.01);
+}
+
+.renacon-mirror .renacon-resume-dropzone.has-file {
+  border-style: solid !important;
+  border-color: var(--renacon-careers-green) !important;
+  background: rgba(0, 128, 55, 0.06) !important;
+}
+
+.renacon-mirror .renacon-resume-dropzone.is-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12);
+}
+
+.renacon-mirror .renacon-resume-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.renacon-mirror .renacon-resume-dropzone-inner {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1.5rem 1.15rem;
+  text-align: center;
+}
+
+.renacon-mirror .renacon-resume-icon {
+  width: 2.6rem;
+  height: 2.6rem;
+  margin-bottom: 0.15rem;
+  border-radius: 2px;
+  background:
+    linear-gradient(160deg, var(--renacon-careers-yellow) 0%, #f0d56a 45%, transparent 46%),
+    linear-gradient(200deg, var(--renacon-careers-green) 0%, var(--renacon-careers-green-deep) 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.28),
+    2px 2px 0 rgba(18, 53, 40, 0.16);
+}
+
+.renacon-mirror .renacon-resume-prompt {
+  margin: 0;
+  color: var(--renacon-careers-ink);
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.renacon-mirror .renacon-resume-browse {
+  color: var(--renacon-careers-green);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.renacon-mirror .renacon-resume-meta {
+  margin: 0;
+  color: var(--renacon-careers-muted);
+  font-size: 0.82rem;
+}
+
+.renacon-mirror .renacon-resume-filename {
+  margin: 0.4rem 0 0;
+  max-width: 100%;
+  padding: 0.4rem 0.75rem;
+  border-radius: 2px;
+  background: rgba(0, 128, 55, 0.12);
+  color: var(--renacon-careers-green-deep);
+  font-size: 0.88rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.renacon-mirror .renacon-resume-error {
+  margin: 0.55rem 0 0;
+  color: #b00020;
+  font-size: 0.88rem;
+}
+
+.renacon-mirror .renacon-careers-actions {
+  margin-top: 1.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.4rem;
+  padding: 1.35rem 0 0.15rem;
+  border-top: 1px solid rgba(201, 213, 204, 0.95);
+  background: linear-gradient(180deg, transparent, rgba(243, 249, 245, 0.65));
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit,
+.renacon-mirror button.renacon-careers-submit[type="submit"],
+.renacon-mirror .renacon-careers-form button.wpforms-submit.renacon-careers-submit {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 13.5rem;
+  border: none !important;
+  border-radius: 2px !important;
+  padding: 1rem 1.7rem !important;
+  background: linear-gradient(180deg, #00a045 0%, var(--renacon-careers-green) 55%, var(--renacon-careers-green-deep) 100%) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #123528 !important;
+  transition:
+    filter 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:hover,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:hover {
+  filter: brightness(1.06);
+  transform: translateY(-2px);
+  box-shadow: 4px 5px 0 #123528 !important;
+  background: linear-gradient(180deg, #00a845 0%, #00903c 55%, var(--renacon-careers-green-deep) 100%) !important;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:focus-visible,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:focus-visible {
+  outline: 2px solid var(--renacon-careers-yellow);
+  outline-offset: 3px;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-careers-submit:disabled,
+.renacon-mirror .renacon-careers-form .renacon-careers-submit.renacon-submit-busy,
+.renacon-mirror button.renacon-careers-submit[type="submit"]:disabled {
+  opacity: 0.72;
+  cursor: default;
+  filter: none;
+  transform: none;
+  box-shadow: 3px 3px 0 #123528 !important;
+}
+
+.renacon-mirror .renacon-careers-hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--renacon-careers-muted);
+}
+
+.renacon-mirror .renacon-careers-hint a {
+  color: var(--renacon-careers-green);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status {
+  flex-basis: 100%;
+  margin: 0.2rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid transparent;
+  background: transparent;
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="info"] {
+  border-left-color: var(--renacon-careers-yellow);
+  background: rgba(247, 231, 168, 0.4);
+  color: var(--renacon-careers-ink);
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="ok"] {
+  border-left-color: var(--renacon-careers-green);
+  background: rgba(0, 128, 55, 0.09);
+  color: var(--renacon-careers-green-deep);
+}
+
+.renacon-mirror .renacon-careers-form .renacon-form-status[data-kind="error"] {
+  border-left-color: #b00020;
+  background: rgba(176, 0, 32, 0.07);
+  color: #8a0018;
+}
+
+.renacon-mirror .renacon-careers-form.renacon-form-success .renacon-careers-submit {
+  box-shadow: 3px 3px 0 var(--renacon-careers-yellow) !important;
+}
+
+@media (max-width: 640px) {
+  .renacon-mirror .renacon-careers-form-wrap {
+    margin: 1.35rem 0 2.25rem;
+    padding: 1.45rem 1.05rem 1.35rem;
+  }
+
+  .renacon-mirror .renacon-careers-intro {
+    gap: 0.85rem;
+    margin-bottom: 1.35rem;
+    padding-bottom: 1.1rem;
+  }
+
+  .renacon-mirror .renacon-careers-brand-mark {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+
+  .renacon-mirror .renacon-careers-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .renacon-mirror .renacon-careers-actions {
+    flex-direction: column;
+    align-items: stretch;
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    margin-left: -1.05rem;
+    margin-right: -1.05rem;
+    margin-bottom: -0.35rem;
+    padding: 1rem 1.05rem 0.85rem;
+    border-top: 1px solid rgba(201, 213, 204, 0.95);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 -8px 20px rgba(26, 46, 34, 0.06);
+  }
+
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit,
+  .renacon-mirror button.renacon-careers-submit[type="submit"] {
+    width: 100%;
+    min-width: 0;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-mirror .renacon-careers-form input:not([type="file"]),
+  .renacon-mirror .renacon-careers-form select,
+  .renacon-mirror .renacon-careers-form textarea,
+  .renacon-mirror .renacon-resume-dropzone,
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit,
+  .renacon-mirror button.renacon-careers-submit[type="submit"] {
+    transition: none !important;
+  }
+
+  .renacon-mirror .renacon-resume-dropzone.is-dragover,
+  .renacon-mirror .renacon-careers-form .renacon-careers-submit:hover,
+  .renacon-mirror button.renacon-careers-submit[type="submit"]:hover {
+    transform: none !important;
+  }
+}
+
+/* CACHE_BUST_MARKER contact-products-polish-202609170955 */
+
+/* ==========================================================================
+   LIVE FORCE WINNERS (services-fix-1789637876)
+   Last in cascade — OUR SERVICES side-by-side + highlights equal 64px.
+   ========================================================================== */
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  max-width: 1290px !important;
+  width: min(1290px, calc(100% - 2rem)) !important;
+  margin-inline: auto !important;
+  background-image: linear-gradient(rgba(204, 204, 204, 0.19), rgba(204, 204, 204, 0.19)) !important;
+  padding: 5% !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  box-sizing: border-box !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 0 !important;
+  align-items: center !important;
+  text-align: center !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
+  width: 64px !important;
+  height: 64px !important;
+  max-width: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-inline: auto !important;
+}
+
+#post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+#post-2306 .stk-ee3acf8-column,
+.entry-content > .stk-ee3acf8 > .stk-row.stk-ee3acf8-column {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  gap: 0 !important;
+}
+
+@media screen and (min-width: 1000px) {
+  #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+  #post-2306 .stk-ee3acf8-column,
+  .entry-content > .stk-ee3acf8 > .stk-row.stk-ee3acf8-column {
+    flex-wrap: nowrap !important;
+  }
+
+  #post-2306 .stk-e01c6a5,
+  .entry-content .stk-e01c6a5 {
+    flex: 1 1 30% !important;
+    max-width: 30% !important;
+    width: 30% !important;
+    min-width: 0 !important;
+  }
+
+  #post-2306 .stk-df90d5b,
+  .entry-content .stk-df90d5b {
+    flex: 1 1 70% !important;
+    max-width: 70% !important;
+    width: 70% !important;
+    min-width: 0 !important;
+  }
+
+  #post-2306 .stk-b162ce9,
+  #post-2306 .stk-0458ac2,
+  #post-2306 .stk-2c3e48d,
+  #post-2306 .stk-7623a40 {
+    flex: 1 1 calc(50% - 20px) !important;
+    max-width: calc(50% - 20px) !important;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  #post-2306 .stk-ee3acf8-column {
+    flex-wrap: wrap !important;
+  }
+
+  #post-2306 .stk-e01c6a5,
+  #post-2306 .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+#post-2306 .stk-b162ce9-container,
+#post-2306 .stk-0458ac2-container,
+#post-2306 .stk-2c3e48d-container,
+#post-2306 .stk-7623a40-container {
+  background-color: transparent !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #178a47 !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   Calculator page — Involve.me embeds + green Stackable shell (renacon.in parity)
+   ========================================================================== */
+body.renacon-page-calculator #post-6793,
+body.renacon-page-calculator article.post-6793 {
+  --renacon-calc-green: #02a554;
+}
+
+body.renacon-page-calculator .ugb-e75cca7-wrapper.ugb-container__wrapper,
+body.renacon-page-calculator .ugb-e75cca7-wrapper.ugb-container__wrapper:before {
+  background-color: #02a554 !important;
+}
+
+body.renacon-page-calculator .ugb-e75cca7-content-wrapper > h1,
+body.renacon-page-calculator h1.eplus-styles-uid-538c5a {
+  color: #f4c708 !important;
+  font-size: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0.35em 0 0.75em;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion,
+body.renacon-page-calculator details.stk-block-accordion {
+  background: #ffffff;
+  border-radius: 4px;
+  margin: 0 0 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion > summary,
+body.renacon-page-calculator details.stk-block-accordion > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 18px;
+  background: #ffffff;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion > summary::-webkit-details-marker,
+body.renacon-page-calculator details.stk-block-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion > summary:hover,
+body.renacon-page-calculator details.stk-block-accordion > summary:hover {
+  background: #f5fbf7;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion .stk-block-heading__text,
+body.renacon-page-calculator details.stk-block-accordion .stk-block-heading__text {
+  color: #1a1a1a;
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion .stk-block-icon,
+body.renacon-page-calculator details.stk-block-accordion .stk-block-icon {
+  color: #02a554;
+}
+
+body.renacon-page-calculator .involveme_embed {
+  width: 100%;
+  max-width: 100%;
+  min-height: 480px;
+  background: #ffffff;
+  padding: 4px 0 12px;
+}
+
+body.renacon-page-calculator .involveme_embed iframe {
+  display: block;
+  width: 100% !important;
+  min-height: 480px;
+  border: 0;
+  background: #ffffff;
+}
+
+body.renacon-page-calculator .ugb-container__side {
+  max-width: 920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media screen and (max-width: 689px) {
+  body.renacon-page-calculator .ugb-e75cca7-content-wrapper > h1,
+  body.renacon-page-calculator h1.eplus-styles-uid-538c5a {
+    font-size: clamp(1.75rem, 8vw, 2.4rem) !important;
+  }
+
+  body.renacon-page-calculator .involveme_embed,
+  body.renacon-page-calculator .involveme_embed iframe {
+    min-height: 560px;
+  }
+
+  body.renacon-page-calculator details.wp-block-stackable-accordion > summary,
+  body.renacon-page-calculator details.stk-block-accordion > summary {
+    padding: 12px 14px;
+  }
+}
+
+/* ============================================================
+   Products spacing + no image hover + full-width forms
+   Marker: renacon-products-spacing-no-img-hover-202609171015
+   ============================================================ */
+
+/* --- Product detail pages: tighter vertical rhythm --- */
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child {
+  margin-block: 0 !important;
+  margin-top: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+/* Collapse oversized spacers between banner / sections (not in-column image spacers) */
+article.renacon-product-page .entry-content > .wp-block-spacer {
+  height: 0.85rem !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child + .wp-block-spacer {
+  height: 0.65rem !important;
+}
+
+article.renacon-product-page .entry-content > .stk-block-columns {
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
+  padding-top: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .stk-block-columns .stk-b745e0f-inner-blocks > :first-child,
+article.renacon-product-page .entry-content > .stk-block-columns h3.wp-block-heading:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+article.renacon-product-page .stk-block-accordion,
+article.renacon-product-page details.stk-block-accordion {
+  margin-top: 0.35rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+article.renacon-product-page .wp-block-ugb-container,
+article.renacon-product-page .ugb-container {
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+}
+
+/* Brochure / product forms — full usable content width (kill 70% strip) */
+article.renacon-product-page .ugb-container__content-wrapper,
+article.renacon-product-page [class*="ugb-"][class*="-content-wrapper"].ugb-container__content-wrapper,
+article.renacon-product-page .wpforms-container,
+article.renacon-product-page .wpforms-container form {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+article.renacon-product-page .ugb-container__side {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-inline: clamp(0.75rem, 2vw, 1.5rem) !important;
+  box-sizing: border-box;
+}
+
+article.renacon-product-page .wpforms-field input,
+article.renacon-product-page .wpforms-field textarea,
+article.renacon-product-page .wpforms-field select {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Our Products hub — less top air under banner */
+#post-635.renacon-our-products-ix .entry-content > .wp-block-image.alignfull:first-child,
+#post-635[data-renacon-products-ix] .entry-content > .wp-block-image.alignfull:first-child {
+  margin-bottom: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .entry-content > .stk-f308afb,
+#post-635[data-renacon-products-ix] .entry-content > .stk-f308afb {
+  padding-top: 0.75rem !important;
+  padding-bottom: 1.25rem !important;
+  margin-top: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .stk-6c7f365,
+#post-635.renacon-our-products-ix .stk-c602183,
+#post-635[data-renacon-products-ix] .stk-6c7f365,
+#post-635[data-renacon-products-ix] .stk-c602183 {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Contact / careers forms — use full content rail */
+.renacon-contact-ix .forminator-ui,
+.renacon-contact-ix .forminator-custom-form,
+.renacon-contact-form,
+#post-4301 .forminator-ui,
+#post-4301 .wp-block-group.alignwide,
+body.renacon-page-contact-us .forminator-ui {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.renacon-contact-ix .ugb-container__content-wrapper,
+body.renacon-page-contact-us .ugb-container__content-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body.renacon-page-contact-us .wp-block-group.alignwide,
+body.renacon-page-contact-us .wp-block-group.is-layout-constrained {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+}
+
+body.renacon-page-contact-us iframe[src*="forms.infozub"],
+body.renacon-page-contact-us iframe[src*="renacon-contact"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.renacon-mirror .renacon-careers-form-wrap {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+}
+
+/* --- Site-wide: kill ALL image hover scale / lift / zoom --- */
+body.renacon-mirror img,
+body.renacon-mirror .stk-img,
+body.renacon-mirror .wp-block-image img,
+body.renacon-mirror .sgb-item img,
+body.renacon-mirror .news-card-media img,
+body.renacon-mirror .stk-img-wrapper img,
+body.renacon-mirror .renacon-product-media img,
+body.renacon-mirror .wp-block-media-text__media img,
+body.renacon-mirror .wp-block-getwid-image-box__image,
+body.renacon-mirror .stk-block-background.stk--has-background-overlay {
+  transform: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.renacon-mirror img:hover,
+  body.renacon-mirror a:hover img,
+  body.renacon-mirror figure:hover img,
+  body.renacon-mirror .stk-img-wrapper:hover img,
+  body.renacon-mirror .stk-img-wrapper:hover .stk-img,
+  body.renacon-mirror .sgb-item:hover img,
+  body.renacon-mirror .news-card:hover img,
+  body.renacon-mirror .renacon-gallery-item:hover img,
+  body.renacon-mirror .renacon-product-hub-card:hover .stk-img,
+  body.renacon-mirror .renacon-product-media:hover img,
+  body.renacon-mirror .wp-block-media-text__media:hover img,
+  body.renacon-mirror .wp-block-getwid-image-box__image-wrapper:hover .wp-block-getwid-image-box__image,
+  body.renacon-mirror .stk-block-background.stk--has-background-overlay:hover,
+  body.renacon-mirror [class*="image"]:hover img {
+    transform: none !important;
+  }
+}
+
+body.renacon-mirror a:active img,
+body.renacon-mirror .sgb-item:active img,
+body.renacon-mirror .stk-img-wrapper:active img {
+  transform: none !important;
+}

@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+body.renacon-mirror {
+  margin: 0;
+}
+
+/* Brochure download forms (WPForms mirror + LeadForm) — no OTP */
+.renacon-brochure-form,
+.renacon-brochure-otp-form,
+.renacon-lead-brochure {
+  --renacon-brochure-green: #008037;
+  --renacon-brochure-ink: #222;
+  max-width: 420px;
+}
+
+.renacon-brochure-form .wpforms-title,
+.renacon-brochure-otp-form .wpforms-title,
+.renacon-lead-brochure .renacon-title {
+  color: var(--renacon-brochure-ink);
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem;
+}
+
+.renacon-brochure-form .wpforms-description,
+.renacon-brochure-otp-form .wpforms-description {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.renacon-brochure-form .wpforms-field,
+.renacon-brochure-otp-form .wpforms-field,
+.renacon-lead-brochure .renacon-field {
+  margin-bottom: 1.15rem;
+}
+
+.renacon-brochure-form .wpforms-field-label,
+.renacon-brochure-otp-form .wpforms-field-label,
+.renacon-lead-brochure label {
+  display: block;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.35rem;
+}
+
+.renacon-brochure-form .wpforms-required-label,
+.renacon-brochure-otp-form .wpforms-required-label,
+.renacon-lead-brochure .req,
+.renacon-careers-form .req {
+  color: #d32f2f;
+}
+
+.renacon-brochure-form input[type="text"],
+.renacon-brochure-form input[type="tel"],
+.renacon-brochure-form input[type="email"],
+.renacon-brochure-form input[type="number"],
+.renacon-brochure-form textarea,
+.renacon-brochure-otp-form input[type="text"],
+.renacon-brochure-otp-form input[type="tel"],
+.renacon-brochure-otp-form input[type="email"],
+.renacon-brochure-otp-form input[type="number"],
+.renacon-brochure-otp-form textarea,
+.renacon-lead-brochure input {
+  width: 100%;
+  border: none !important;
+  border-bottom: 1px solid #111 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.45rem 0 !important;
+  font-size: 1rem;
+  color: #111;
+  outline: none;
+}
+
+.renacon-brochure-form textarea,
+.renacon-brochure-otp-form textarea {
+  min-height: 2rem;
+  resize: vertical;
+}
+
+/* Hide any leftover OTP controls if older HTML is cached */
+.renacon-send-otp,
+.renacon-verify-otp,
+.renacon-otp-controls,
+.renacon-otp-label,
+.renacon-otp-input,
+.renacon-demo-otp-banner {
+  display: none !important;
+}
+
+.renacon-brochure-form .wpforms-submit,
+.renacon-brochure-form .renacon-download-brochure,
+.renacon-brochure-otp-form .wpforms-submit,
+.renacon-brochure-otp-form .renacon-download-brochure,
+.renacon-lead-brochure .renacon-download-brochure {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border: none;
+  border-radius: 2px;
+  background: var(--renacon-brochure-green) !important;
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #111;
+}
+
+.renacon-brochure-form .wpforms-submit:hover,
+.renacon-brochure-form .renacon-download-brochure:hover,
+.renacon-brochure-otp-form .wpforms-submit:hover,
+.renacon-brochure-otp-form .renacon-download-brochure:hover,
+.renacon-lead-brochure .renacon-download-brochure:hover {
+  filter: brightness(1.05);
+}
+
+.renacon-form-status,
+.renacon-otp-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.renacon-form-status[data-kind="error"],
+.renacon-otp-status[data-kind="error"] {
+  color: #b00020;
+}
+
+.renacon-form-status[data-kind="ok"],
+.renacon-otp-status[data-kind="ok"] {
+  color: #0b6b34;
+}
+
+/* Careers application form — Renacon green / yellow (premium panel).
+   Mirrored WP styles load after this file; definitive rules live in
+   site-overrides.css — keep tokens + structure here for Next CSS chunk. */
+.renacon-careers-form-wrap {
+  --renacon-careers-green: #008037;
+  --renacon-careers-green-deep: #00662c;
+  --renacon-careers-yellow: #e8b923;
+  --renacon-careers-yellow-soft: #f7e7a8;
+  --renacon-careers-ink: #1a2e22;
+  --renacon-careers-muted: #5a6b60;
+  --renacon-careers-line: #c9d5cc;
+  --renacon-careers-surface: #f4faf6;
+}
