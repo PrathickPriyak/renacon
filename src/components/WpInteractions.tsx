@@ -655,7 +655,7 @@ export function WpInteractions() {
         document.querySelector<HTMLElement>("main.site-main") ||
         document.body;
       root.classList.add("renacon-our-products-ix");
-      root.setAttribute("data-renacon-products-ix", "products-hub-v1");
+      root.setAttribute("data-renacon-products-ix", "products-hub-v2");
       document.body.classList.add("renacon-page-our-products");
       hydrateWpImages(root);
 
@@ -786,7 +786,7 @@ export function WpInteractions() {
       softStaggerGalleryItems(root);
     }
 
-    // Contact page — interactive form polish marker
+    // Contact page — premium interactive form polish
     const contactRoot =
       document.getElementById("post-4301") ||
       document.querySelector<HTMLElement>(".page-id-4301, article.post-4301");
@@ -796,22 +796,52 @@ export function WpInteractions() {
         document.querySelector<HTMLElement>("main.site-main") ||
         document.body;
       root.classList.add("renacon-contact-ix");
+      root.setAttribute("data-renacon-contact-ix", "contact-premium-v1");
+      document.body.classList.add("renacon-page-contact-us");
       hydrateWpImages(root);
       cleanups.push(initEditorPlusTabs(root));
+
+      // Soft focus ring class for keyboard / pointer focus on fields
+      const fieldSelector =
+        ".forminator-input, .forminator-textarea, select.forminator-select--field";
+      const onFieldFocus = (e: Event) => {
+        const t = e.target;
+        if (!(t instanceof HTMLElement)) return;
+        if (!t.matches(fieldSelector)) return;
+        t.classList.add("renacon-field-focus");
+      };
+      const onFieldBlur = (e: Event) => {
+        const t = e.target;
+        if (!(t instanceof HTMLElement)) return;
+        t.classList.remove("renacon-field-focus");
+      };
+      root.addEventListener("focusin", onFieldFocus);
+      root.addEventListener("focusout", onFieldBlur);
+      cleanups.push(() => {
+        root.removeEventListener("focusin", onFieldFocus);
+        root.removeEventListener("focusout", onFieldBlur);
+      });
+
       initPageInteractions(
         root,
         {
           revealSelector: [
             ".forminator-custom-form",
+            ".forminator-row",
             ".wp-block-columns",
+            ".stk-block-column",
             ".entry-content > p",
             ".entry-content > h1",
             ".entry-content > h2",
+            ".entry-content > h3",
             ".wp-block-image",
             ".ep_tabs_wrapper",
+            ".ep_label_main",
+            ".ugb-container",
           ].join(", "),
           heroSelectors: [
             ".entry-content > .wp-block-image:first-child",
+            ".entry-content > .wp-block-image.alignfull:first-child",
             "h1.page-title",
             "h1.wp-block-heading",
           ],

@@ -3152,8 +3152,8 @@ article.renacon-product-page .wpforms-submit:focus-visible {
 
 
 /* ============================================================
-   Our Products hub (#post-635) — layout + interactive polish
-   Marker: data-renacon-products-ix="products-hub-v1"
+   Our Products hub (#post-635) — equal-height cards + polish
+   Marker: data-renacon-products-ix="products-hub-v2"
    ============================================================ */
 #post-635.renacon-our-products-ix,
 #post-635.renacon-ix-v2,
@@ -3191,39 +3191,145 @@ body.renacon-page-our-products #post-635 {
 #post-635.renacon-our-products-ix .stk-c602183 > .stk-row,
 #post-635[data-renacon-products-ix] .stk-6c7f365 > .stk-row,
 #post-635[data-renacon-products-ix] .stk-c602183 > .stk-row {
+  display: flex !important;
   align-items: stretch !important;
 }
 
+/* Equal-height product cards — flex column, CTA pinned to bottom */
 #post-635.renacon-our-products-ix .renacon-product-hub-card,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-self: stretch !important;
+  height: 100% !important;
+  min-height: 100% !important;
   text-align: center;
+  box-sizing: border-box;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-column__content,
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-block-content,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-column__content,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-block-content {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Nested content column (title / copy / CTA) fills remaining height */
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  margin-top: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  align-items: stretch !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper,
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* Consistent product image frame (override uneven page-CSS widths) */
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-image,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-image {
+  width: 100% !important;
+  margin-bottom: 1rem !important;
 }
 
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img-wrapper,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img-wrapper {
-  margin-inline: auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-inline: auto !important;
+  width: min(100%, 260px) !important;
+  max-width: 260px !important;
+  aspect-ratio: 1 / 1 !important;
+  height: auto !important;
+  overflow: hidden;
 }
 
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img {
-  margin-inline: auto;
-  height: auto;
-  max-width: 100%;
+  margin-inline: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
 }
 
-#post-635.renacon-our-products-ix h3.wp-block-heading,
-#post-635.renacon-our-products-ix .stk-block-heading__text,
-#post-635[data-renacon-products-ix] h3.wp-block-heading,
-#post-635[data-renacon-products-ix] .stk-block-heading__text {
+#post-635.renacon-our-products-ix .renacon-product-hub-card h3.wp-block-heading,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-heading__text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card h3.wp-block-heading,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-heading__text {
   color: #111111 !important;
   font-weight: 700;
   letter-spacing: 0.01em;
+  min-height: 3.1em;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 0.65rem !important;
 }
 
-#post-635.renacon-our-products-ix .stk-block-text__text,
-#post-635[data-renacon-products-ix] .stk-block-text__text {
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-text {
+  flex: 1 1 auto !important;
+  margin-bottom: 1rem !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-text__text,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-text__text {
   color: #000000 !important;
   line-height: 1.55;
+}
+
+/* Pin Read more to card bottom so row bottoms align */
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-button-group,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-button-group {
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+  width: 100%;
 }
 
 /* Brand green CTAs (Stackable buttons already green via page CSS; harden focus) */
@@ -3296,12 +3402,13 @@ body.renacon-page-our-products #post-635 {
   #post-635.renacon-our-products-ix .renacon-product-hub-card:hover,
   #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover {
     transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(11, 61, 44, 0.1);
   }
 
   #post-635.renacon-our-products-ix .renacon-product-hub-card:hover .stk-img,
   #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover .stk-img {
-    transform: scale(1.03);
-    filter: saturate(1.05);
+    transform: scale(1.04);
+    filter: saturate(1.06);
   }
 
   #post-635.renacon-our-products-ix a.stk-button:hover .stk-button__inner-text,
@@ -3317,6 +3424,11 @@ body.renacon-page-our-products #post-635 {
   #post-635[data-renacon-products-ix] .stk-c602183 > .stk-row {
     flex-wrap: wrap !important;
   }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card {
+    min-height: 0;
+  }
 }
 
 @media (max-width: 689px) {
@@ -3331,6 +3443,14 @@ body.renacon-page-our-products #post-635 {
   #post-635[data-renacon-products-ix] .renacon-product-hub-card {
     flex: 1 1 100% !important;
     max-width: 100% !important;
+    height: auto !important;
+  }
+
+  #post-635.renacon-our-products-ix .renacon-product-hub-card h3.wp-block-heading,
+  #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-heading__text,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card h3.wp-block-heading,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-heading__text {
+    min-height: 0;
   }
 
   #post-635.renacon-our-products-ix .renacon-reveal,
@@ -3353,6 +3473,7 @@ body.renacon-page-our-products #post-635 {
     transition: none !important;
     filter: none !important;
     will-change: auto !important;
+    box-shadow: none !important;
   }
 }
 
@@ -3444,27 +3565,149 @@ body.renacon-page-our-products #post-635 {
 }
 
 /* ============================================================
-   Contact page — form interactivity
+   Contact page — premium interactive polish (green/yellow brand)
+   Marker: data-renacon-contact-ix="contact-premium-v1"
    ============================================================ */
+.renacon-contact-ix,
+#post-4301.renacon-contact-ix,
+body.renacon-page-contact-us #post-4301 {
+  --renacon-contact-green: #008037;
+  --renacon-contact-green-deep: #00662c;
+  --renacon-contact-green-bright: #00a045;
+  --renacon-contact-yellow: #e8b923;
+  --renacon-contact-yellow-soft: #f7e7a8;
+  --renacon-contact-ink: #1a2e22;
+  --renacon-contact-muted: #5a6b60;
+  --renacon-contact-line: #c9d5cc;
+  --renacon-contact-surface: #f3f9f5;
+}
+
+/* Office / location columns — subtle premium hover */
+.renacon-contact-ix .stk-block-column.stk-column {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .stk-45e988b > .stk-row > .stk-block-column:hover,
+  .renacon-contact-ix .stk-bd46dff > .stk-row > .stk-block-column:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.renacon-contact-ix .stk-block-icon .stk--inner-svg svg {
+  transition: transform 0.35s ease, color 0.25s ease;
+  color: var(--renacon-contact-green);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .stk-block-column:hover .stk-block-icon .stk--inner-svg svg {
+    transform: translateY(-2px) scale(1.06);
+    color: var(--renacon-contact-green-deep);
+  }
+}
+
+/* Enquiry form shell */
+.renacon-contact-ix .stk-39d8173,
+.renacon-contact-ix .ep_tabs_root {
+  --renacon-contact-green: #008037;
+}
+
+.renacon-contact-ix .ep_tabs_wrapper,
+.renacon-contact-ix .ep_tab_item_wrapper {
+  border-radius: 2px;
+}
+
+.renacon-contact-ix .ep_label_main {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .ep_label_main:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.05);
+  }
+}
+
+.renacon-contact-ix .ep_label_main:focus-visible {
+  outline: 2px solid var(--renacon-contact-yellow);
+  outline-offset: 3px;
+}
+
+/* Form fields — premium spacing + brand focus rings */
+.renacon-contact-ix .forminator-field,
+.renacon-contact-form .forminator-field {
+  margin-bottom: 0.35rem;
+}
+
+.renacon-contact-ix .forminator-label,
+.renacon-contact-form .forminator-label {
+  color: var(--renacon-contact-ink) !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.45rem !important;
+}
+
+.renacon-contact-ix .forminator-row {
+  margin-bottom: 1.05rem !important;
+}
+
 .renacon-contact-ix .forminator-input,
 .renacon-contact-ix .forminator-textarea,
 .renacon-contact-ix select.forminator-select--field,
 .renacon-contact-form .forminator-input,
-.renacon-contact-form .forminator-textarea {
+.renacon-contact-form .forminator-textarea,
+.renacon-contact-form select.forminator-select--field {
+  border: 1px solid var(--renacon-contact-line) !important;
+  border-radius: 2px !important;
+  background: #fff !important;
+  color: var(--renacon-contact-ink) !important;
+  padding: 0.85rem 1rem !important;
+  min-height: 3rem;
+  box-shadow: none !important;
   transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    background-color 0.25s ease;
+    border-color 0.28s ease,
+    box-shadow 0.28s ease,
+    background-color 0.28s ease,
+    transform 0.28s ease !important;
+}
+
+.renacon-contact-ix .forminator-textarea,
+.renacon-contact-form .forminator-textarea {
+  min-height: 7.5rem;
+  line-height: 1.5;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-ix .forminator-input:hover,
+  .renacon-contact-ix .forminator-textarea:hover,
+  .renacon-contact-ix select.forminator-select--field:hover,
+  .renacon-contact-form .forminator-input:hover,
+  .renacon-contact-form .forminator-textarea:hover,
+  .renacon-contact-form select.forminator-select--field:hover {
+    border-color: #9bb5a4 !important;
+    background: var(--renacon-contact-surface) !important;
+  }
 }
 
 .renacon-contact-ix .forminator-input:focus,
 .renacon-contact-ix .forminator-textarea:focus,
 .renacon-contact-ix select.forminator-select--field:focus,
 .renacon-contact-form .forminator-input:focus,
-.renacon-contact-form .forminator-textarea:focus {
-  border-color: #00984a !important;
-  box-shadow: 0 0 0 3px rgba(0, 152, 74, 0.18) !important;
+.renacon-contact-form .forminator-textarea:focus,
+.renacon-contact-form select.forminator-select--field:focus,
+.renacon-contact-ix .renacon-field-focus,
+.renacon-contact-form .renacon-field-focus {
+  border-color: var(--renacon-contact-green) !important;
+  box-shadow:
+    0 0 0 3px rgba(0, 128, 55, 0.16),
+    0 0 0 1px var(--renacon-contact-yellow-soft) !important;
   outline: none !important;
+  background: #fff !important;
 }
 
 .renacon-field-invalid {
@@ -3472,20 +3715,50 @@ body.renacon-page-our-products #post-635 {
   box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.18) !important;
 }
 
+/* Submit CTAs — Renacon green with yellow focus accent */
 .renacon-contact-ix .forminator-button-submit,
-.renacon-contact-form .forminator-button-submit {
+.renacon-contact-form .forminator-button-submit,
+.renacon-contact-ix button.forminator-button-submit {
+  background: linear-gradient(
+    180deg,
+    var(--renacon-contact-green-bright) 0%,
+    var(--renacon-contact-green) 55%,
+    var(--renacon-contact-green-deep) 100%
+  ) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 2px !important;
+  padding: 0.95rem 1.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 var(--renacon-contact-yellow) !important;
   transition:
-    background-color 0.3s ease,
+    background 0.3s ease,
     transform 0.25s ease,
-    box-shadow 0.3s ease !important;
+    box-shadow 0.3s ease,
+    filter 0.25s ease !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .renacon-contact-ix .forminator-button-submit:hover,
   .renacon-contact-form .forminator-button-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 152, 74, 0.28);
+    filter: brightness(1.04);
+    box-shadow: 4px 5px 0 var(--renacon-contact-yellow) !important;
   }
+}
+
+.renacon-contact-ix .forminator-button-submit:focus-visible,
+.renacon-contact-form .forminator-button-submit:focus-visible {
+  outline: 2px solid var(--renacon-contact-yellow);
+  outline-offset: 3px;
+}
+
+.renacon-contact-ix .forminator-button-submit:active,
+.renacon-contact-form .forminator-button-submit:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--renacon-contact-yellow) !important;
 }
 
 .renacon-submit-busy {
@@ -3494,40 +3767,107 @@ body.renacon-page-our-products #post-635 {
 }
 
 .renacon-otp-status,
-.renacon-contact-form .renacon-otp-status {
-  margin: 0.75rem 0;
-  padding: 0.65rem 0.85rem;
-  border-radius: 4px;
+.renacon-contact-form .renacon-otp-status,
+.renacon-contact-ix .renacon-form-status,
+.renacon-contact-form .renacon-form-status {
+  margin: 0.85rem 0;
+  padding: 0.75rem 0.95rem;
+  border-radius: 2px;
   font-size: 0.92rem;
-  line-height: 1.4;
+  line-height: 1.45;
+  border-left: 3px solid transparent;
 }
 
-.renacon-otp-status[data-kind="info"] {
+.renacon-otp-status[data-kind="info"],
+.renacon-form-status[data-kind="info"] {
   background: #eef7f1;
-  color: #0b3d2c;
+  color: var(--renacon-contact-ink);
+  border-left-color: var(--renacon-contact-yellow);
 }
 
-.renacon-otp-status[data-kind="error"] {
+.renacon-otp-status[data-kind="error"],
+.renacon-form-status[data-kind="error"] {
   background: #fdecea;
   color: #8a1f14;
+  border-left-color: #c0392b;
 }
 
-.renacon-otp-status[data-kind="ok"] {
+.renacon-otp-status[data-kind="ok"],
+.renacon-form-status[data-kind="ok"] {
   background: #e6f6ec;
-  color: #0b3d2c;
+  color: var(--renacon-contact-green-deep);
+  border-left-color: var(--renacon-contact-green);
   border: 1px solid rgba(0, 152, 74, 0.35);
+  border-left-width: 3px;
 }
 
+.renacon-contact-form.renacon-form-success .forminator-button-submit {
+  box-shadow: 3px 3px 0 var(--renacon-contact-yellow) !important;
+}
+
+/* Scroll reveal */
 .renacon-contact-ix .renacon-reveal {
   opacity: 0;
-  transform: translateY(1rem);
-  transition: opacity 0.55s ease, transform 0.55s ease;
+  transform: translate3d(0, 1.15rem, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
 }
 
 .renacon-contact-ix .renacon-reveal.renacon-reveal-in {
   opacity: 1;
   transform: none;
+  will-change: auto;
+}
+
+.renacon-contact-ix .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 0.7rem, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+.renacon-contact-ix.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 689px) {
+  .renacon-contact-ix .forminator-input,
+  .renacon-contact-ix .forminator-textarea,
+  .renacon-contact-ix select.forminator-select--field,
+  .renacon-contact-form .forminator-input,
+  .renacon-contact-form .forminator-textarea {
+    padding: 0.8rem 0.9rem !important;
+  }
+
+  .renacon-contact-ix .forminator-button-submit,
+  .renacon-contact-form .forminator-button-submit {
+    width: 100%;
+    box-shadow: 2px 2px 0 var(--renacon-contact-yellow) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-contact-ix .renacon-reveal,
+  .renacon-contact-ix .renacon-hero-piece,
+  .renacon-contact-ix .stk-block-column.stk-column,
+  .renacon-contact-ix .forminator-input,
+  .renacon-contact-ix .forminator-textarea,
+  .renacon-contact-ix select.forminator-select--field,
+  .renacon-contact-ix .forminator-button-submit,
+  .renacon-contact-ix .ep_label_main,
+  .renacon-contact-ix .stk-block-icon .stk--inner-svg svg {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    filter: none !important;
+  }
 }
 
 /* News — ensure images display */
@@ -4356,7 +4696,7 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
-/* CACHE_BUST_MARKER services-fix-1789637876 */
+/* CACHE_BUST_MARKER contact-products-polish-202609170942 */
 
 /* ==========================================================================
    LIVE FORCE WINNERS (services-fix-1789637876)
