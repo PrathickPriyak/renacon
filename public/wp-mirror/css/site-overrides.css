@@ -911,23 +911,23 @@ button[type="submit"]:hover {
 .wp-block-getwid-section__background-video {
   display: block;
   width: 100% !important;
-  min-height: min(78vh, 720px);
-  height: min(78vh, 720px);
+  min-height: calc(100vh - 72px);
+  height: calc(100vh - 72px);
   object-fit: cover;
   object-position: center;
 }
 
 .wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
 .wp-block-getwid-section .wp-block-spacer[style*="640px"] {
-  height: min(78vh, 720px) !important;
+  height: calc(100vh - 72px) !important;
 }
 
 @media (max-width: 768px) {
   .wp-block-getwid-section__background-video,
   .wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
   .wp-block-getwid-section .wp-block-spacer[style*="640px"] {
-    min-height: 48vh;
-    height: 48vh !important;
+    min-height: calc(100vh - 64px);
+    height: calc(100vh - 64px) !important;
   }
 }
 
