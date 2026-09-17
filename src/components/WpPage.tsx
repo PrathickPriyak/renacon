@@ -24,14 +24,14 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-about-us-exact-202609171140`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-about-us-exact-202609171400`}
         />
       ) : null}
       {/* Hard cache-bust site overrides on calculator + product pages */}
       {slug === "calculator" || product ? (
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-about-us-exact-202609171140"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-about-us-exact-202609171400"
         />
       ) : null}
       <WpMain html={html} />

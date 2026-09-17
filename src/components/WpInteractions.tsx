@@ -561,6 +561,10 @@ export function WpInteractions() {
 
     // About Us — exact renacon.in parity: do not wrap scroll-reveal chrome
     // that hides sections or restyles cards. Accordion is native <details>.
+    const aboutRoot = document.getElementById("post-4487");
+    if (aboutRoot) {
+      document.body.classList.add("renacon-page-about-us");
+    }
 
     // Why Renacon — reveals, benefit stagger, hero zoom
     const whyRoot = document.getElementById("post-5659");
