@@ -11,12 +11,44 @@ export type Post = {
   contentHtml: string;
 };
 
+const WP_ORIGIN = "https://renacon.in";
+
+function absolutizeMediaUrl(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
+    return trimmed;
+  }
+  if (trimmed.startsWith("//")) return `https:${trimmed}`;
+  if (trimmed.startsWith("/wp-content/") || trimmed.startsWith("/wp-includes/")) {
+    return `${WP_ORIGIN}${trimmed}`;
+  }
+  return trimmed;
+}
+
+function firstContentImage(html: string): string | null {
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return match?.[1] ? absolutizeMediaUrl(match[1]) : null;
+}
+
+function normalizePost(post: Post): Post {
+  const contentHtml = sanitizeHtml(post.contentHtml || "");
+  const image =
+    (post.image ? absolutizeMediaUrl(post.image) : null) ||
+    firstContentImage(contentHtml);
+  return {
+    ...post,
+    image,
+    contentHtml,
+  };
+}
+
 let cache: Post[] | null = null;
 
 export function getPosts(): Post[] {
   if (cache) return cache;
   const raw = readFileSync(join(process.cwd(), "content/posts.json"), "utf8");
-  cache = JSON.parse(raw) as Post[];
+  const parsed = JSON.parse(raw) as Post[];
+  cache = parsed.map(normalizePost);
   return cache;
 }
 
@@ -29,5 +61,13 @@ export function sanitizeHtml(html: string): string {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<iframe(?![^>]*youtube)[^>]*>[\s\S]*?<\/iframe>/gi, "")
     .replace(/on\w+="[^"]*"/gi, "")
-    .replace(/javascript:/gi, "");
+    .replace(/javascript:/gi, "")
+    .replace(
+      /(src|href)=(["'])\/(wp-content|wp-includes)\//gi,
+      `$1=$2${WP_ORIGIN}/$3/`,
+    )
+    .replace(
+      /url\(\s*(['"]?)\/(wp-content|wp-includes)\//gi,
+      `url($1${WP_ORIGIN}/$2/`,
+    );
 }

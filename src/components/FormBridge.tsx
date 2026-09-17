@@ -64,13 +64,25 @@ function findNameInput(form: HTMLFormElement): HTMLInputElement | null {
 }
 
 function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
-  let status = form.querySelector<HTMLParagraphElement>(".renacon-otp-status");
+  let status = form.querySelector<HTMLParagraphElement>(".renacon-otp-status, .renacon-form-status");
   if (!status) {
     status = document.createElement("p");
-    status.className = "renacon-otp-status";
+    status.className = "renacon-otp-status renacon-form-status";
     status.setAttribute("aria-live", "polite");
-    const submitContainer = form.querySelector(".wpforms-submit-container") || form;
-    submitContainer.parentElement?.insertBefore(status, submitContainer);
+    const submitContainer =
+      form.querySelector(
+        ".wpforms-submit-container, .forminator-row-last, .forminator-button-submit",
+      ) || form;
+    const anchor =
+      submitContainer instanceof HTMLButtonElement
+        ? submitContainer.parentElement || form
+        : submitContainer;
+    const parent = anchor.parentElement;
+    if (parent) {
+      parent.insertBefore(status, anchor);
+    } else {
+      form.appendChild(status);
+    }
   }
   return status;
 }
@@ -344,8 +356,31 @@ export function FormBridge() {
       }
       document.querySelectorAll("form").forEach((form) => {
         if (!(form instanceof HTMLFormElement)) return;
-        if (!isBrochureForm(form)) return;
-        enhanceBrochureForm(form);
+        if (isBrochureForm(form)) {
+          enhanceBrochureForm(form);
+        }
+        // Contact / Forminator interactive focus polish
+        if (
+          form.className.includes("forminator") ||
+          form.className.includes("wpforms") ||
+          /\/contact-us\/?$/.test(window.location.pathname)
+        ) {
+          form.classList.add("renacon-contact-form");
+          form.querySelectorAll<HTMLElement>(
+            "input, textarea, select, .forminator-input, .forminator-textarea",
+          ).forEach((el) => {
+            if (el.dataset.renaconFocusReady === "1") return;
+            el.dataset.renaconFocusReady = "1";
+            el.addEventListener("focus", () => el.classList.add("renacon-field-focus"));
+            el.addEventListener("blur", () => {
+              el.classList.remove("renacon-field-focus");
+              if (el.classList.contains("renacon-field-invalid") && "value" in el) {
+                const value = String((el as HTMLInputElement).value || "").trim();
+                if (value) el.classList.remove("renacon-field-invalid");
+              }
+            });
+          });
+        }
       });
     };
 
@@ -452,26 +487,92 @@ export function FormBridge() {
       const kind = path.includes("career") ? "careers" : "contact";
       const endpoint = kind === "careers" ? "/api/careers/" : "/api/contact/";
 
+      // Inline validation feedback (contact / careers / dealer forms)
+      form.classList.add("renacon-contact-form");
+      const clearFieldStates = () => {
+        form.querySelectorAll(".renacon-field-invalid").forEach((el) =>
+          el.classList.remove("renacon-field-invalid"),
+        );
+      };
+      clearFieldStates();
+
+      const markInvalid = (selector: string) => {
+        const el = form.querySelector(selector);
+        if (el instanceof HTMLElement) {
+          el.classList.add("renacon-field-invalid");
+          el.focus();
+        }
+      };
+
+      if (!name.trim()) {
+        setStatus(form, "Please enter your name.", "error");
+        markInvalid('input[name="name-1"], input[name*="name" i], .forminator-name--field');
+        return;
+      }
+      if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setStatus(form, "Enter a valid email address.", "error");
+        markInvalid('input[type="email"], input[name="email-1"], .forminator-email--field');
+        return;
+      }
+      if (phone && phone.replace(/\D/g, "").length > 0 && phone.replace(/\D/g, "").length < 8) {
+        setStatus(form, "Enter a valid phone number.", "error");
+        markInvalid('input[name="phone-1"], .forminator-field--phone, input[type="tel"]');
+        return;
+      }
+      // Contact API requires phone — use placeholder only when field is optional & empty
+      const phoneForApi = phone.trim() || "0000000000";
+
+      const submitBtn = form.querySelector<HTMLButtonElement>(
+        'button[type="submit"], .forminator-button-submit, .wpforms-submit',
+      );
+      const prevLabel = submitBtn?.textContent || "";
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add("renacon-submit-busy");
+        submitBtn.textContent = "Sending…";
+      }
+
       try {
+        setStatus(form, "Sending your message…", "info");
         const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...payload,
-            name: name || "Website visitor",
-            email: email || "unknown@renacon.in",
-            phone: phone || "0000000000",
+            name: name.trim(),
+            email: email.trim(),
+            phone: phoneForApi,
             message,
             kind,
             product: document.title,
+            page_url: path,
           }),
         });
         const json = (await res.json()) as { ok?: boolean; error?: string };
         if (!res.ok || !json.ok) throw new Error(json.error || "Submit failed");
-        alert("Thank you. Your request has been received.");
+        setStatus(form, "Thank you. Your request has been received.", "ok");
+        form.classList.add("renacon-form-success");
         form.reset();
+        clearFieldStates();
+        const responseMsg = form.querySelector<HTMLElement>(".forminator-response-message");
+        if (responseMsg) {
+          responseMsg.classList.remove("forminator-error");
+          responseMsg.classList.add("forminator-success");
+          responseMsg.setAttribute("aria-hidden", "false");
+          responseMsg.textContent = "Thank you. Your request has been received.";
+        }
       } catch (err) {
-        alert(err instanceof Error ? err.message : "Unable to submit form");
+        setStatus(
+          form,
+          err instanceof Error ? err.message : "Unable to submit form",
+          "error",
+        );
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove("renacon-submit-busy");
+          submitBtn.textContent = prevLabel || "Submit";
+        }
       }
     };
 

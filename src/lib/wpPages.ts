@@ -1,12 +1,68 @@
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 const root = join(process.cwd(), "content/pages-html");
+const pageStylesRoot = join(process.cwd(), "content/page-styles");
+
+const PRODUCT_SLUGS = new Set([
+  "cement-mortar",
+  "rapid-wall-installation",
+  "renabond-aac-joint-mortar",
+  "renacon-aac-blocks",
+  "renacon-wall-putty",
+  "renafix-201-tds",
+  "renafix-201-tile-adhesive",
+  "renafix-211",
+  "renafix-211-tds",
+  "renafix-222-tds",
+  "renafix-222-tile-adhesive",
+  "renafix-333",
+  "renafix-floor-top-hardener",
+  "renafix-gp-grout",
+  "renafix-grout",
+  "renafix-tile-adhesive-444",
+  "renafix-tile-adhesive",
+  "renafix-tile-grout",
+  "renaplast-readymix-plaster",
+]);
+
+export function isProductSlug(slug: string): boolean {
+  return PRODUCT_SLUGS.has(slug);
+}
 
 export function readPageHtml(slug: string): string | null {
   const path = join(root, `${slug}.html`);
   if (!existsSync(path)) return null;
-  return readFileSync(path, "utf8");
+  let html = readFileSync(path, "utf8");
+
+  if (isProductSlug(slug)) {
+    html = html.replace(
+      /(<article\b[^>]*\bclass=")([^"]*)(")/i,
+      (_m, pre: string, classes: string, post: string) => {
+        if (/\brenacon-product-page\b/.test(classes)) {
+          return `${pre}${classes}${post}`;
+        }
+        return `${pre}${classes} renacon-product-page${post}`;
+      },
+    );
+  }
+
+  return html;
+}
+
+/** Stackable page CSS (background-image columns) mirrored from renacon.in */
+export function readPageStyles(slug: string): string | null {
+  const path = join(pageStylesRoot, `${slug}.css`);
+  if (!existsSync(path)) return null;
+  const css = readFileSync(path, "utf8").trim();
+  return css || null;
+}
+
+export function listPageStyleSlugs(): string[] {
+  if (!existsSync(pageStylesRoot)) return [];
+  return readdirSync(pageStylesRoot)
+    .filter((f) => f.endsWith(".css"))
+    .map((f) => f.replace(/\.css$/, ""));
 }
 
 export function readPartial(name: "_header.html" | "_footer.html" | "_offcanvas.html"): string {

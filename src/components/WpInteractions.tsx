@@ -340,7 +340,7 @@ function wrapHomeBands(
     const wrap = document.createElement("div");
     wrap.className = `renacon-home-band renacon-home-band--${band.name}`;
     wrap.setAttribute("data-renacon-band", band.name);
-    wrap.setAttribute("data-renacon-premium", "sep2026");
+    wrap.setAttribute("data-renacon-home", "bg-only");
     // Force vertical page flow — prevent mirror CSS from flexing bands sideways
     wrap.style.display = "block";
     wrap.style.width = "100%";
@@ -609,7 +609,6 @@ export function WpInteractions() {
     // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
     cleanups.push(initGetwidHotspots());
 
-
     // Product pages — images, accordion, CTA polish (all product slugs)
     const productRoots = Array.from(
       document.querySelectorAll<HTMLElement>("article.renacon-product-page"),
@@ -644,9 +643,83 @@ export function WpInteractions() {
       initProductAccordions(productRoot, cleanups);
     });
 
+    // Our Products hub — scroll-reveal + card hover (page-scoped)
+    const productsHub = document.getElementById("post-635");
+    if (productsHub) {
+      productsHub.classList.add("renacon-our-products-ix");
+      hydrateWpImages(productsHub);
+      initPageInteractions(
+        productsHub,
+        {
+          revealSelector: [
+            ".stk-block-image",
+            ".stk-block-column",
+            ".wp-block-stackable-columns",
+            ".stk-block-heading",
+            ".entry-content > .wp-block-image",
+            ".entry-content > p",
+            "a.stk-link",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image.alignfull:first-child",
+            ".entry-content > .wp-block-image:first-child",
+            "h1.wp-block-heading",
+            ".stk-block-heading",
+          ],
+        },
+        cleanups,
+      );
+    }
+
+    // Projects gallery — lightbox viewer (never navigate to missing WP child pages)
+    cleanups.push(initGalleryLightbox());
+
+    // Contact page — interactive form polish marker
+    const contactRoot =
+      document.getElementById("post-4301") ||
+      document.querySelector<HTMLElement>(".page-id-4301, article.post-4301");
+    if (contactRoot || /\/contact-us\/?$/.test(window.location.pathname)) {
+      const root =
+        contactRoot ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      root.classList.add("renacon-contact-ix");
+      hydrateWpImages(root);
+      initPageInteractions(
+        root,
+        {
+          revealSelector: [
+            ".forminator-custom-form",
+            ".wp-block-columns",
+            ".entry-content > p",
+            ".entry-content > h1",
+            ".entry-content > h2",
+            ".wp-block-image",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image:first-child",
+            "h1.page-title",
+            "h1.wp-block-heading",
+          ],
+        },
+        cleanups,
+      );
+    }
+
+    // News pages — ensure mirrored media URLs resolve
+    if (
+      document.querySelector(".news-index, article.post.type-post") ||
+      /\/news\//.test(window.location.pathname)
+    ) {
+      hydrateWpImages(document.body);
+      const newsRoot =
+        document.querySelector<HTMLElement>(".news-index, article.post.type-post") ||
+        document.body;
+      newsRoot.classList.add("renacon-news-ix");
+    }
+
     // Global belt-and-suspenders for mirrored media URLs / lazy attrs
     hydrateWpImages(document.body);
-
 
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
@@ -696,6 +769,161 @@ function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fal
     ? `<div class="wp-block-getwid-image-hotspot__tooltip-content">${content}</div>`
     : "";
   return `<div class="wp-block-getwid-image-hotspot__tooltip"><div class="wp-block-getwid-image-hotspot__tooltip-title">${titleHtml}</div>${contentHtml}<a class="renacon-hotspot-cta" href="${href}"${target}>View product</a></div>`;
+}
+
+/** Pick largest URL from an img srcset, falling back to src. */
+function largestImageUrl(img: HTMLImageElement): string {
+  const srcset = img.getAttribute("srcset") || "";
+  let best = img.currentSrc || img.getAttribute("src") || "";
+  let bestW = 0;
+  srcset.split(",").forEach((part) => {
+    const bits = part.trim().split(/\s+/);
+    const url = bits[0];
+    if (!url) return;
+    const wMatch = bits[1]?.match(/^(\d+)w$/);
+    const w = wMatch ? Number(wMatch[1]) : 0;
+    if (w >= bestW) {
+      bestW = w;
+      best = url;
+    }
+  });
+  return absolutizeWpUrl(best);
+}
+
+/**
+ * Simply Gallery items link to missing WP child pages (/projects-2/slug/).
+ * Intercept click/touch and open a lightbox with the full image instead.
+ */
+function initGalleryLightbox(): () => void {
+  const items = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>(
+      ".sgb-item > a, .simply-gallery-amp .sgb-item a, .pgc_sgb_slider .sgb-item a",
+    ),
+  );
+  if (!items.length) return () => undefined;
+
+  const cleanups: Array<() => void> = [];
+  let overlay: HTMLElement | null = null;
+
+  const close = () => {
+    if (!overlay) return;
+    overlay.classList.remove("is-open");
+    document.body.style.overflow = "";
+    const node = overlay;
+    window.setTimeout(() => {
+      node.remove();
+      if (overlay === node) overlay = null;
+    }, 180);
+  };
+
+  const open = (src: string, caption: string) => {
+    close();
+    const safeCaption = caption
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+    overlay = document.createElement("div");
+    overlay.className = "renacon-lightbox";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-label", caption || "Project image");
+    overlay.innerHTML = `
+      <button type="button" class="renacon-lightbox-close" aria-label="Close">&times;</button>
+      <figure class="renacon-lightbox-figure">
+        <img class="renacon-lightbox-img" alt="${safeCaption}" />
+        ${safeCaption ? `<figcaption class="renacon-lightbox-caption">${safeCaption}</figcaption>` : ""}
+      </figure>
+    `;
+    const img = overlay.querySelector<HTMLImageElement>(".renacon-lightbox-img");
+    if (img) {
+      img.src = src;
+      img.decoding = "async";
+    }
+    document.body.appendChild(overlay);
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => overlay?.classList.add("is-open"));
+
+    const onCloseClick = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      if (
+        t?.classList.contains("renacon-lightbox") ||
+        t?.closest(".renacon-lightbox-close")
+      ) {
+        e.preventDefault();
+        close();
+      }
+    };
+    overlay.addEventListener("click", onCloseClick);
+    cleanups.push(() => overlay?.removeEventListener("click", onCloseClick));
+  };
+
+  items.forEach((anchor) => {
+    const item = anchor.closest<HTMLElement>(".sgb-item");
+    item?.classList.add("renacon-gallery-item");
+    anchor.classList.add("renacon-gallery-trigger");
+    anchor.setAttribute("role", "button");
+    anchor.setAttribute("aria-haspopup", "dialog");
+
+    const onActivate = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const img = anchor.querySelector<HTMLImageElement>("img");
+      if (!img) return;
+      const caption =
+        item
+          ?.querySelector(".sgb-item-caption")
+          ?.textContent?.replace(/\u00a0/g, " ")
+          .trim() ||
+        img.getAttribute("alt") ||
+        "";
+      open(largestImageUrl(img), caption);
+    };
+
+    const supportsPointer = typeof window.PointerEvent !== "undefined";
+    if (supportsPointer) {
+      let lastTs = 0;
+      const onPointerUp = (e: Event) => {
+        lastTs = Date.now();
+        onActivate(e);
+      };
+      const suppressGhost = (e: Event) => {
+        if (Date.now() - lastTs < 500) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
+      anchor.addEventListener("pointerup", onPointerUp);
+      anchor.addEventListener("click", suppressGhost);
+      cleanups.push(() => {
+        anchor.removeEventListener("pointerup", onPointerUp);
+        anchor.removeEventListener("click", suppressGhost);
+      });
+    } else {
+      anchor.addEventListener("click", onActivate);
+      cleanups.push(() => anchor.removeEventListener("click", onActivate));
+    }
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onActivate(e);
+      }
+    };
+    anchor.addEventListener("keydown", onKey);
+    cleanups.push(() => anchor.removeEventListener("keydown", onKey));
+  });
+
+  const onDocKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape" && overlay) close();
+  };
+  document.addEventListener("keydown", onDocKey);
+  cleanups.push(() => document.removeEventListener("keydown", onDocKey));
+
+  return () => {
+    close();
+    cleanups.forEach((fn) => fn());
+  };
 }
 
 function initGetwidHotspots(): () => void {
