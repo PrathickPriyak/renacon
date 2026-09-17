@@ -31,7 +31,7 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {slug === "calculator" || product ? (
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-homepage-recreation-202609171200"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-animation-interactions-202609171530"
         />
       ) : null}
       <WpMain html={html} />
