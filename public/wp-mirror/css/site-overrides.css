@@ -485,10 +485,15 @@ html.ct-panel-open #offcanvas * {
     width: auto !important;
   }
 
+  /* Full-bleed mobile header bar (match Blocksy / renacon.in — not 90vw gutters) */
   .ct-header .ct-container,
-  .ct-header [data-row] > div {
-    width: min(100%, 90vw);
-    padding-inline: 0;
+  .ct-header [data-row] > div,
+  #header.ct-header .ct-container,
+  #header.ct-header [data-row] > div {
+    width: 100% !important;
+    max-width: none !important;
+    padding-inline: 0.85rem !important;
+    box-sizing: border-box;
   }
 
   .ct-header-trigger,
@@ -1621,6 +1626,98 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
     max-width: 100%;
   }
 }
+
+/* ---------- Phase 7 — responsive parity with Stackable 689 + Blocksy ---------- */
+@media (max-width: 689px) {
+  /* Fractional Stackable image wrappers → full width on phones */
+  .stk-11fa48c .stk-img-wrapper,
+  .stk-508cd5f .stk-img-wrapper,
+  .stk-ec5b2e0 .stk-img-wrapper,
+  .stk-9d7fdab .stk-img-wrapper,
+  .stk-0028551 .stk-img-wrapper,
+  .stk-48cfaf5 .stk-img-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Media page: stack video columns at 689 (was 599) */
+  #post-1067 .stk-block-columns .stk-block-column,
+  .renacon-media-ix .stk-block-columns .stk-block-column,
+  body.renacon-page-media .stk-block-columns .stk-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  #post-1067 .stk-block-columns > .stk-row,
+  .renacon-media-ix .stk-block-columns > .stk-row,
+  body.renacon-page-media .stk-block-columns > .stk-row {
+    flex-wrap: wrap !important;
+    padding-inline: 1rem !important;
+  }
+
+  /* About Us media-text hero stack at Stackable mobile */
+  #post-4487 .entry-content > .wp-block-media-text,
+  body.renacon-page-about-us .entry-content > .wp-block-media-text {
+    grid-template-columns: 100% !important;
+  }
+
+  #post-4487 .wp-block-media-text > .wp-block-media-text__media,
+  #post-4487 .wp-block-media-text > .wp-block-media-text__content,
+  body.renacon-page-about-us .wp-block-media-text > .wp-block-media-text__media,
+  body.renacon-page-about-us .wp-block-media-text > .wp-block-media-text__content {
+    grid-column: 1 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Tables / embeds scroll without page overflow */
+  .renacon-mirror .entry-content table,
+  .renacon-mirror .entry-content .wp-block-table,
+  .renacon-mirror .entry-content .wp-block-embed,
+  .renacon-mirror .entry-content .wp-block-video {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .renacon-mirror .entry-content iframe,
+  .renacon-mirror .entry-content video,
+  .renacon-mirror .entry-content embed,
+  .renacon-mirror .entry-content img {
+    max-width: 100% !important;
+  }
+
+  /* Calculator Involve.me embeds */
+  body.renacon-page-calculator iframe,
+  .renacon-calculator-ix iframe {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Contact Forminator fields */
+  .renacon-contact-ix .forminator-input,
+  .renacon-contact-ix .forminator-textarea,
+  .renacon-contact-ix select.forminator-select--field {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Gallery hub cards single column */
+  .gallery-hub-grid,
+  .gallery-hub-links {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Prefer clipping page chrome; allow intentional table scroll wrappers */
+@media (max-width: 999px) {
+  .renacon-mirror {
+    overflow-x: clip;
+  }
+}
+
+/* CACHE_BUST_MARKER responsive-audit-202609171700 */
 
 /* ---------- Match live Renacon chrome ---------- */
 .ct-header .menu-container > .menu > li > a {
@@ -3412,11 +3509,19 @@ body.renacon-page-our-products #post-635 {
   align-items: center !important;
   justify-content: center !important;
   margin-inline: auto !important;
-  width: min(100%, 260px) !important;
-  max-width: 260px !important;
+  width: min(100%, 360px) !important;
+  max-width: 360px !important;
   aspect-ratio: 1 / 1 !important;
   height: auto !important;
   overflow: hidden;
+}
+
+@media (max-width: 689px) {
+  #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img-wrapper,
+  #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
