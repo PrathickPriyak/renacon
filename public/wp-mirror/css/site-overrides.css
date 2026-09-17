@@ -2555,8 +2555,10 @@ button[type="submit"]:hover {
   width: 100% !important;
   max-width: 100% !important;
   height: auto !important;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
+  /* GIFs are ~328x509 portrait and include yellow label bars at the bottom —
+     do NOT crop to square or the banners disappear */
+  aspect-ratio: auto !important;
+  object-fit: contain;
   object-position: center top;
 }
 
