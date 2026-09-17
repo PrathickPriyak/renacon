@@ -287,6 +287,17 @@ export function FormBridge() {
           /\/careers\/?$/.test(window.location.pathname)
         ) {
           form.classList.add("renacon-contact-form");
+          // Forminator mirrors often ship with inline display:none until WP JS runs
+          if (
+            /\/contact-us\/?$/.test(window.location.pathname) &&
+            form.className.includes("forminator")
+          ) {
+            const panel = form.closest<HTMLElement>(".ep_tab_item_wrapper");
+            const panelActive = !panel || panel.classList.contains("ep_active_tab");
+            if (panelActive) {
+              form.style.setProperty("display", "block", "important");
+            }
+          }
           form.querySelectorAll<HTMLElement>(
             "input:not([type='file']), textarea, select, .forminator-input, .forminator-textarea",
           ).forEach((el) => {

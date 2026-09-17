@@ -568,7 +568,7 @@ export function WpInteractions() {
         document.body;
       root.classList.add("renacon-contact-ix");
       root.setAttribute("data-renacon-contact-ix", "contact-premium-v1");
-      document.body.classList.add("renacon-page-contact-us");
+      document.body.classList.add("renacon-page-contact-us", "eplus_styles");
       hydrateWpImages(root);
       cleanups.push(initEditorPlusTabs(root));
 
@@ -814,13 +814,22 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
       labels.forEach((label, i) => {
         label.classList.toggle("ep_active_tab", i === index);
         label.setAttribute("aria-selected", i === index ? "true" : "false");
+        label.setAttribute("tabindex", i === index ? "0" : "-1");
       });
       panels.forEach((panel, i) => {
         const on = i === index;
         panel.classList.toggle("ep_active_tab", on);
+        panel.hidden = !on;
         panel.style.setProperty("display", on ? "block" : "none", "important");
         panel.querySelectorAll<HTMLElement>("form").forEach((form) => {
-          form.style.display = on ? "" : "none";
+          // Forminator mirrors ship with inline display:none — force visible when tab is active
+          if (on) {
+            form.style.removeProperty("display");
+            form.style.setProperty("display", "block", "important");
+            form.removeAttribute("hidden");
+          } else {
+            form.style.setProperty("display", "none", "important");
+          }
         });
       });
     };
