@@ -2,139 +2,9 @@
 
 import { useEffect } from "react";
 
-const IX_MARKER = "renacon-ix-v2";
-const IX_ATTR = "v2-sep2026";
-
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
-
-function dedupeNested(candidates: HTMLElement[]): HTMLElement[] {
-  return candidates.filter(
-    (el) => !candidates.some((other) => other !== el && other.contains(el)),
-  );
-}
-
-function observeReveals(
-  revealEls: HTMLElement[],
-  reduceMotion: boolean,
-  cleanups: Array<() => void>,
-): void {
-  if (reduceMotion) {
-    revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-    return;
-  }
-
-  if (typeof IntersectionObserver === "undefined") {
-    revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target as HTMLElement;
-        el.classList.add("renacon-reveal-in");
-        io.unobserve(el);
-      });
-    },
-    { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
-  );
-
-  revealEls.forEach((el) => io.observe(el));
-  cleanups.push(() => io.disconnect());
-}
-
-function initPageInteractions(
-  root: HTMLElement,
-  options: {
-    revealSelector: string;
-    heroSelectors: string[];
-    benefitListSelector?: string;
-    benefitsInClass?: string;
-  },
-  cleanups: Array<() => void>,
-): void {
-  root.classList.add(IX_MARKER);
-  root.setAttribute("data-renacon-ix", IX_ATTR);
-
-  const reduceMotion = prefersReducedMotion();
-
-  const candidates = Array.from(
-    root.querySelectorAll<HTMLElement>(options.revealSelector),
-  ).filter((el) => {
-    if (el.classList.contains("renacon-reveal")) return false;
-    if (el.classList.contains("wp-block-spacer")) return false;
-    return true;
-  });
-
-  const revealEls = dedupeNested(candidates);
-  revealEls.forEach((el, i) => {
-    el.classList.add("renacon-reveal");
-    el.style.setProperty(
-      "--renacon-reveal-delay",
-      `${Math.min(i * 55, 360)}ms`,
-    );
-  });
-  observeReveals(revealEls, reduceMotion, cleanups);
-
-  // Staggered hero / title entrance (always visible on load)
-  const heroPieces: HTMLElement[] = [];
-  options.heroSelectors.forEach((sel) => {
-    root.querySelectorAll<HTMLElement>(sel).forEach((el) => {
-      if (!heroPieces.includes(el)) heroPieces.push(el);
-    });
-  });
-
-  heroPieces.forEach((el, i) => {
-    el.classList.add("renacon-hero-piece");
-    el.style.setProperty("--renacon-hero-delay", `${80 + i * 110}ms`);
-  });
-
-  const runHero = () => root.classList.add("renacon-hero-in");
-  if (reduceMotion) {
-    runHero();
-  } else {
-    const t = window.setTimeout(runHero, 60);
-    cleanups.push(() => window.clearTimeout(t));
-  }
-
-  if (options.benefitListSelector && options.benefitsInClass) {
-    const items = Array.from(
-      root.querySelectorAll<HTMLElement>(`${options.benefitListSelector} > li`),
-    );
-    items.forEach((li, i) => {
-      li.classList.add("renacon-why-benefit");
-      li.style.setProperty("--renacon-benefit-delay", `${120 + i * 90}ms`);
-      li.tabIndex = 0;
-    });
-
-    const markBenefitsIn = () => root.classList.add(options.benefitsInClass!);
-
-    if (reduceMotion) {
-      markBenefitsIn();
-    } else if (typeof IntersectionObserver !== "undefined") {
-      const list =
-        root.querySelector<HTMLElement>(options.benefitListSelector) || root;
-      const bio = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting) return;
-            markBenefitsIn();
-            bio.disconnect();
-          });
-        },
-        { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
-      );
-      bio.observe(list);
-      cleanups.push(() => bio.disconnect());
-    } else {
-      markBenefitsIn();
-    }
-  }
-}
-
 
 const WP_ORIGIN = "https://renacon.in";
 
@@ -190,40 +60,14 @@ function hydrateWpImages(root: ParentNode): void {
   );
 }
 
-function initProductImagePolish(
-  root: HTMLElement,
-  cleanups: Array<() => void>,
-): void {
+/** Mark product media hooks — no invent scroll-fade (live Stackable has none). */
+function initProductImagePolish(root: HTMLElement): void {
   root.classList.add("renacon-product-ix");
-
-  const figures = Array.from(
-    root.querySelectorAll<HTMLElement>(
+  root
+    .querySelectorAll<HTMLElement>(
       ".wp-block-image, .stk-block-background, .stk-block-image, .wp-block-getwid-image-box",
-    ),
-  );
-  figures.forEach((fig) => fig.classList.add("renacon-product-media"));
-
-  const photoCols = Array.from(
-    root.querySelectorAll<HTMLElement>(
-      ".stk-block-background.stk--has-background-overlay",
-    ),
-  );
-  if (prefersReducedMotion() || typeof IntersectionObserver === "undefined") {
-    photoCols.forEach((el) => el.classList.add("renacon-product-photo-in"));
-    return;
-  }
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const el = entry.target as HTMLElement;
-        el.classList.toggle("renacon-product-photo-in", entry.isIntersecting);
-      });
-    },
-    { threshold: 0.2 },
-  );
-  photoCols.forEach((el) => io.observe(el));
-  cleanups.push(() => io.disconnect());
+    )
+    .forEach((fig) => fig.classList.add("renacon-product-media"));
 }
 
 function initProductAccordions(
@@ -535,18 +379,29 @@ export function WpInteractions() {
       });
     });
 
+    // Blocksy sticky: fixed:shrink at top → yes:shrink when scrolled (row 100→90).
+    // In-flow pages keep the sticky node in document flow via CSS (see header-blocksy-in).
     const header =
       document.getElementById("header") ||
       document.querySelector<HTMLElement>(".ct-header");
     const stickyNodes = Array.from(
       document.querySelectorAll<HTMLElement>("#header [data-sticky]"),
     );
+    const stickyContainers = Array.from(
+      document.querySelectorAll<HTMLElement>("#header .ct-sticky-container"),
+    );
     const onScroll = () => {
       if (!header) return;
       const scrolled = window.scrollY > 8;
       header.classList.toggle("renacon-header-scrolled", scrolled);
       stickyNodes.forEach((el) => {
-        el.setAttribute("data-sticky", scrolled ? "yes" : "shrink");
+        el.setAttribute("data-sticky", scrolled ? "yes:shrink" : "fixed:shrink");
+      });
+      // Preserve layout height when Blocksy would take the sticky node out of flow
+      stickyContainers.forEach((container) => {
+        const row = container.querySelector<HTMLElement>('[data-row*="middle"]');
+        const h = row?.offsetHeight || (window.innerWidth <= 999 ? 70 : 100);
+        container.style.minHeight = `${h}px`;
       });
     };
     onScroll();
@@ -590,41 +445,17 @@ export function WpInteractions() {
     // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
     cleanups.push(initGetwidHotspots());
 
-    // Product pages — images, accordion, CTA polish (all product slugs)
+    // Product pages — images + native accordion polish (no invent scroll-reveal)
     const productRoots = Array.from(
       document.querySelectorAll<HTMLElement>("article.renacon-product-page"),
     );
     productRoots.forEach((productRoot) => {
       hydrateWpImages(productRoot);
-      initPageInteractions(
-        productRoot,
-        {
-          revealSelector: [
-            ".entry-content > .wp-block-image",
-            ".entry-content > p",
-            ".entry-content > h1",
-            ".entry-content > h2",
-            ".entry-content > h3",
-            ".wp-block-stackable-columns",
-            ".wp-block-stackable-accordion",
-            ".wp-block-image",
-            ".ugb-container",
-            ".wpforms-container",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            ".entry-content > .wp-block-image:first-child",
-            "h1.wp-block-heading",
-            ".stk-block-heading",
-          ],
-        },
-        cleanups,
-      );
-      initProductImagePolish(productRoot, cleanups);
+      initProductImagePolish(productRoot);
       initProductAccordions(productRoot, cleanups);
     });
 
-    // Our Products hub — scroll-reveal + card hover (page-scoped)
+    // Our Products hub — card hooks + Stackable button hover only (no invent reveal/lift)
     const productsHub =
       document.getElementById("post-635") ||
       document.querySelector<HTMLElement>("article.post-635, .page-id-635");
@@ -638,7 +469,7 @@ export function WpInteractions() {
       document.body.classList.add("renacon-page-our-products");
       hydrateWpImages(root);
 
-      // Mark top-level product columns as hub cards (avoid nested column hover fights)
+      // Mark top-level product columns as hub cards (layout hooks only)
       const cardRows = root.querySelectorAll<HTMLElement>(
         ".stk-6c7f365 > .stk-row, .stk-c602183 > .stk-row, .stk-6c7f365-column, .stk-c602183-column",
       );
@@ -662,27 +493,12 @@ export function WpInteractions() {
             .forEach((el) => el.classList.add("renacon-product-hub-card"));
         });
       }
-
-      initPageInteractions(
-        root,
-        {
-          revealSelector: [
-            ".renacon-product-hub-card",
-            ".entry-content > .wp-block-image",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            ".entry-content > .wp-block-image:first-child",
-          ],
-        },
-        cleanups,
-      );
     }
 
     // Projects / media gallery — lightbox viewer (never navigate to missing WP child pages)
     cleanups.push(initGalleryLightbox());
 
-    // Projects-2 — scroll-reveal, stagger, hover lift (layout-preserving)
+    // Projects-2 — gallery normalize + lightbox only (no invent scroll-reveal)
     const projectsGalleryRoot =
       document.getElementById("post-1192") ||
       document.querySelector<HTMLElement>(".page-id-1192, article.post-1192");
@@ -696,33 +512,11 @@ export function WpInteractions() {
       document.body.classList.add("renacon-page-projects-2");
       document.querySelector("main.site-main")?.classList.add("renacon-projects-gallery-ix");
       hydrateWpImages(document.querySelector("main.site-main") || root);
-      // Prefer main — mirrored markup previously ejected later galleries from <article>
       normalizeSimplyGalleries(document.querySelector("main.site-main") || root);
       clearGalleryMotionLocks(root);
-      initPageInteractions(
-        root,
-        {
-          revealSelector: [
-            "h1.wp-block-heading",
-            "h2.wp-block-heading",
-            "h1.page-title",
-            ".sgb-item",
-            ".entry-content > .wp-block-image",
-            ".entry-content > p",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            ".entry-content > .wp-block-image:first-child",
-            "h1.page-title",
-            "h1.wp-block-heading",
-          ],
-        },
-        cleanups,
-      );
-      softStaggerGalleryItems(root);
     }
 
-    // Media — Qubely tabs + scroll-reveal + gallery polish
+    // Media — Qubely tabs + gallery normalize (no invent scroll-reveal)
     const mediaRoot =
       document.getElementById("post-1067") ||
       document.querySelector<HTMLElement>(".page-id-1067, article.post-1067");
@@ -740,32 +534,9 @@ export function WpInteractions() {
       clearGalleryMotionLocks(root);
       sanitizeEmbedTitles(document.querySelector("main.site-main") || root);
       cleanups.push(initQubelyTabs(root));
-      initPageInteractions(
-        root,
-        {
-          revealSelector: [
-            "h1.wp-block-heading",
-            "h2.wp-block-heading",
-            "h1.page-title",
-            ".qubely-tab-nav",
-            ".sgb-item",
-            ".wp-block-embed",
-            ".entry-content > .wp-block-image",
-            ".entry-content > p",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            ".entry-content > .wp-block-image:first-child",
-            "h1.page-title",
-            "h1.wp-block-heading",
-          ],
-        },
-        cleanups,
-      );
-      softStaggerGalleryItems(root);
     }
 
-    // Contact page — premium interactive form polish
+    // Contact page — Editor Plus tabs + field focus (no invent scroll-reveal)
     const contactRoot =
       document.getElementById("post-4301") ||
       document.querySelector<HTMLElement>(".page-id-4301, article.post-4301");
@@ -780,7 +551,6 @@ export function WpInteractions() {
       hydrateWpImages(root);
       cleanups.push(initEditorPlusTabs(root));
 
-      // Soft focus ring class for keyboard / pointer focus on fields
       const fieldSelector =
         ".forminator-input, .forminator-textarea, select.forminator-select--field";
       const onFieldFocus = (e: Event) => {
@@ -800,36 +570,9 @@ export function WpInteractions() {
         root.removeEventListener("focusin", onFieldFocus);
         root.removeEventListener("focusout", onFieldBlur);
       });
-
-      initPageInteractions(
-        root,
-        {
-          revealSelector: [
-            ".forminator-custom-form",
-            ".forminator-row",
-            ".wp-block-columns",
-            ".stk-block-column",
-            ".entry-content > p",
-            ".entry-content > h1",
-            ".entry-content > h2",
-            ".entry-content > h3",
-            ".wp-block-image",
-            ".ep_tabs_wrapper",
-            ".ep_label_main",
-            ".ugb-container",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image:first-child",
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            "h1.page-title",
-            "h1.wp-block-heading",
-          ],
-        },
-        cleanups,
-      );
     }
 
-    // Calculator — Involve.me embeds + accordion polish
+    // Calculator — Involve.me embeds + native accordion polish
     const calculatorRoot =
       document.getElementById("post-6793") ||
       document.querySelector<HTMLElement>("article.post-6793, .page-id-6793");
@@ -842,21 +585,6 @@ export function WpInteractions() {
       root.setAttribute("data-renacon-calc-ix", "calculator-v1");
       document.body.classList.add("renacon-page-calculator", "stk--anim-init");
       initProductAccordions(root, cleanups);
-      initPageInteractions(
-        root,
-        {
-          revealSelector: [
-            ".wp-block-stackable-accordion",
-            ".ugb-container",
-            "h1.wp-block-heading",
-          ].join(", "),
-          heroSelectors: [
-            "h1.wp-block-heading",
-            ".ugb-e75cca7-content-wrapper > h1",
-          ],
-        },
-        cleanups,
-      );
     }
 
     // News pages — ensure mirrored media URLs resolve
@@ -936,6 +664,8 @@ function sanitizeEmbedTitles(scope: ParentNode = document): void {
   });
 }
 
+const qubelyAbortByRoot = new WeakMap<HTMLElement, AbortController>();
+
 /** Qubely tabs (media page Recent Events / Media) — plugin JS not shipped. */
 function initQubelyTabs(scope: ParentNode = document): () => void {
   const roots = Array.from(
@@ -946,7 +676,10 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
   const cleanups: Array<() => void> = [];
 
   roots.forEach((root) => {
-    if (root.dataset.renaconQubelyReady === "1") return;
+    qubelyAbortByRoot.get(root)?.abort();
+    const ac = new AbortController();
+    qubelyAbortByRoot.set(root, ac);
+
     root.dataset.renaconQubelyReady = "1";
     root.classList.add("renacon-qubely-tabs");
 
@@ -975,51 +708,51 @@ function initQubelyTabs(scope: ParentNode = document): () => void {
         const on = i === index;
         panel.classList.toggle("qubely-active", on);
         panel.classList.toggle("renacon-tab-panel-in", on);
-        panel.style.display = on ? "block" : "none";
+        panel.style.setProperty("display", on ? "block" : "none", "important");
         panel.setAttribute("aria-hidden", on ? "false" : "true");
       });
-      const activePanel = panels[index];
-      if (activePanel) {
-        softStaggerGalleryItems(activePanel);
-        if (!prefersReducedMotion()) {
-          activePanel
-            .querySelectorAll<HTMLElement>(".sgb-item.renacon-reveal")
-            .forEach((el) => {
-              el.classList.remove("renacon-reveal-in");
-              void el.offsetWidth;
-              requestAnimationFrame(() => el.classList.add("renacon-reveal-in"));
-            });
-        }
+    };
+
+    const onClick = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      const item = t?.closest<HTMLElement>(".qubely-tab-nav > .qubely-tab-item");
+      if (!item || !root.contains(item)) return;
+      e.preventDefault();
+      const index = items.indexOf(item);
+      if (index < 0) return;
+      activate(index);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      const item = t?.closest<HTMLElement>(".qubely-tab-nav > .qubely-tab-item");
+      if (!item || !root.contains(item)) return;
+      const index = items.indexOf(item);
+      if (index < 0) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        activate(index);
+        return;
+      }
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        const dir = e.key === "ArrowRight" ? 1 : -1;
+        const next = (index + dir + items.length) % items.length;
+        activate(next);
+        items[next]?.focus();
       }
     };
 
-    items.forEach((item, index) => {
+    items.forEach((item) => {
       item.setAttribute("role", "tab");
       item.tabIndex = 0;
-      const onActivate = (e: Event) => {
-        e.preventDefault();
-        activate(index);
-      };
-      item.addEventListener("click", onActivate);
-      const onKey = (e: KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          activate(index);
-          return;
-        }
-        if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-          e.preventDefault();
-          const dir = e.key === "ArrowRight" ? 1 : -1;
-          const next = (index + dir + items.length) % items.length;
-          activate(next);
-          items[next]?.focus();
-        }
-      };
-      item.addEventListener("keydown", onKey);
-      cleanups.push(() => {
-        item.removeEventListener("click", onActivate);
-        item.removeEventListener("keydown", onKey);
-      });
+    });
+
+    root.addEventListener("click", onClick, { signal: ac.signal });
+    root.addEventListener("keydown", onKey, { signal: ac.signal });
+    cleanups.push(() => {
+      ac.abort();
+      delete root.dataset.renaconQubelyReady;
+      qubelyAbortByRoot.delete(root);
     });
 
     activate(
@@ -1045,7 +778,6 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
   const cleanups: Array<() => void> = [];
 
   roots.forEach((root) => {
-    if (root.dataset.renaconTabsReady === "1") return;
     root.dataset.renaconTabsReady = "1";
     root.classList.add("renacon-ep-tabs");
 
@@ -1065,8 +797,7 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
       panels.forEach((panel, i) => {
         const on = i === index;
         panel.classList.toggle("ep_active_tab", on);
-        panel.style.display = on ? "block" : "none";
-        // Forms inside inactive tabs may be display:none from theme CSS
+        panel.style.setProperty("display", on ? "block" : "none", "important");
         panel.querySelectorAll<HTMLElement>("form").forEach((form) => {
           form.style.display = on ? "" : "none";
         });
@@ -1086,6 +817,9 @@ function initEditorPlusTabs(scope: ParentNode = document): () => void {
 
     panels.forEach((panel) => panel.setAttribute("role", "tabpanel"));
     activate(0);
+    cleanups.push(() => {
+      delete root.dataset.renaconTabsReady;
+    });
   });
 
   return () => cleanups.forEach((fn) => fn());
@@ -1135,7 +869,7 @@ function normalizeSimplyGalleries(root: ParentNode): void {
       item.style.width = "100%";
       item.style.height = "auto";
       item.style.maxWidth = "none";
-      // Leave transform/opacity to CSS so scroll-reveal + hover lift can run
+      // Leave transform/opacity clear so CSS hover + lightbox can run
 
       let caption = item.querySelector<HTMLElement>(".sgb-item-caption");
       const captionText = caption?.textContent?.replace(/\s+/g, " ").trim() || "";
@@ -1166,27 +900,12 @@ function normalizeSimplyGalleries(root: ParentNode): void {
 }
 
 
-/** Remove masonry leftover locks that would block reveal/hover motion. */
+/** Remove masonry leftover locks that would block gallery hover/lightbox. */
 function clearGalleryMotionLocks(root: ParentNode): void {
   root.querySelectorAll<HTMLElement>(".sgb-item").forEach((item) => {
     item.style.removeProperty("transform");
     item.style.removeProperty("opacity");
     item.style.removeProperty("visibility");
-  });
-}
-
-/** Soft per-grid stagger delays (capped) for gallery cards. */
-function softStaggerGalleryItems(root: ParentNode): void {
-  root.querySelectorAll<HTMLElement>(".sgb-gallery").forEach((gallery) => {
-    const items = Array.from(gallery.querySelectorAll<HTMLElement>(".sgb-item"));
-    items.forEach((item, i) => {
-      item.classList.add("renacon-gallery-stagger");
-      const delay = `${Math.min(i * 45, 420)}ms`;
-      item.style.setProperty("--renacon-stagger-delay", delay);
-      if (item.classList.contains("renacon-reveal")) {
-        item.style.setProperty("--renacon-reveal-delay", delay);
-      }
-    });
   });
 }
 
@@ -1210,10 +929,11 @@ function initGalleryLightbox(): () => void {
     overlay.classList.remove("is-open");
     document.body.style.overflow = "";
     const node = overlay;
+    const delay = prefersReducedMotion() ? 0 : 180;
     window.setTimeout(() => {
       node.remove();
       if (overlay === node) overlay = null;
-    }, 180);
+    }, delay);
   };
 
   const open = (src: string, caption: string) => {

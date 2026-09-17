@@ -1000,11 +1000,11 @@ body.renacon-page-media .renacon-hotspot-tip,
 }
 
 .qubely-block-tab .qubely-tab-body > .qubely-tab-content {
-  display: none;
+  display: none !important;
 }
 
 .qubely-block-tab .qubely-tab-body > .qubely-tab-content.qubely-active {
-  display: block;
+  display: block !important;
 }
 
 /* Superseded by 16:9 absolute-fill rules above (renacon-hero-clip-videos-v3) */
@@ -1808,11 +1808,11 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
   color: #04a354;
 }
 
-/* Sticky header subtle elevation once scrolled (class toggled in WpInteractions) */
+/* Sticky header elevation once scrolled — match live solid bar + light shadow (no invent blur) */
 #header.ct-header.renacon-header-scrolled,
 .ct-header.renacon-header-scrolled {
-  box-shadow: 0 8px 24px rgba(5, 46, 31, 0.12);
-  backdrop-filter: saturate(1.1) blur(6px);
+  box-shadow: none;
+  backdrop-filter: none;
 }
 
 /* Touch-friendly OTP controls on small screens */
@@ -3541,12 +3541,12 @@ body.renacon-page-our-products #post-635 {
   transform: none;
 }
 
-/* Hover lift — product cards only (page-scoped) */
+/* Hover — product hub cards: live Stackable has button darken only (no invent lift) */
 #post-635.renacon-our-products-ix .renacon-product-hub-card,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card {
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease;
+  transition: none;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
@@ -3558,8 +3558,8 @@ body.renacon-page-our-products #post-635 {
 @media (hover: hover) and (pointer: fine) {
   #post-635.renacon-our-products-ix .renacon-product-hub-card:hover,
   #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 14px 28px rgba(11, 61, 44, 0.1);
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   #post-635.renacon-our-products-ix .renacon-product-hub-card:hover .stk-img,
@@ -5240,4 +5240,84 @@ body.renacon-mirror .stk-img-wrapper:active img {
   transform: none !important;
 }
 
-/* CACHE_BUST_MARKER global-chrome-202609171445 */
+/* CACHE_BUST_MARKER animation-interactions-202609171600 */
+
+/* Phase 6 — neutralize invented scroll-reveal / stagger (live renacon.in has none).
+   Keep content visible even if leftover classes remain in the DOM. */
+.renacon-reveal,
+.renacon-reveal.renacon-reveal-in,
+.renacon-hero-piece,
+.renacon-ix-v2 .renacon-reveal,
+.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+.renacon-ix-v2 .renacon-hero-piece,
+.renacon-ix-v2.renacon-hero-in .renacon-hero-piece,
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal,
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+article.renacon-product-page.renacon-ix-v2 .renacon-hero-piece,
+article.renacon-product-page.renacon-ix-v2.renacon-hero-in .renacon-hero-piece,
+#post-635.renacon-our-products-ix .renacon-reveal,
+#post-635.renacon-ix-v2 .renacon-reveal,
+#post-635[data-renacon-products-ix] .renacon-reveal,
+#post-635.renacon-our-products-ix .renacon-reveal.renacon-reveal-in,
+#post-635.renacon-ix-v2 .renacon-reveal.renacon-reveal-in,
+#post-635[data-renacon-products-ix] .renacon-reveal.renacon-reveal-in,
+.renacon-contact-ix .renacon-reveal,
+.renacon-contact-ix .renacon-reveal.renacon-reveal-in,
+.renacon-projects-gallery-ix .renacon-reveal,
+.renacon-media-ix .renacon-reveal,
+.renacon-projects-gallery-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-media-ix.renacon-ix-v2 .renacon-reveal,
+.renacon-projects-gallery-ix .renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .renacon-reveal.renacon-reveal-in,
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal,
+.renacon-projects-gallery-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-projects-2 .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in,
+.renacon-media-ix .wp-block-embed.renacon-reveal,
+body.renacon-page-media .wp-block-embed.renacon-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  visibility: visible !important;
+}
+
+.renacon-projects-gallery-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-projects-gallery-ix h2.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h1.wp-block-heading.renacon-reveal-in::after,
+.renacon-media-ix h2.wp-block-heading.renacon-reveal-in::after {
+  content: none !important;
+  display: none !important;
+  animation: none !important;
+}
+
+/* Phase 6 — no invent gallery card lift (Simply Gallery has none on live) */
+@media (hover: hover) and (pointer: fine) {
+  .renacon-projects-gallery-ix .sgb-item.renacon-reveal-in:hover,
+  .renacon-media-ix .sgb-item.renacon-reveal-in:hover,
+  body.renacon-page-projects-2 .sgb-item.renacon-gallery-item:hover,
+  body.renacon-page-media .sgb-item.renacon-gallery-item:hover,
+  .renacon-projects-gallery-ix .sgb-item:hover,
+  .renacon-media-ix .sgb-item:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .sub-menu,
+  .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .sub-menu,
+  .renacon-lightbox,
+  .renacon-lightbox.is-open,
+  #header.ct-header [data-sticky],
+  #header.ct-header [data-sticky] [data-row],
+  #header.ct-header [data-sticky] [data-row*=boxed] > div {
+    animation: none !important;
+    transition: none !important;
+  }
+}

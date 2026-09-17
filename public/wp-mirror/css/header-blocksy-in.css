@@ -302,6 +302,71 @@ body.renacon-mirror {
   box-shadow: 0px 10px 20px rgba(44, 62, 80, 0.05) !important;
 }
 
+/* Blocksy sticky shrink: live renacon.in row 100→90 on yes:shrink */
+#header.ct-header [data-sticky*="yes"] [data-row*="middle"],
+#header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] {
+  --height: 90px;
+}
+#header.ct-header [data-sticky*="yes"] [data-row*="middle"] > div,
+#header.ct-header [data-sticky*="yes"] [data-row*="middle"] .ct-container,
+#header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] > div,
+#header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] .ct-container {
+  min-height: 90px !important;
+}
+#header.ct-header [data-sticky*="yes"] [data-id="logo"] .site-logo-container,
+#header.ct-header [data-sticky="yes:shrink"] [data-id="logo"] .site-logo-container {
+  height: 80px !important;
+}
+@media (max-width: 999.98px) {
+  #header.ct-header [data-sticky*="yes"] [data-row*="middle"],
+  #header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] {
+    --height: 70px;
+  }
+  #header.ct-header [data-sticky*="yes"] [data-row*="middle"] > div,
+  #header.ct-header [data-sticky*="yes"] [data-row*="middle"] .ct-container,
+  #header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] > div,
+  #header.ct-header [data-sticky="yes:shrink"] [data-row*="middle"] .ct-container {
+    min-height: 70px !important;
+  }
+  #header.ct-header [data-sticky*="yes"] [data-id="logo"] .site-logo-container,
+  #header.ct-header [data-sticky="yes:shrink"] [data-id="logo"] .site-logo-container {
+    height: 50px !important;
+  }
+}
+
+/*
+ * In-flow sticky pages: outer .renacon-site-header is position:sticky.
+ * Keep Blocksy [data-sticky] in document flow so the wrap does not collapse
+ * when Blocksy would set position:fixed on fixed:shrink / yes:shrink.
+ */
+body.renacon-page-about-us #header [data-sticky],
+body.renacon-page-why-renacon #header [data-sticky],
+body.renacon-page-contact-us #header [data-sticky],
+body.renacon-page-careers #header [data-sticky],
+body.renacon-page-calculator #header [data-sticky],
+body.renacon-page-privacy #header [data-sticky],
+body.renacon-page-sitemap #header [data-sticky],
+body.renacon-page-our-products #header [data-sticky],
+body.renacon-page-projects-2 #header [data-sticky],
+body.renacon-page-media #header [data-sticky],
+body.renacon-page-gallery #header [data-sticky],
+body:has(#post-4487) #header [data-sticky],
+body:has(#post-5659) #header [data-sticky],
+body:has(#post-4301) #header [data-sticky],
+body:has(#post-7899) #header [data-sticky],
+body:has(#post-6793) #header [data-sticky],
+body:has(#post-7264) #header [data-sticky],
+body:has(#post-5483) #header [data-sticky],
+body:has(#post-635) #header [data-sticky],
+body:has(#post-1192) #header [data-sticky],
+body:has(#post-1067) #header [data-sticky] {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+}
+
 #header.ct-header .ct-header-trigger {
   --theme-icon-size: 18px;
   background: transparent;
@@ -324,4 +389,4 @@ body.renacon-mirror {
   fill: #1a1e21;
 }
 
-/* CACHE_BUST_MARKER global-chrome-202609171430 */
+/* CACHE_BUST_MARKER animation-interactions-202609171530 */

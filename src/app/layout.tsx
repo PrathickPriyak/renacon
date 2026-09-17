@@ -40,12 +40,12 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-global-chrome-202609171445"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-animation-interactions-202609171600"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-global-chrome-202609171445"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-animation-interactions-202609171600"
         />
       </head>
       <body
