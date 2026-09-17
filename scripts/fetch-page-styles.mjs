@@ -14,6 +14,7 @@ const root = join(__dirname, "..");
 const outDir = join(root, "content/page-styles");
 
 const PRODUCTS = [
+  "our-products",
   "cement-mortar",
   "rapid-wall-installation",
   "renabond-aac-joint-mortar",

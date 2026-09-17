@@ -646,27 +646,54 @@ export function WpInteractions() {
     });
 
     // Our Products hub — scroll-reveal + card hover (page-scoped)
-    const productsHub = document.getElementById("post-635");
-    if (productsHub) {
-      productsHub.classList.add("renacon-our-products-ix");
-      hydrateWpImages(productsHub);
+    const productsHub =
+      document.getElementById("post-635") ||
+      document.querySelector<HTMLElement>("article.post-635, .page-id-635");
+    if (productsHub || /\/our-products\/?$/.test(window.location.pathname)) {
+      const root =
+        productsHub ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      root.classList.add("renacon-our-products-ix");
+      root.setAttribute("data-renacon-products-ix", "products-hub-v1");
+      document.body.classList.add("renacon-page-our-products");
+      hydrateWpImages(root);
+
+      // Mark top-level product columns as hub cards (avoid nested column hover fights)
+      const cardRows = root.querySelectorAll<HTMLElement>(
+        ".stk-6c7f365 > .stk-row, .stk-c602183 > .stk-row, .stk-6c7f365-column, .stk-c602183-column",
+      );
+      cardRows.forEach((row) => {
+        row
+          .querySelectorAll<HTMLElement>(":scope > .stk-block-column")
+          .forEach((col) => col.classList.add("renacon-product-hub-card"));
+      });
+      if (!root.querySelector(".renacon-product-hub-card")) {
+        [
+          "9865a45",
+          "7149e4e",
+          "c5b65b7",
+          "0eaf3ea",
+          "a9ed25c",
+          "2c836f6",
+          "875bc77",
+        ].forEach((id) => {
+          root
+            .querySelectorAll<HTMLElement>(`.stk-${id}`)
+            .forEach((el) => el.classList.add("renacon-product-hub-card"));
+        });
+      }
+
       initPageInteractions(
-        productsHub,
+        root,
         {
           revealSelector: [
-            ".stk-block-image",
-            ".stk-block-column",
-            ".wp-block-stackable-columns",
-            ".stk-block-heading",
+            ".renacon-product-hub-card",
             ".entry-content > .wp-block-image",
-            ".entry-content > p",
-            "a.stk-link",
           ].join(", "),
           heroSelectors: [
             ".entry-content > .wp-block-image.alignfull:first-child",
             ".entry-content > .wp-block-image:first-child",
-            "h1.wp-block-heading",
-            ".stk-block-heading",
           ],
         },
         cleanups,

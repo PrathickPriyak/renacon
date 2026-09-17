@@ -24,7 +24,7 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=services-fix-1789637876`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-our-products-ix-202609170940-v1`}
         />
       ) : null}
       <WpMain html={html} />
