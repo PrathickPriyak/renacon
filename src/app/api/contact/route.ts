@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { consumeVerificationToken } from "@/lib/otp";
 import { resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
 
 function asString(value: unknown): string {
@@ -60,16 +59,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid phone number" }, { status: 400 });
   }
 
-  let verifiedPhone: string | undefined;
-  if (kind === "brochure") {
-    const verificationToken = asString(record.verificationToken);
-    const verified = await consumeVerificationToken(verificationToken, phone);
-    if (!verified.ok) {
-      return NextResponse.json({ ok: false, error: verified.error }, { status: 403 });
-    }
-    verifiedPhone = verified.phone;
-  }
-
+  // Brochure downloads no longer require OTP; optional token is ignored if present.
   await persistSubmission(kind, {
     ...record,
     name,
@@ -77,7 +67,6 @@ export async function POST(request: Request) {
     phone,
     message,
     kind,
-    verifiedPhone,
   });
 
   if (kind === "brochure") {

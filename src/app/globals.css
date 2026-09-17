@@ -4,7 +4,8 @@ body.renacon-mirror {
   margin: 0;
 }
 
-/* OTP-gated brochure download forms (WPForms mirror + LeadForm) */
+/* Brochure download forms (WPForms mirror + LeadForm) — no OTP */
+.renacon-brochure-form,
 .renacon-brochure-otp-form,
 .renacon-lead-brochure {
   --renacon-brochure-green: #008037;
@@ -12,6 +13,7 @@ body.renacon-mirror {
   max-width: 420px;
 }
 
+.renacon-brochure-form .wpforms-title,
 .renacon-brochure-otp-form .wpforms-title,
 .renacon-lead-brochure .renacon-title {
   color: var(--renacon-brochure-ink);
@@ -20,21 +22,22 @@ body.renacon-mirror {
   margin: 0 0 0.35rem;
 }
 
+.renacon-brochure-form .wpforms-description,
 .renacon-brochure-otp-form .wpforms-description {
   color: #555;
   font-size: 0.95rem;
   margin-bottom: 1.25rem;
 }
 
+.renacon-brochure-form .wpforms-field,
 .renacon-brochure-otp-form .wpforms-field,
-.renacon-lead-brochure .renacon-field,
-.renacon-otp-controls {
+.renacon-lead-brochure .renacon-field {
   margin-bottom: 1.15rem;
 }
 
+.renacon-brochure-form .wpforms-field-label,
 .renacon-brochure-otp-form .wpforms-field-label,
-.renacon-lead-brochure label,
-.renacon-otp-label {
+.renacon-lead-brochure label {
   display: block;
   color: #333;
   font-size: 0.95rem;
@@ -42,17 +45,23 @@ body.renacon-mirror {
   margin-bottom: 0.35rem;
 }
 
+.renacon-brochure-form .wpforms-required-label,
 .renacon-brochure-otp-form .wpforms-required-label,
-.renacon-lead-brochure .req {
+.renacon-lead-brochure .req,
+.renacon-careers-form .req {
   color: #d32f2f;
 }
 
+.renacon-brochure-form input[type="text"],
+.renacon-brochure-form input[type="tel"],
+.renacon-brochure-form input[type="email"],
+.renacon-brochure-form input[type="number"],
+.renacon-brochure-form textarea,
 .renacon-brochure-otp-form input[type="text"],
 .renacon-brochure-otp-form input[type="tel"],
 .renacon-brochure-otp-form input[type="email"],
 .renacon-brochure-otp-form input[type="number"],
 .renacon-brochure-otp-form textarea,
-.renacon-brochure-otp-form .renacon-otp-input,
 .renacon-lead-brochure input {
   width: 100%;
   border: none !important;
@@ -66,36 +75,24 @@ body.renacon-mirror {
   outline: none;
 }
 
+.renacon-brochure-form textarea,
 .renacon-brochure-otp-form textarea {
   min-height: 2rem;
   resize: vertical;
 }
 
+/* Hide any leftover OTP controls if older HTML is cached */
 .renacon-send-otp,
-.renacon-verify-otp {
-  display: inline-block;
-  margin: 0.35rem 0.5rem 0.75rem 0;
-  padding: 0.35rem 0.85rem;
-  border: 1px solid #666;
-  background: #e8e8e8;
-  color: #222;
-  font-size: 0.9rem;
-  line-height: 1.2;
-  cursor: pointer;
-  border-radius: 2px;
+.renacon-verify-otp,
+.renacon-otp-controls,
+.renacon-otp-label,
+.renacon-otp-input,
+.renacon-demo-otp-banner {
+  display: none !important;
 }
 
-.renacon-send-otp:hover,
-.renacon-verify-otp:hover {
-  background: #ddd;
-}
-
-.renacon-send-otp:disabled,
-.renacon-verify-otp:disabled {
-  opacity: 0.65;
-  cursor: default;
-}
-
+.renacon-brochure-form .wpforms-submit,
+.renacon-brochure-form .renacon-download-brochure,
 .renacon-brochure-otp-form .wpforms-submit,
 .renacon-brochure-otp-form .renacon-download-brochure,
 .renacon-lead-brochure .renacon-download-brochure {
@@ -114,46 +111,183 @@ body.renacon-mirror {
   box-shadow: 3px 3px 0 #111;
 }
 
+.renacon-brochure-form .wpforms-submit:hover,
+.renacon-brochure-form .renacon-download-brochure:hover,
 .renacon-brochure-otp-form .wpforms-submit:hover,
 .renacon-brochure-otp-form .renacon-download-brochure:hover,
 .renacon-lead-brochure .renacon-download-brochure:hover {
   filter: brightness(1.05);
 }
 
+.renacon-form-status,
 .renacon-otp-status {
   margin: 0.75rem 0 0;
   font-size: 0.9rem;
   color: #333;
 }
 
+.renacon-form-status[data-kind="error"],
 .renacon-otp-status[data-kind="error"] {
   color: #b00020;
 }
 
+.renacon-form-status[data-kind="ok"],
 .renacon-otp-status[data-kind="ok"] {
   color: #0b6b34;
 }
 
-.renacon-demo-otp-banner {
-  display: block;
-  margin: 0.5rem 0 0.85rem;
-  padding: 0.7rem 0.85rem;
-  background: #eef8f1;
-  border: 1px solid #b7dfc4;
-  border-left: 4px solid #008037;
-  color: #123528;
-  font-size: 0.92rem;
-  line-height: 1.4;
+/* Careers application form */
+.renacon-careers-form-wrap {
+  --renacon-careers-green: #008037;
+  --renacon-careers-ink: #1a2e22;
+  --renacon-careers-muted: #5a6b60;
+  --renacon-careers-line: #c9d5cc;
+  max-width: 720px;
+  margin: 2rem auto 3rem;
+  padding: 1.75rem 1.5rem 2rem;
+  background:
+    linear-gradient(180deg, rgba(232, 244, 236, 0.65) 0%, rgba(255, 255, 255, 0.95) 42%),
+    #fff;
+  border: 1px solid var(--renacon-careers-line);
 }
 
-.renacon-demo-otp-code {
-  display: inline-block;
-  padding: 0.1rem 0.4rem;
-  margin-inline: 0.15rem;
-  background: #fff;
-  border: 1px dashed #008037;
-  font-size: 1.05rem;
+.renacon-careers-form-title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
   font-weight: 700;
-  letter-spacing: 0.12em;
-  color: #008037;
+  color: var(--renacon-careers-ink);
+  letter-spacing: 0.01em;
+}
+
+.renacon-careers-form-lead {
+  margin: 0 0 1.5rem;
+  color: var(--renacon-careers-muted);
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+.renacon-careers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.15rem 1.25rem;
+}
+
+.renacon-careers-form .renacon-field {
+  min-width: 0;
+}
+
+.renacon-careers-form .renacon-field-span {
+  grid-column: 1 / -1;
+}
+
+.renacon-careers-form label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--renacon-careers-ink);
+}
+
+.renacon-careers-form input,
+.renacon-careers-form select,
+.renacon-careers-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--renacon-careers-line);
+  border-radius: 2px;
+  background: #fff;
+  color: var(--renacon-careers-ink);
+  font-size: 1rem;
+  line-height: 1.35;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.renacon-careers-form input:focus,
+.renacon-careers-form select:focus,
+.renacon-careers-form textarea:focus,
+.renacon-careers-form .renacon-field-focus {
+  border-color: var(--renacon-careers-green);
+  box-shadow: 0 0 0 3px rgba(0, 128, 55, 0.15);
+}
+
+.renacon-careers-form .renacon-field-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12);
+}
+
+.renacon-careers-form textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
+.renacon-careers-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.85rem 1.25rem;
+}
+
+.renacon-careers-submit {
+  appearance: none;
+  border: none;
+  padding: 0.85rem 1.4rem;
+  background: var(--renacon-careers-green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #123528;
+}
+
+.renacon-careers-submit:hover {
+  filter: brightness(1.06);
+}
+
+.renacon-careers-submit:disabled,
+.renacon-careers-submit.renacon-submit-busy {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.renacon-careers-hint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--renacon-careers-muted);
+}
+
+.renacon-careers-hint a {
+  color: var(--renacon-careers-green);
+  text-decoration: underline;
+}
+
+.renacon-careers-form .renacon-form-status {
+  flex-basis: 100%;
+  margin: 0.25rem 0 0;
+}
+
+@media (max-width: 640px) {
+  .renacon-careers-form-wrap {
+    margin: 1.25rem 0 2rem;
+    padding: 1.25rem 1rem 1.5rem;
+  }
+
+  .renacon-careers-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .renacon-careers-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .renacon-careers-submit {
+    width: 100%;
+    text-align: center;
+  }
 }

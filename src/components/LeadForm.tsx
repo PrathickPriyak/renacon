@@ -14,90 +14,6 @@ export function LeadForm({
 }) {
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [message, setMessage] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [verificationToken, setVerificationToken] = useState("");
-  const [demoChallenge, setDemoChallenge] = useState("");
-  const [otpBusy, setOtpBusy] = useState(false);
-
-  async function sendOtp() {
-    if (phone.replace(/\D/g, "").length < 8) {
-      setStatus("error");
-      setMessage("Enter a valid phone number before sending OTP.");
-      return;
-    }
-    setOtpBusy(true);
-    setMessage("");
-    try {
-      const res = await fetch("/api/otp/send/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone }),
-      });
-      const json = (await res.json()) as {
-        ok?: boolean;
-        error?: string;
-        devOtp?: string;
-        demoMode?: boolean;
-        demoChallenge?: string;
-        message?: string;
-      };
-      if (!res.ok || !json.ok) throw new Error(json.error || "Unable to send OTP");
-      setOtpSent(true);
-      setVerificationToken("");
-      setDemoChallenge(json.demoChallenge || "");
-      if (json.demoMode && json.devOtp) {
-        setOtp(json.devOtp);
-        setStatus("ok");
-        setMessage(
-          json.message ||
-            `Demo mode: OTP is ${json.devOtp}. Click Verify OTP to continue.`,
-        );
-      } else {
-        setOtp("");
-        setStatus("ok");
-        setMessage(json.message || "OTP sent to your mobile. Enter the SMS code and verify.");
-      }
-    } catch (err) {
-      setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Unable to send OTP");
-    } finally {
-      setOtpBusy(false);
-    }
-  }
-
-  async function verifyOtp() {
-    setOtpBusy(true);
-    try {
-      const res = await fetch("/api/otp/verify/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          phone,
-          otp,
-          demoChallenge: demoChallenge || undefined,
-        }),
-      });
-      const json = (await res.json()) as {
-        ok?: boolean;
-        error?: string;
-        verificationToken?: string;
-      };
-      if (!res.ok || !json.ok || !json.verificationToken) {
-        throw new Error(json.error || "OTP verification failed");
-      }
-      setVerificationToken(json.verificationToken);
-      setStatus("ok");
-      setMessage("Phone verified. You can download the brochure now.");
-    } catch (err) {
-      setVerificationToken("");
-      setStatus("error");
-      setMessage(err instanceof Error ? err.message : "OTP verification failed");
-    } finally {
-      setOtpBusy(false);
-    }
-  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -108,22 +24,14 @@ export function LeadForm({
     const endpoint =
       kind === "careers" ? "/api/careers" : kind === "brochure" ? "/api/brochure" : "/api/contact";
 
-    if (kind === "brochure" && !verificationToken) {
-      setStatus("error");
-      setMessage("Please verify OTP before downloading the brochure.");
-      return;
-    }
-
     try {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...data,
-          phone: kind === "brochure" ? phone : data.phone,
           kind,
           product,
-          verificationToken,
           productPath: typeof window !== "undefined" ? window.location.pathname : "",
         }),
       });
@@ -136,7 +44,7 @@ export function LeadForm({
         const downloadUrl =
           json.downloadUrl ||
           resolveBrochureUrl(typeof window !== "undefined" ? window.location.pathname : "");
-        setMessage("Verified. Your brochure download is starting…");
+        setMessage("Thank you. Your brochure download is starting…");
         const anchor = document.createElement("a");
         anchor.href = downloadUrl;
         anchor.target = "_blank";
@@ -145,9 +53,6 @@ export function LeadForm({
         document.body.appendChild(anchor);
         anchor.click();
         anchor.remove();
-        setVerificationToken("");
-        setOtpSent(false);
-        setOtp("");
       } else {
         setMessage(
           kind === "careers"
@@ -156,7 +61,6 @@ export function LeadForm({
         );
       }
       form.reset();
-      setPhone("");
     } catch (err) {
       setStatus("error");
       setMessage(err instanceof Error ? err.message : "Something went wrong");
@@ -165,7 +69,7 @@ export function LeadForm({
 
   if (kind === "brochure") {
     return (
-      <form onSubmit={onSubmit} className="renacon-brochure-otp-form renacon-lead-brochure">
+      <form onSubmit={onSubmit} className="renacon-brochure-form renacon-lead-brochure">
         <div className="renacon-field">
           <label>
             Name <span className="req">*</span>
@@ -176,51 +80,8 @@ export function LeadForm({
           <label>
             Phone Number <span className="req">*</span>
           </label>
-          <input
-            name="phone"
-            required
-            value={phone}
-            onChange={(e) => {
-              setPhone(e.target.value);
-              setVerificationToken("");
-            }}
-          />
+          <input name="phone" type="tel" required />
         </div>
-        <button type="button" className="renacon-send-otp" disabled={otpBusy} onClick={sendOtp}>
-          {otpBusy ? "Please wait…" : "Send OTP"}
-        </button>
-        {otpSent ? (
-          <div className="renacon-otp-controls">
-            {message.includes("Demo mode") || message.includes("OTP is") ? (
-              <div className="renacon-demo-otp-banner" role="status">
-                <strong>Demo OTP:</strong>{" "}
-                <code className="renacon-demo-otp-code">{otp || "———"}</code> — use this
-                code when SMS is not configured.
-              </div>
-            ) : null}
-            <div className="renacon-field">
-              <label>
-                Enter OTP <span className="req">*</span>
-              </label>
-              <input
-                className="renacon-otp-input"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                maxLength={6}
-                inputMode="numeric"
-                placeholder="6-digit OTP"
-              />
-            </div>
-            <button
-              type="button"
-              className="renacon-verify-otp"
-              disabled={otpBusy || Boolean(verificationToken)}
-              onClick={verifyOtp}
-            >
-              {verificationToken ? "Verified" : "Verify OTP"}
-            </button>
-          </div>
-        ) : null}
         <div className="renacon-field">
           <label>
             Email <span className="req">*</span>
@@ -239,7 +100,7 @@ export function LeadForm({
           {status === "loading" ? "Sending…" : "DOWNLOAD BROCHURE"}
         </button>
         {message ? (
-          <p className={`renacon-otp-status`} data-kind={status === "error" ? "error" : "ok"}>
+          <p className="renacon-form-status" data-kind={status === "error" ? "error" : "ok"}>
             {message}
           </p>
         ) : null}

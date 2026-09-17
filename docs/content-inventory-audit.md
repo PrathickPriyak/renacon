@@ -26,6 +26,7 @@ Audit result: **0 HTML pages without a route**, **0 orphan app routes**.
 
 ## Forms / OTP
 
-- Brochure OTP: `/api/otp/send/`, `/api/otp/verify/`
+- Brochure download: form submit → `/api/brochure/` (no OTP in UI)
+- OTP APIs retained unused: `/api/otp/send/`, `/api/otp/verify/`
 - Without MSG91/Twilio/Fast2SMS env vars → **demoMode** with `devOtp` in response
 - Documented in `env.sms.example`

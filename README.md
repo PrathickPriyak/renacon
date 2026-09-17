@@ -28,9 +28,11 @@ export VERCEL_TOKEN=…   # session only — never commit
 ./scripts/deploy-stable.sh
 ```
 
-## SMS / brochure OTP
+## Brochure downloads
 
-Copy `env.sms.example` → `.env.local` (and Vercel env) for real SMS. Without keys, OTP APIs run in **demoMode** and return `devOtp` for QA.
+Brochure forms collect name, phone, and email, then start the download directly — **no OTP step**.
+
+OTP API routes (`/api/otp/send`, `/api/otp/verify`) remain available but unused by the UI. Copy `env.sms.example` → `.env.local` only if you re-enable SMS verification later.
 
 ## Notes
 
