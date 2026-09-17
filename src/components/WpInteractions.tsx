@@ -142,6 +142,18 @@ export function WpInteractions() {
       });
     });
 
+    // Sticky header elevation after scroll (desktop + mobile)
+    const header =
+      document.getElementById("header") ||
+      document.querySelector<HTMLElement>(".ct-header");
+    const onScroll = () => {
+      if (!header) return;
+      header.classList.toggle("renacon-header-scrolled", window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    cleanups.push(() => window.removeEventListener("scroll", onScroll));
+
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);
@@ -150,6 +162,7 @@ export function WpInteractions() {
       cleanups.forEach((fn) => fn());
       document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";
+      header?.classList.remove("renacon-header-scrolled");
     };
   }, []);
 

@@ -19,8 +19,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Production URL
+
+Stable deploy: [https://renacon.vercel.app](https://renacon.vercel.app)
+
+```bash
+export VERCEL_TOKEN=…   # session only — never commit
+./scripts/deploy-stable.sh
+```
+
+## SMS / brochure OTP
+
+Copy `env.sms.example` → `.env.local` (and Vercel env) for real SMS. Without keys, OTP APIs run in **demoMode** and return `devOtp` for QA.
+
 ## Notes
 
 - Product photography and news images are loaded from the existing `renacon.in` media library.
 - WordPress admin credentials must **not** be stored in this repo. Rotate the password that was shared in chat.
 - After deploy, connect form submissions to email/CRM if you need inbox delivery.
+- Content inventory audit: `docs/content-inventory-audit.md`
