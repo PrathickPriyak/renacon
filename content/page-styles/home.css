@@ -21,3 +21,252 @@
 /* CACHE_BUST_MARKER renacon-live-force-20260917093135-x9k2 */
 
 /* CACHE_BUST_MARKER services-fix-1789637876 */
+
+/* ==========================================================================
+   PHASE 2 — homepage recreation vs https://renacon.in/
+   Scoped to #post-2306 / body:has(#post-2306). Do not restyle other pages.
+   Marker: homepage-recreation-202609171200
+   ========================================================================== */
+
+/* ---- In-flow sticky header (Phase 1 overlay + 100vh hero does not match .in) ---- */
+body:has(#post-2306) .renacon-site-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10050 !important;
+  background: #ffffff !important;
+}
+
+body:has(#post-2306) #header.ct-header {
+  position: relative !important;
+  background: #ffffff !important;
+}
+
+body:has(#post-2306) #header.ct-header [data-device="desktop"][data-transparent],
+body:has(#post-2306) #header.ct-header [data-device="mobile"][data-transparent] {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+}
+
+body:has(#post-2306) #main.site-main,
+body:has(#post-2306) .site-main {
+  padding-top: 0 !important;
+}
+
+body:has(#post-2306) .entry-content > .wp-block-stackable-columns.alignfull:first-child,
+body:has(#post-2306) .entry-content > .wp-block-getwid-section.alignfull:first-child,
+body:has(#post-2306) .entry-content > .alignfull:first-child,
+body:has(#post-2306) #post-2306 .entry-content > .stk-52d755f.alignfull,
+body:has(#post-2306) #post-2306 .entry-content > .stk-52d755f {
+  margin-top: 0 !important;
+}
+
+/* ---- Hero: 640px spacer (Getwid), video fills the section — not 100vh ---- */
+body:has(#post-2306) .wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
+body:has(#post-2306) .wp-block-getwid-section .wp-block-spacer[style*="640px"],
+#post-2306 .wp-block-getwid-section .wp-block-spacer[style*="640px"] {
+  min-height: 640px !important;
+  height: 640px !important;
+}
+
+body:has(#post-2306) .wp-block-getwid-section__background-video,
+#post-2306 .wp-block-getwid-section__background-video {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+@media (max-width: 768px) {
+  body:has(#post-2306) .wp-block-getwid-section__background-video,
+  body:has(#post-2306) .wp-block-getwid-section.alignfull .eplus-wrapper.wp-block-spacer[style*="640px"],
+  body:has(#post-2306) .wp-block-getwid-section .wp-block-spacer[style*="640px"],
+  #post-2306 .wp-block-getwid-section .wp-block-spacer[style*="640px"] {
+    min-height: 640px !important;
+    height: 640px !important;
+  }
+
+  body:has(#post-2306) .wp-block-getwid-section__background-video,
+  #post-2306 .wp-block-getwid-section__background-video {
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+}
+
+#post-2306 .getwid-background-video-controls {
+  display: flex !important;
+  z-index: 3 !important;
+}
+
+/* ---- WP custom font sizes (missing from mirrored global-styles; tokens force h1 to 30px) ---- */
+#post-2306 h1.has-45-font-size,
+#post-2306 .has-45-font-size {
+  font-size: 45px !important;
+  line-height: 1.5 !important;
+}
+
+#post-2306 h1.has-46-font-size,
+#post-2306 .has-46-font-size {
+  font-size: 46px !important;
+  line-height: 1.5 !important;
+}
+
+#post-2306 .has-20-font-size {
+  font-size: 20px !important;
+}
+
+#post-2306 h3,
+#post-2306 h3.wp-block-heading,
+#post-2306 h3.eplus-styles-uid-71fa75,
+#post-2306 h3.eplus-styles-uid-341832,
+#post-2306 h4,
+#post-2306 h4.wp-block-heading,
+#post-2306 .wp-block-getwid-image-box h3,
+#post-2306 .wp-block-getwid-image-box h4 {
+  font-size: 25px !important;
+  line-height: 1.5 !important;
+  text-transform: uppercase !important;
+  color: #000000 !important;
+}
+
+#post-2306 .eplus-styles-uid-17de4e {
+  font-size: 15px !important;
+  color: #000000 !important;
+}
+
+/* ---- Product / highlights containers: Blocksy 1290 / 90vw ---- */
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+  width: min(1290px, 90vw) !important;
+  max-width: min(1290px, 90vw) !important;
+  margin-inline: auto !important;
+}
+
+@media (max-width: 689.98px) {
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+    width: min(1290px, 88vw) !important;
+    max-width: min(1290px, 88vw) !important;
+  }
+
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+    flex-wrap: wrap !important;
+  }
+
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ---- Getwid hotspot: full-bleed black pulsing dots like .in (no plus icon) ---- */
+#post-2306 .wp-block-getwid-image-hotspot.alignfull,
+#post-2306 .wp-block-getwid-image-hotspot {
+  width: 100% !important;
+  max-width: none !important;
+  margin-inline: 0 !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot__wrapper {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot__image {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot,
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot.renacon-hotspot-dot {
+  width: auto !important;
+  height: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 8px !important;
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot.renacon-hotspot-dot:hover,
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot.renacon-hotspot-open {
+  background: #000000 !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot-icon {
+  font-size: 6px !important;
+  width: 6px !important;
+  height: 6px !important;
+  color: transparent !important;
+  overflow: hidden !important;
+}
+
+#post-2306 .wp-block-getwid-image-hotspot .wp-block-getwid-image-hotspot__dot-icon::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* ---- Project cards: restore Stackable hover scale(1.1) killed by global transform:none ---- */
+@media (hover: hover) and (pointer: fine) {
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-2e8bd88 .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent.stk--is-hovered .stk-2e8bd88 .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-3257fdb .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent.stk--is-hovered .stk-3257fdb .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-24b91e2 .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent.stk--is-hovered .stk-24b91e2 .stk-img-wrapper img {
+    transform: scale(1.1) !important;
+    transition: transform 0.3s ease !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-2e8bd88 .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-3257fdb .stk-img-wrapper img,
+  body.renacon-mirror #post-2306 .stk-hover-parent:hover .stk-24b91e2 .stk-img-wrapper img {
+    transform: none !important;
+  }
+}
+
+/* ---- Side tools: outline stack like .in (homepage only) ---- */
+body:has(#post-2306) .renacon-side-menu {
+  gap: 0;
+}
+
+body:has(#post-2306) .renacon-side-item {
+  background: #ffffff !important;
+  color: #039440 !important;
+  border: 1px solid #039440 !important;
+  border-right: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body:has(#post-2306) .renacon-side-item.whatsapp,
+body:has(#post-2306) .renacon-side-item.enquire,
+body:has(#post-2306) .renacon-side-item.calculator {
+  background: #ffffff !important;
+  color: #039440 !important;
+}
+
+body:has(#post-2306) .renacon-side-item:hover,
+body:has(#post-2306) .renacon-side-item:focus-visible,
+body:has(#post-2306) .renacon-side-item.whatsapp:hover,
+body:has(#post-2306) .renacon-side-item.enquire:hover,
+body:has(#post-2306) .renacon-side-item.calculator:hover {
+  background: #039440 !important;
+  color: #ffffff !important;
+}
+
+/* CACHE_BUST_MARKER homepage-recreation-202609171200 */
