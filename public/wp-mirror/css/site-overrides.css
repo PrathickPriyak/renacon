@@ -558,36 +558,52 @@ html.ct-panel-open #offcanvas * {
   transform: none !important;
 }
 
-/* Leave room for fixed right-side menu so captions/images aren't cropped */
+/* Gallery pages: do NOT pad/clip entry-content — asymmetric padding +
+   overflow-x:clip + 100vw breakout was cutting PROJECTS/MEDIA banner titles
+   off the left edge (same class of bug as offcanvas label clipping). */
 #post-1192 .entry-content,
 #post-1067 .entry-content,
 .page-id-1192 .entry-content,
 .page-id-1067 .entry-content,
 .renacon-projects-gallery-ix .entry-content,
 .renacon-media-ix .entry-content {
-  padding-inline: 1rem;
-  padding-right: max(1.25rem, 3.75rem);
+  padding-inline: 0;
+  padding-right: 0;
   box-sizing: border-box;
-  overflow-x: clip;
+  overflow-x: visible;
+  overflow: visible;
 }
 
+/* Heroes: edge-to-edge via 100% of full-width parent — avoid 100vw/scrollbar math */
 #post-1192 .entry-content > .wp-block-image.alignfull,
 #post-1067 .entry-content > .wp-block-image.alignfull,
 .renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull,
-.renacon-media-ix .entry-content > .wp-block-image.alignfull {
-  width: 100vw !important;
-  max-width: 100vw !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
+.renacon-media-ix .entry-content > .wp-block-image.alignfull,
+body.renacon-page-projects-2 .entry-content > .wp-block-image.alignfull,
+body.renacon-page-media .entry-content > .wp-block-image.alignfull {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
   padding: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  overflow: visible !important;
 }
 
 #post-1192 .entry-content > .wp-block-image.alignfull img,
-#post-1067 .entry-content > .wp-block-image.alignfull img {
+#post-1067 .entry-content > .wp-block-image.alignfull img,
+.renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull img,
+.renacon-media-ix .entry-content > .wp-block-image.alignfull img,
+body.renacon-page-projects-2 .entry-content > .wp-block-image.alignfull img,
+body.renacon-page-media .entry-content > .wp-block-image.alignfull img {
   width: 100% !important;
-  max-width: none !important;
+  max-width: 100% !important;
   height: auto !important;
   display: block;
+  object-fit: contain;
+  object-position: left center;
 }
 
 #post-1192 .simply-gallery-amp,
@@ -614,7 +630,8 @@ main.site-main .simply-gallery-amp.alignwide {
   margin-left: auto !important;
   margin-right: auto !important;
   margin-block: 0.75rem 1.75rem;
-  padding-inline: 0 !important;
+  /* Side-menu clearance lives on content rails, not on entry-content heroes */
+  padding-inline: 1rem max(1rem, 3.75rem) !important;
   box-sizing: border-box !important;
   float: none !important;
   left: auto !important;
@@ -633,11 +650,96 @@ body.renacon-page-projects-2 .entry-content > h1.wp-block-heading,
 body.renacon-page-media h1.wp-block-heading,
 body.renacon-page-media h2.wp-block-heading {
   margin-block: 1.5rem 0.75rem;
-  padding-inline: 0.25rem;
+  padding-inline: 1rem max(1rem, 3.75rem);
   max-width: 1180px;
   width: 100%;
   margin-inline: auto;
   text-align: center;
+  box-sizing: border-box;
+}
+
+/* Media VIDEOS — gutters between YouTube cards + no stuck title chrome */
+#post-1067 .stk-block-columns > .stk-row,
+.renacon-media-ix .stk-block-columns > .stk-row,
+body.renacon-page-media .stk-block-columns > .stk-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1.25rem 1.35rem !important;
+  column-gap: 1.35rem !important;
+  row-gap: 1.5rem !important;
+  --stk-column-gap: 1.35rem !important;
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 1rem max(1rem, 3.75rem);
+}
+
+#post-1067 .stk-block-columns .stk-block-column,
+.renacon-media-ix .stk-block-columns .stk-block-column,
+body.renacon-page-media .stk-block-columns .stk-block-column {
+  min-width: 0 !important;
+  flex: 1 1 calc(33.333% - 1rem) !important;
+  max-width: 100% !important;
+}
+
+#post-1067 .wp-block-embed,
+#post-1067 .wp-block-embed__wrapper,
+.renacon-media-ix .wp-block-embed,
+.renacon-media-ix .wp-block-embed__wrapper {
+  position: relative;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+/* Opacity-only reveal on embeds — transforms break iframe chrome / leave title ghosts */
+.renacon-media-ix .wp-block-embed.renacon-reveal,
+body.renacon-page-media .wp-block-embed.renacon-reveal {
+  transform: none !important;
+}
+
+.renacon-media-ix .wp-block-embed.renacon-reveal.renacon-reveal-in,
+body.renacon-page-media .wp-block-embed.renacon-reveal.renacon-reveal-in {
+  transform: none !important;
+}
+
+/* Hide orphan Tippy / hotspot title chrome on media (no hotspots here) */
+body.renacon-page-media .tippy-popper,
+body.renacon-page-media .tippy-tooltip,
+body.renacon-page-media .renacon-hotspot-tip,
+.renacon-media-ix .tippy-popper,
+.renacon-media-ix .tippy-tooltip {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#post-1067 .wp-element-caption,
+.renacon-media-ix .wp-element-caption {
+  position: static !important;
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  color: #1a1e21;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+@media (max-width: 899px) {
+  #post-1067 .stk-block-columns .stk-block-column,
+  .renacon-media-ix .stk-block-columns .stk-block-column,
+  body.renacon-page-media .stk-block-columns .stk-block-column {
+    flex: 1 1 calc(50% - 0.75rem) !important;
+  }
+}
+
+@media (max-width: 599px) {
+  #post-1067 .stk-block-columns .stk-block-column,
+  .renacon-media-ix .stk-block-columns .stk-block-column,
+  body.renacon-page-media .stk-block-columns .stk-block-column {
+    flex: 1 1 100% !important;
+  }
 }
 
 .simply-gallery-amp .sgb-gallery .sgb-item,
@@ -786,9 +888,13 @@ body.renacon-page-media h2.wp-block-heading {
     height: 140px !important;
   }
 
-  #post-1192 .entry-content,
-  #post-1067 .entry-content {
-    padding-right: 1rem;
+  #post-1192 .simply-gallery-amp,
+  #post-1067 .simply-gallery-amp,
+  #post-1067 .stk-block-columns > .stk-row,
+  #post-1192 h1.wp-block-heading,
+  #post-1067 h1.wp-block-heading,
+  #post-1067 h2.wp-block-heading {
+    padding-inline: 1rem !important;
   }
 
   .sgb-item-caption,

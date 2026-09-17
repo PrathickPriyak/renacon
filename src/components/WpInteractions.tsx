@@ -757,6 +757,7 @@ export function WpInteractions() {
       hydrateWpImages(document.querySelector("main.site-main") || root);
       normalizeSimplyGalleries(document.querySelector("main.site-main") || root);
       clearGalleryMotionLocks(root);
+      sanitizeEmbedTitles(document.querySelector("main.site-main") || root);
       cleanups.push(initQubelyTabs(root));
       initPageInteractions(
         root,
