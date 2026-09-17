@@ -1,4 +1,4 @@
-/* renacon-match-mobile-gallery-sep2026 — offcanvas + highlights/products + gallery grid */
+/* renacon-mobile-nav-active-v1 — offcanvas toggles + active nav colors */
 
 :root {
   --renacon-header-pad-y: 1.35rem;
@@ -209,6 +209,15 @@ html.ct-panel-open #offcanvas * {
   pointer-events: auto !important;
 }
 
+/* Hamburger always interactive on touch devices */
+#header .ct-header-trigger[data-toggle-panel="#offcanvas"] {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 10060;
+}
+
 .renacon-mirror #offcanvas.is-open a,
 .renacon-mirror #offcanvas.active a {
   color: #fff;
@@ -298,13 +307,19 @@ html.ct-panel-open #offcanvas * {
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 4px;
   color: #fff;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 44px;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  z-index: 2;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile .ct-icon {
