@@ -20,11 +20,11 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
           dangerouslySetInnerHTML={{ __html: pageCss }}
         />
       ) : null}
-      {/* Belt-and-suspenders: global product stylesheet for all product routes */}
-      {product ? (
+      {/* External page CSS with aggressive cache-bust (home + products) */}
+      {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-product-images-sep2026`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-live-force-20260917093135-x9k2`}
         />
       ) : null}
       <WpMain html={html} />
