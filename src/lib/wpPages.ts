@@ -40,5 +40,6 @@ export const WP_STYLESHEETS = [
   "/wp-mirror/css/inline-wp-block-image-inline-css.css",
   "/wp-mirror/css/inline-wp-block-columns-inline-css.css",
   "/wp-mirror/css/inline-wp-block-paragraph-inline-css.css",
+  "/wp-mirror/css/inline-anon-4434.css",
   "/wp-mirror/css/site-overrides.css",
 ];

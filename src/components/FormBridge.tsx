@@ -8,6 +8,8 @@ type OtpSendResponse = {
   error?: string;
   demoMode?: boolean;
   devOtp?: string;
+  demoChallenge?: string;
+  message?: string;
 };
 
 type OtpVerifyResponse = {
@@ -123,7 +125,17 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
   tokenInput.name = "renacon_verification_token";
   tokenInput.className = "renacon-verification-token";
 
-  otpWrap.append(sendBtn, otpLabel, otpInput, verifyBtn, tokenInput);
+  const challengeInput = document.createElement("input");
+  challengeInput.type = "hidden";
+  challengeInput.name = "renacon_demo_challenge";
+  challengeInput.className = "renacon-demo-challenge";
+
+  const demoBanner = document.createElement("div");
+  demoBanner.className = "renacon-demo-otp-banner";
+  demoBanner.hidden = true;
+  demoBanner.setAttribute("role", "status");
+
+  otpWrap.append(sendBtn, otpLabel, otpInput, verifyBtn, tokenInput, challengeInput, demoBanner);
   phoneContainer.insertAdjacentElement("afterend", otpWrap);
 
   // Style submit button text
@@ -161,20 +173,26 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
       verified = false;
       tokenInput.value = "";
       form.dataset.otpVerified = "0";
+      challengeInput.value = json.demoChallenge || "";
 
       if (json.demoMode && json.devOtp) {
+        otpInput.value = json.devOtp;
+        demoBanner.hidden = false;
+        demoBanner.innerHTML = `<strong>Demo OTP:</strong> <code class="renacon-demo-otp-code">${json.devOtp}</code> — enter this code (SMS keys not configured).`;
         setStatus(
           form,
-          `Demo mode only: OTP is ${json.devOtp}. Configure MSG91/Twilio for real SMS.`,
-          "info",
+          json.message || `Demo mode: your OTP is ${json.devOtp}. Click Verify OTP to continue.`,
+          "ok",
         );
       } else {
+        demoBanner.hidden = true;
+        demoBanner.textContent = "";
+        otpInput.value = "";
         setStatus(
           form,
           "OTP sent to your mobile number. Enter the SMS code and click Verify OTP.",
           "ok",
         );
-        otpInput.value = "";
       }
       otpInput.focus();
     } catch (err) {
@@ -199,7 +217,11 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
       const res = await fetch("/api/otp/verify/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp }),
+        body: JSON.stringify({
+          phone,
+          otp,
+          demoChallenge: challengeInput.value || undefined,
+        }),
       });
       const json = (await res.json()) as OtpVerifyResponse;
       if (!res.ok || !json.ok || !json.verificationToken) {
@@ -227,6 +249,9 @@ function enhanceBrochureForm(form: HTMLFormElement): void {
     verified = false;
     form.dataset.otpVerified = "0";
     tokenInput.value = "";
+    challengeInput.value = "";
+    demoBanner.hidden = true;
+    demoBanner.textContent = "";
     otpInput.disabled = false;
     otpInput.value = "";
     verifyBtn.hidden = false;

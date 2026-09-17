@@ -1196,3 +1196,265 @@ button[type="submit"]:hover {
   }
 }
 
+/* ---------- Homepage: highlights strip (3 brand claims) ---------- */
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
+  max-width: min(1100px, calc(100% - 2rem)) !important;
+  margin-inline: auto !important;
+  margin-block: 0.35rem 0.75rem !important;
+  padding: 1.15rem 1.35rem !important;
+  gap: 1.25rem 1.75rem !important;
+  align-items: stretch !important;
+  background: linear-gradient(180deg, #f6faf7 0%, #eef5f0 100%);
+  border-top: 1px solid #d7e6dc;
+  border-bottom: 1px solid #d7e6dc;
+  box-sizing: border-box;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  gap: 0.4rem;
+  flex: 1 1 0 !important;
+  min-width: 0;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-spacer {
+  display: none !important;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image {
+  margin: 0 !important;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img {
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: contain;
+  display: block;
+  margin-inline: auto;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p {
+  margin: 0 !important;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  color: #1a1e21;
+}
+
+.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p strong {
+  font-weight: 700;
+  color: #123528;
+}
+
+@media (max-width: 689px) {
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
+    padding: 1rem 0.85rem !important;
+    gap: 1.1rem !important;
+  }
+
+  .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ---------- Homepage: OUR SERVICES (restore Blocksy/Stackable layout) ---------- */
+.entry-content > .stk-ee3acf8,
+.stk-ee3acf8 {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+  box-sizing: border-box;
+}
+
+.stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+.stk-ee3acf8-column {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: stretch !important;
+  gap: 0;
+  width: 100%;
+}
+
+.stk-e01c6a5 {
+  position: relative !important;
+  overflow: hidden !important;
+  background-color: #0b2e1f !important;
+  background-image: url(https://renacon.in/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  background-size: cover !important;
+  padding: 3.5rem 2.5rem !important;
+  box-sizing: border-box;
+}
+
+.stk-e01c6a5:before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background-color: #000 !important;
+  opacity: 0.55 !important;
+  z-index: 1 !important;
+  pointer-events: none;
+}
+
+.stk-e01c6a5 > .stk-column-wrapper,
+.stk-e01c6a5 .stk-e01c6a5-inner-blocks {
+  position: relative;
+  z-index: 2;
+}
+
+.stk-e01c6a5 .has-palette-color-8-color,
+.stk-e01c6a5 .has-text-color,
+.stk-e01c6a5 h1,
+.stk-e01c6a5 p {
+  color: #ffffff !important;
+}
+
+.stk-e01c6a5 .wp-block-image img {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.stk-df90d5b {
+  background-color: rgba(204, 204, 204, 0.2) !important;
+  padding: 1.5rem 1.25rem !important;
+  box-sizing: border-box;
+  align-self: stretch !important;
+}
+
+.stk-df90d5b .stk-57da9d5-column,
+.stk-df90d5b .stk-473efc4-column {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 1.25rem 1.5rem !important;
+}
+
+.stk-43533bb,
+.stk-f0223a1,
+.stk-e3c56a3,
+.stk-92754a5 {
+  background-color: #ffffff !important;
+  border-radius: 5px !important;
+  padding: 1.15rem 1rem !important;
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 1000px) {
+  .stk-e01c6a5 {
+    flex: 1 1 30% !important;
+    max-width: 32% !important;
+    min-height: 420px;
+  }
+
+  .stk-df90d5b {
+    flex: 1 1 68% !important;
+    max-width: 68% !important;
+    padding-left: 1.5rem !important;
+  }
+
+  .stk-b162ce9,
+  .stk-0458ac2,
+  .stk-2c3e48d,
+  .stk-7623a40 {
+    flex: 1 1 calc(50% - 0.75rem) !important;
+    max-width: calc(50% - 0.75rem) !important;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  .stk-e01c6a5,
+  .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+  }
+
+  .stk-e01c6a5 {
+    min-height: 220px;
+    padding: 2.5rem 1.5rem !important;
+  }
+}
+
+/* ---------- Section icons above centered headings (OUR PROJECTS, etc.) ---------- */
+.entry-content > .wp-block-image.aligncenter {
+  display: table !important;
+  float: none !important;
+  width: auto !important;
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-bottom: 0.35rem !important;
+  text-align: center !important;
+}
+
+.entry-content > .wp-block-image.aligncenter img {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Keep icon + title + subtitle as one centered unit */
+.entry-content > .wp-block-image.aligncenter:has(+ .wp-block-heading.has-text-align-center),
+.entry-content > .wp-block-heading.has-text-align-center:has(+ p.has-text-align-center) {
+  text-align: center;
+}
+
+.entry-content > .wp-block-heading.has-text-align-center {
+  margin-top: 0.25rem;
+}
+
+/* ---------- Header: logo / nav / social spacing polish ---------- */
+.ct-header [data-row*="middle"] .ct-container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem 1.25rem;
+  width: min(1290px, calc(100% - 2rem));
+}
+
+.ct-header [data-id="logo"] {
+  flex: 0 0 auto;
+}
+
+.ct-header [data-id="menu"] {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.ct-header [data-id="socials"] {
+  flex: 0 0 auto;
+  margin-inline-start: 0.25rem;
+}
+
+.ct-header .ct-social-box {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.2rem;
+  flex-wrap: nowrap;
+}
+
+.ct-header .menu-container > .menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.15rem 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 999px) {
+  .ct-header [data-row*="middle"] .ct-container {
+    justify-content: space-between !important;
+  }
+
+  .ct-header [data-id="menu"] {
+    display: none;
+  }
+}
+

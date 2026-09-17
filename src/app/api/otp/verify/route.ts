@@ -18,11 +18,12 @@ export async function POST(request: Request) {
   const record = body as Record<string, unknown>;
   const phone = asString(record.phone);
   const otp = asString(record.otp);
+  const demoChallenge = asString(record.demoChallenge) || undefined;
   if (!phone || !otp) {
     return NextResponse.json({ ok: false, error: "Phone and OTP are required" }, { status: 400 });
   }
 
-  const result = await verifyOtp(phone, otp);
+  const result = await verifyOtp(phone, otp, demoChallenge);
   if (!result.ok) {
     return NextResponse.json(result, { status: 400 });
   }

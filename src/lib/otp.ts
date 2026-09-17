@@ -1,4 +1,4 @@
-import { createHash, randomBytes, randomInt } from "node:crypto";
+import { createHash, createHmac, randomBytes, randomInt, timingSafeEqual } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
@@ -6,6 +6,72 @@ import { tmpdir } from "node:os";
 const OTP_TTL_MS = 5 * 60 * 1000;
 const TOKEN_TTL_MS = 30 * 60 * 1000;
 const STORE_PATH = join(tmpdir(), "renacon-otp", "store.json");
+
+/** Stable secret for demo-mode OTP challenges (serverless-safe; not for real SMS). */
+function demoHmacSecret(): string {
+  return (
+    process.env.OTP_DEMO_SECRET ||
+    process.env.OTP_HMAC_SECRET ||
+    "renacon-brochure-demo-otp-v1"
+  );
+}
+
+function signDemoChallenge(phone: string, otp: string, expiresAt: number): string {
+  const payload = `${phone}.${otp}.${expiresAt}`;
+  const sig = createHmac("sha256", demoHmacSecret()).update(payload).digest("hex");
+  return Buffer.from(`${payload}.${sig}`).toString("base64url");
+}
+
+function readDemoChallenge(
+  token: string,
+): { phone: string; otp: string; expiresAt: number } | null {
+  try {
+    const raw = Buffer.from(token, "base64url").toString("utf8");
+    const parts = raw.split(".");
+    if (parts.length !== 4) return null;
+    const [phone, otp, expStr, sig] = parts;
+    if (!phone || !otp || !expStr || !sig) return null;
+    const expiresAt = Number(expStr);
+    if (!Number.isFinite(expiresAt)) return null;
+    const payload = `${phone}.${otp}.${expiresAt}`;
+    const expected = createHmac("sha256", demoHmacSecret()).update(payload).digest("hex");
+    const a = Buffer.from(sig);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
+    return { phone, otp, expiresAt };
+  } catch {
+    return null;
+  }
+}
+
+function signVerificationToken(phone: string, expiresAt: number): string {
+  const nonce = randomBytes(8).toString("hex");
+  const payload = `v1.${phone}.${expiresAt}.${nonce}`;
+  const sig = createHmac("sha256", demoHmacSecret()).update(payload).digest("hex");
+  return Buffer.from(`${payload}.${sig}`).toString("base64url");
+}
+
+function readSignedVerificationToken(
+  token: string,
+): { phone: string; expiresAt: number; nonce: string } | null {
+  try {
+    const raw = Buffer.from(token, "base64url").toString("utf8");
+    const parts = raw.split(".");
+    if (parts.length !== 5 || parts[0] !== "v1") return null;
+    const [, phone, expStr, nonce, sig] = parts;
+    if (!phone || !expStr || !nonce || !sig) return null;
+    const expiresAt = Number(expStr);
+    if (!Number.isFinite(expiresAt)) return null;
+    const payload = `v1.${phone}.${expiresAt}.${nonce}`;
+    const expected = createHmac("sha256", demoHmacSecret()).update(payload).digest("hex");
+    const a = Buffer.from(sig);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
+    return { phone, expiresAt, nonce };
+  } catch {
+    return null;
+  }
+}
 
 type OtpRecord = {
   otp: string;
@@ -118,6 +184,8 @@ export type SendOtpResult = {
   message: string;
   /** Only returned in demo mode — never in production SMS mode */
   devOtp?: string;
+  /** Signed challenge so verify works across serverless instances in demo mode */
+  demoChallenge?: string;
 };
 
 async function sendViaMsg91(phone: string, otp: string): Promise<void> {
@@ -296,11 +364,12 @@ export async function sendOtp(
     }
   }
 
+  const expiresAt = Date.now() + OTP_TTL_MS;
   store.otps[phone] = {
     otp,
     phone,
     name: name?.trim() || undefined,
-    expiresAt: Date.now() + OTP_TTL_MS,
+    expiresAt,
     attempts: 0,
     provider,
   };
@@ -319,14 +388,20 @@ export async function sendOtp(
     provider: production ? provider : "demo",
     message: production
       ? "OTP sent to your mobile number. Enter the code you received."
-      : "Demo mode: SMS provider not configured.",
-    ...(production ? {} : { devOtp: otp }),
+      : `Demo mode: use OTP ${otp} (SMS not configured).`,
+    ...(production
+      ? {}
+      : {
+          devOtp: otp,
+          demoChallenge: signDemoChallenge(phone, otp, expiresAt),
+        }),
   };
 }
 
 export async function verifyOtp(
   phoneRaw: string,
   otpRaw: string,
+  demoChallenge?: string,
 ): Promise<{ ok: true; verificationToken: string; expiresInSec: number } | { ok: false; error: string }> {
   if (!isValidPhone(phoneRaw)) {
     return { ok: false, error: "Enter a valid phone number" };
@@ -340,27 +415,54 @@ export async function verifyOtp(
   const store = await loadStore();
   prune(store);
   const record = store.otps[phone];
-  if (!record) {
-    return { ok: false, error: "OTP expired or not found. Please send OTP again." };
+
+  let matched = false;
+
+  if (record) {
+    if (record.expiresAt <= Date.now()) {
+      delete store.otps[phone];
+      await saveStore(store);
+      return { ok: false, error: "OTP expired. Please send OTP again." };
+    }
+    record.attempts += 1;
+    if (record.attempts > 5) {
+      delete store.otps[phone];
+      await saveStore(store);
+      return { ok: false, error: "Too many attempts. Please send OTP again." };
+    }
+    if (record.otp === otp) {
+      matched = true;
+      delete store.otps[phone];
+    } else {
+      await saveStore(store);
+      // Fall through to demo challenge before failing — serverless may have lost the store
+    }
   }
-  if (record.expiresAt <= Date.now()) {
+
+  if (!matched && demoChallenge && !isProductionSms()) {
+    const challenge = readDemoChallenge(demoChallenge);
+    if (!challenge) {
+      return { ok: false, error: "OTP session expired. Please send OTP again." };
+    }
+    if (challenge.expiresAt <= Date.now()) {
+      return { ok: false, error: "OTP expired. Please send OTP again." };
+    }
+    if (challenge.phone !== phone || challenge.otp !== otp) {
+      return { ok: false, error: "Invalid OTP. Check the code and try again." };
+    }
+    matched = true;
     delete store.otps[phone];
-    await saveStore(store);
-    return { ok: false, error: "OTP expired. Please send OTP again." };
   }
-  record.attempts += 1;
-  if (record.attempts > 5) {
-    delete store.otps[phone];
-    await saveStore(store);
-    return { ok: false, error: "Too many attempts. Please send OTP again." };
-  }
-  if (record.otp !== otp) {
-    await saveStore(store);
+
+  if (!matched) {
+    if (!record) {
+      return { ok: false, error: "OTP expired or not found. Please send OTP again." };
+    }
     return { ok: false, error: "Invalid OTP. Check the SMS and try again." };
   }
 
-  delete store.otps[phone];
-  const verificationToken = randomBytes(24).toString("hex");
+  const verificationToken = signVerificationToken(phone, Date.now() + TOKEN_TTL_MS);
+  // Best-effort store for one-time consume when same instance is warm
   store.tokens[hashToken(verificationToken)] = {
     phone,
     expiresAt: Date.now() + TOKEN_TTL_MS,
@@ -382,6 +484,29 @@ export async function consumeVerificationToken(
   if (!token) {
     return { ok: false, error: "Phone verification required. Please verify OTP first." };
   }
+
+  const signed = readSignedVerificationToken(token);
+  if (signed) {
+    if (signed.expiresAt <= Date.now()) {
+      return { ok: false, error: "Verification expired. Please verify OTP again." };
+    }
+    if (phoneRaw) {
+      const phone = normalizePhone(phoneRaw);
+      if (phone && phone !== signed.phone) {
+        return { ok: false, error: "Verified phone does not match the form phone number." };
+      }
+    }
+    // Best-effort one-time invalidation when store is available
+    const store = await loadStore();
+    prune(store);
+    const key = hashToken(token);
+    if (store.tokens[key]) {
+      delete store.tokens[key];
+      await saveStore(store);
+    }
+    return { ok: true, phone: signed.phone };
+  }
+
   const store = await loadStore();
   prune(store);
   const key = hashToken(token);

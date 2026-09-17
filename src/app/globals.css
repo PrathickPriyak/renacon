@@ -133,3 +133,27 @@ body.renacon-mirror {
 .renacon-otp-status[data-kind="ok"] {
   color: #0b6b34;
 }
+
+.renacon-demo-otp-banner {
+  display: block;
+  margin: 0.5rem 0 0.85rem;
+  padding: 0.7rem 0.85rem;
+  background: #eef8f1;
+  border: 1px solid #b7dfc4;
+  border-left: 4px solid #008037;
+  color: #123528;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.renacon-demo-otp-code {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  margin-inline: 0.15rem;
+  background: #fff;
+  border: 1px dashed #008037;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #008037;
+}

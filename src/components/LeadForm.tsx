@@ -18,6 +18,7 @@ export function LeadForm({
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [verificationToken, setVerificationToken] = useState("");
+  const [demoChallenge, setDemoChallenge] = useState("");
   const [otpBusy, setOtpBusy] = useState(false);
 
   async function sendOtp() {
@@ -39,16 +40,22 @@ export function LeadForm({
         error?: string;
         devOtp?: string;
         demoMode?: boolean;
+        demoChallenge?: string;
         message?: string;
       };
       if (!res.ok || !json.ok) throw new Error(json.error || "Unable to send OTP");
       setOtpSent(true);
       setVerificationToken("");
-      setOtp("");
+      setDemoChallenge(json.demoChallenge || "");
       if (json.demoMode && json.devOtp) {
+        setOtp(json.devOtp);
         setStatus("ok");
-        setMessage(`Demo mode only: OTP is ${json.devOtp}. Add SMS keys for real SMS.`);
+        setMessage(
+          json.message ||
+            `Demo mode: OTP is ${json.devOtp}. Click Verify OTP to continue.`,
+        );
       } else {
+        setOtp("");
         setStatus("ok");
         setMessage(json.message || "OTP sent to your mobile. Enter the SMS code and verify.");
       }
@@ -66,7 +73,11 @@ export function LeadForm({
       const res = await fetch("/api/otp/verify/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, otp }),
+        body: JSON.stringify({
+          phone,
+          otp,
+          demoChallenge: demoChallenge || undefined,
+        }),
       });
       const json = (await res.json()) as {
         ok?: boolean;
@@ -180,6 +191,13 @@ export function LeadForm({
         </button>
         {otpSent ? (
           <div className="renacon-otp-controls">
+            {message.includes("Demo mode") || message.includes("OTP is") ? (
+              <div className="renacon-demo-otp-banner" role="status">
+                <strong>Demo OTP:</strong>{" "}
+                <code className="renacon-demo-otp-code">{otp || "———"}</code> — use this
+                code when SMS is not configured.
+              </div>
+            ) : null}
             <div className="renacon-field">
               <label>
                 Enter OTP <span className="req">*</span>
