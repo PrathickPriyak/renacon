@@ -3,6 +3,9 @@
 /* source:id="editorplus-generated-styles-header" */
 .eplus-styles-uid-eb50a4{color:#000000}
 .eplus-styles-uid-3d5b16{grid-template-columns:repeat(1,1fr);list-style-type:disc}
+@media (max-width:981px){.eplus-styles-uid-3d5b16{list-style-type:}}
+@media (max-width:600px){.eplus-styles-uid-3d5b16{list-style-type:}}
+.eplus-styles-uid-3d5b16:hover{list-style-type:}
 .eplus-styles-uid-17de4e{font-size:15px;color:#000000}
 
 /* source:class="stk-block-styles" */
@@ -38,7 +41,7 @@
   .stk-bff5fe4{flex:1 1 calc(47.6% - var(--stk-column-gap,0px) * 1 / 2 ) !important}
 }
 @media screen and (min-width:690px) and (max-width:999px){
-  .stk-72ab4ab,.stk-bff5fe4{flex:0 1 100% !important;max-width:100% !important}
+  .stk-72ab4ab,.stk-bff5fe4{flex:0 1 calc(100% - var(--stk-column-gap,0px) * 0 / 1 ) !important}
 }
 
 /* Restore Blocksy/WP flow that global site-overrides flattened (Why Renacon only) */
@@ -106,6 +109,7 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   width:100%;
   height:auto;
   max-height:none;
+  aspect-ratio:2560 / 747;
   object-fit:fill;
   transform:none !important;
 }
@@ -220,7 +224,10 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   margin-top:1.5em !important;
   margin-bottom:calc(0.3em + 10px) !important;
   padding-bottom:0 !important;
-  color:#000000;
+}
+#post-5659 .entry-content > h2.wp-block-heading .stk-highlight{
+  color:#000000 !important;
+  background-image:none !important;
 }
 #post-5659 .entry-content > h2.wp-block-heading::after{
   content:none !important;
@@ -241,7 +248,21 @@ body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
   }
 }
 
-/* About-style in-flow white header: this page has no overlay hero */
+/* In-flow sticky header — this page has no overlay hero (same as About Us) */
+body.renacon-page-why-renacon .renacon-site-header,
+body:has(#post-5659) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+
+body.renacon-page-why-renacon #header.ct-header,
+body:has(#post-5659) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+
 body.renacon-page-why-renacon #main.site-main,
 body.renacon-page-why-renacon .site-main,
 body:has(#post-5659) #main.site-main,
@@ -253,12 +274,18 @@ body:has(#post-5659) .site-main{
   body.renacon-page-why-renacon #header.ct-header [data-device="desktop"][data-transparent],
   body:has(#post-5659) #header.ct-header [data-device="desktop"][data-transparent]{
     position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
   }
 }
 @media (max-width:999.98px){
   body.renacon-page-why-renacon #header.ct-header [data-device="mobile"][data-transparent],
   body:has(#post-5659) #header.ct-header [data-device="mobile"][data-transparent]{
     position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
   }
 }
 
@@ -292,4 +319,40 @@ body:has(#post-5659) #header.ct-header .menu-container > .menu > li > a{
   gap:0 !important;
 }
 
-/* CACHE_BUST_MARKER why-renacon-exact-202609171305 */
+/* Kill ix-v2 scroll-reveal / hero crop / list cards if JS still tags nodes */
+#post-5659.renacon-ix-v2 .renacon-reveal,
+#post-5659.renacon-ix-v2 .renacon-hero-piece,
+#post-5659.renacon-ix-v2 .ep-custom-list > li,
+#post-5659.renacon-ix-v2 .ep-custom-list > li.renacon-why-benefit{
+  opacity:1 !important;
+  transform:none !important;
+  filter:none !important;
+  transition:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  padding:0 !important;
+}
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child img{
+  transform:none !important;
+  max-height:none !important;
+  object-fit:fill !important;
+}
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child::after,
+#post-5659.renacon-ix-v2 h1.wp-block-heading::after,
+#post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading::after,
+#post-5659.renacon-ix-v2 .ep-custom-list > li::before{
+  content:none !important;
+  display:none !important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  #post-5659 *,
+  #post-5659 *::before,
+  #post-5659 *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+
+/* CACHE_BUST_MARKER why-renacon-recreation-202609171430 */
