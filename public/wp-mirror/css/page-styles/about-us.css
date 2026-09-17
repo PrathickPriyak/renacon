@@ -1,0 +1,575 @@
+/* Mirrored from https://renacon.in/about-us/ — Editor Plus + Stackable page styles */
+/* source:id="editorplus-generated-styles-header" */
+.eplus-styles-uid-17de4e{font-size:15px;color:#000000}
+.eplus-styles-uid-f3364f{font-size:15px}
+.eplus-styles-uid-eb50a4{color:#000000}
+.eplus-styles-uid-2d6e38{grid-template-columns:repeat(1,1fr);list-style-type:disc}
+@media (max-width:981px){.eplus-styles-uid-2d6e38{list-style-type:}}
+@media (max-width:600px){.eplus-styles-uid-2d6e38{list-style-type:}}
+.eplus-styles-uid-2d6e38:hover{list-style-type:}
+.eplus-styles-uid-315554{grid-template-columns:repeat(1,1fr);list-style-type:disc}
+@media (max-width:981px){.eplus-styles-uid-315554{list-style-type:}}
+@media (max-width:600px){.eplus-styles-uid-315554{list-style-type:}}
+.eplus-styles-uid-315554:hover{list-style-type:}
+.eplus-styles-uid-1fd7b4{grid-template-columns:repeat(1,1fr);list-style-type:disc}
+@media (max-width:981px){.eplus-styles-uid-1fd7b4{list-style-type:}}
+@media (max-width:600px){.eplus-styles-uid-1fd7b4{list-style-type:}}
+.eplus-styles-uid-1fd7b4:hover{list-style-type:}
+
+/* source:class="stk-block-styles" on post-4487 */
+.stk-7f8fab2 .stk-block-heading__text{font-size:83px !important;color:#01953f !important;}
+.stk-830c817{border-radius:8px !important;overflow:hidden !important;box-shadow:0px 10px 30px rgba(0, 0, 0, 0.05) !important;margin-bottom:0px !important;}
+.stk-53d1045{background-color:var(--theme-palette-color-8, #ffffff) !important;background-image:url(https://testbed1.cosmican.com/wp-content/uploads/2022/11/cyber-security-digital-data-protection-concept.jpg) !important;background-position:center center !important;background-repeat:no-repeat !important;background-size:cover !important;box-shadow:0 5px 5px 0 #123f5209 !important;}
+.stk-53d1045:before{background-color:var(--theme-palette-color-8, #ffffff) !important;opacity:1 !important;}
+.stk-dde9403,.stk-71ec564,.stk-5296f63,.stk-b20440e,.stk-2724035,.stk-c43faaf,.stk-fd64d78{margin-bottom:0px !important;}
+:is(.stk-cc2942b, .stk-d62a5bf, .stk-79444b8, .stk-474fd8e, .stk-2724035, .stk-c43faaf, .stk-fd64d78) .stk-block-heading__text{text-transform:uppercase !important;}
+:is(.stk-97d2c48, .stk-d3588aa, .stk-3a77725, .stk-3eebd72) .stk--svg-wrapper .stk--inner-svg svg:last-child,
+:is(.stk-97d2c48, .stk-d3588aa, .stk-3a77725, .stk-3eebd72) .stk--svg-wrapper .stk--inner-svg svg:last-child :is(g, path, rect, polygon, ellipse){fill:var(--theme-palette-color-8, #ffffff) !important;}
+:is(.stk-97d2c48, .stk-d3588aa, .stk-3a77725, .stk-3eebd72) .stk--svg-wrapper .stk--inner-svg{background-color:#00984a !important;padding:10px !important;}
+.stk-9ca72ed-container,.stk-b9aef73-container,.stk-ad91ac3-container{background-color:#f4f4f4 !important;border-radius:10px !important;overflow:hidden !important;}
+.stk-9ca72ed-container:before,.stk-b9aef73-container:before,.stk-ad91ac3-container:before{background-color:#f4f4f4 !important;}
+.stk-a3eaa53,.stk-2abfe31,.stk-71c78d2{margin-bottom:20px !important;}
+:is(.stk-a3eaa53, .stk-2abfe31, .stk-71c78d2) .stk--svg-wrapper .stk--inner-svg svg:last-child{height:90px !important;width:90px !important;}
+@media screen and (max-width:999px){
+  .stk-7f8fab2 .stk-block-heading__text{font-size:50px !important;}
+}
+
+/* ==========================================================================
+   PHASE 3 — About Us recreation vs https://renacon.in/about-us/
+   Scoped to #post-4487 / body:has(#post-4487). Do not restyle other pages.
+   Marker: about-us-recreation-202609171250
+   ========================================================================== */
+
+body.renacon-page-about-us,
+body:has(#post-4487){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+
+#post-4487{
+  color:rgb(72,75,77);
+  background-color:transparent;
+  font-family:Roboto,sans-serif;
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+
+/* In-flow sticky header — this page has no overlay hero */
+body.renacon-page-about-us .renacon-site-header,
+body:has(#post-4487) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+
+body.renacon-page-about-us #header.ct-header,
+body:has(#post-4487) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+
+body.renacon-page-about-us #main.site-main,
+body.renacon-page-about-us .site-main,
+body:has(#post-4487) #main.site-main,
+body:has(#post-4487) .site-main{
+  padding-top:0 !important;
+}
+
+@media (min-width:1000px){
+  body.renacon-page-about-us #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-4487) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-about-us #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-4487) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+
+body.renacon-page-about-us #header.ct-header [data-row*="middle"],
+body:has(#post-4487) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+
+body.renacon-page-about-us #header.ct-header .ct-container,
+body:has(#post-4487) #header.ct-header .ct-container{
+  width:min(1290px,90vw) !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+body.renacon-page-about-us #header.ct-header .menu-container > .menu,
+body:has(#post-4487) #header.ct-header .menu-container > .menu{
+  align-items:stretch !important;
+  height:100%;
+}
+body.renacon-page-about-us #header.ct-header .menu-container > .menu > li,
+body:has(#post-4487) #header.ct-header .menu-container > .menu > li{
+  height:100%;
+  display:flex;
+  align-items:stretch;
+}
+body.renacon-page-about-us #header.ct-header .menu-container > .menu > li > a,
+body:has(#post-4487) #header.ct-header .menu-container > .menu > li > a{
+  height:100% !important;
+  display:flex !important;
+  gap:0 !important;
+}
+
+/* Blocksy 1290 / 90vw content column */
+#post-4487 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
+#post-4487 .entry-content > .wp-block-columns:not(.alignfull),
+#post-4487 .entry-content > .stk-block-columns:not(.alignfull),
+#post-4487 .entry-content > .wp-block-media-text,
+#post-4487 .entry-content > .wp-block-ugb-container,
+#post-4487 .entry-content > .ugb-container,
+#post-4487 .entry-content > p,
+#post-4487 .entry-content > h1,
+#post-4487 .entry-content > h2,
+#post-4487 .entry-content > details{
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+
+#post-4487 .entry-content > .wp-block-spacer{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+@media screen and (max-width:689px){
+  #post-4487 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
+  #post-4487 .entry-content > .stk-block-columns:not(.alignfull),
+  #post-4487 .entry-content > .wp-block-media-text,
+  #post-4487 .entry-content > .ugb-container,
+  #post-4487 .entry-content > p,
+  #post-4487 .entry-content > h1,
+  #post-4487 .entry-content > h2,
+  #post-4487 .entry-content > details{
+    width:calc(100% - 47px) !important;
+  }
+}
+
+/* ---- Hero media-text: ABOUT US + founder photo ---- */
+#post-4487 .entry-content > .wp-block-media-text{
+  display:grid !important;
+  grid-template-columns:auto 43% !important;
+  direction:ltr;
+  margin-top:0 !important;
+  margin-bottom:1.5em !important;
+}
+#post-4487 .wp-block-media-text.has-media-on-the-right > .wp-block-media-text__content{
+  grid-column:1;
+  grid-row:1;
+  align-self:center;
+  padding:0 8% !important;
+  word-break:break-word;
+}
+#post-4487 .wp-block-media-text.has-media-on-the-right > .wp-block-media-text__media{
+  grid-column:2;
+  grid-row:1;
+  align-self:center;
+  margin:0 !important;
+  overflow:visible !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+#post-4487 .wp-block-media-text__media img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-width:unset;
+  vertical-align:middle;
+  object-fit:fill;
+  transform:none !important;
+  filter:none !important;
+  border-radius:0 !important;
+}
+@media (max-width:600px){
+  #post-4487 .entry-content > .wp-block-media-text.is-stacked-on-mobile{
+    grid-template-columns:100% !important;
+  }
+  #post-4487 .wp-block-media-text.is-stacked-on-mobile > .wp-block-media-text__media{
+    grid-column:1;
+    grid-row:1;
+  }
+  #post-4487 .wp-block-media-text.is-stacked-on-mobile > .wp-block-media-text__content{
+    grid-column:1;
+    grid-row:2;
+    padding:8% 0 0 !important;
+  }
+}
+
+/* ABOUT US — live Stackable 83px / #01953f (50px ≤999px). Kill ix-v2 underline. */
+#post-4487 .stk-7f8fab2 .stk-block-heading__text,
+#post-4487.renacon-ix-v2 .stk-7f8fab2 .stk-block-heading__text,
+#post-4487.renacon-ix-v2 .wp-block-media-text .stk-block-heading__text{
+  font-size:83px !important;
+  line-height:1.5 !important;
+  font-weight:700 !important;
+  color:#01953f !important;
+  text-transform:none !important;
+  letter-spacing:normal !important;
+  margin:0 !important;
+  display:block !important;
+  max-width:none !important;
+  position:static;
+}
+#post-4487 .stk-7f8fab2 .stk-block-heading__text::after,
+#post-4487.renacon-ix-v2 .stk-block-heading__text::after,
+#post-4487.renacon-ix-v2.renacon-hero-in .stk-block-heading__text::after{
+  content:none !important;
+  display:none !important;
+  width:0 !important;
+  height:0 !important;
+  margin:0 !important;
+  background:none !important;
+}
+@media screen and (max-width:999px){
+  #post-4487 .stk-7f8fab2 .stk-block-heading__text,
+  #post-4487.renacon-ix-v2 .stk-7f8fab2 .stk-block-heading__text{
+    font-size:50px !important;
+  }
+}
+
+/* Body copy */
+#post-4487 .entry-content > p,
+#post-4487 .eplus-styles-uid-17de4e,
+#post-4487 .eplus-styles-uid-f3364f{
+  font-size:15px !important;
+  line-height:24.75px !important;
+  color:#000000 !important;
+  margin-top:0 !important;
+  margin-bottom:1.5em !important;
+}
+#post-4487 .stk-highlight{
+  background-image:none !important;
+}
+
+#post-4487 .entry-content > h2.wp-block-heading{
+  font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.313), 18px) !important;
+  line-height:1.5 !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  margin-top:1.5em !important;
+  margin-bottom:calc(0.3em + 10px) !important;
+  padding-bottom:0 !important;
+}
+#post-4487 .entry-content > h2.wp-block-heading::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* VISION 2030 — Blocksy h1 30px, centered */
+#post-4487 .entry-content > h1.wp-block-heading{
+  font-size:30px !important;
+  line-height:45px !important;
+  font-weight:700 !important;
+  color:#1a1e21 !important;
+  text-transform:none !important;
+  letter-spacing:normal !important;
+  text-align:center !important;
+  margin-top:0 !important;
+  margin-bottom:19px !important;
+  display:block;
+}
+#post-4487 .entry-content > h1.wp-block-heading::after{
+  content:none !important;
+  display:none !important;
+}
+
+/* Founder Getwid image-box — photo on the right, 50% */
+#post-4487 .wp-block-getwid-image-box.has-image-right{
+  display:flex !important;
+  flex-direction:row !important;
+  flex-wrap:nowrap !important;
+  align-items:stretch !important;
+  justify-content:flex-start !important;
+  gap:0 !important;
+}
+#post-4487 .has-image-right .wp-block-getwid-image-box__image-container{
+  order:1;
+  margin:0 0 0 20px;
+  max-width:50%;
+  flex:1 0 auto;
+  overflow:visible !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+#post-4487 .wp-block-getwid-image-box__image-wrapper,
+#post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper{
+  overflow:visible !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+}
+#post-4487 .wp-block-getwid-image-box__image,
+#post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image{
+  display:block;
+  width:100%;
+  height:auto;
+  transform:none !important;
+  filter:none !important;
+}
+#post-4487 .wp-block-getwid-image-box__content{
+  order:0;
+  flex:0 1 100%;
+  align-self:center;
+}
+#post-4487 .wp-block-getwid-image-box h3{
+  font-size:20px !important;
+  line-height:1.5 !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  text-align:left !important;
+  margin-top:0 !important;
+  margin-bottom:0.5em !important;
+}
+#post-4487 .wp-block-getwid-image-box p{
+  font-size:15px !important;
+  line-height:24.75px !important;
+  color:#000000 !important;
+  text-align:left !important;
+}
+@media screen and (max-width:767px){
+  #post-4487 .wp-block-getwid-image-box.has-image-right{
+    flex-direction:column !important;
+  }
+  #post-4487 .has-image-right .wp-block-getwid-image-box__image-container{
+    order:0;
+    max-width:100%;
+    width:100%;
+    margin:0 0 20px 0;
+  }
+}
+
+/* Founder card — live stk-830c817 shadow, no ix-v2 hover lift */
+#post-4487 #erp .stk-block-column,
+#post-4487.renacon-ix-v2 #erp .stk-block-column{
+  transform:none !important;
+  background-color:transparent !important;
+}
+#post-4487.renacon-ix-v2 #erp .stk-block-column:hover,
+#post-4487.renacon-ix-v2 #erp .stk-block-column:active{
+  transform:none !important;
+  box-shadow:none !important;
+  background-color:transparent !important;
+}
+
+#post-4487 .wp-block-pullquote,
+#post-4487.renacon-ix-v2 .wp-block-pullquote{
+  border:none !important;
+  border-inline-start:none !important;
+  box-shadow:none !important;
+  transform:none !important;
+  padding:70px !important;
+  text-align:center;
+  margin:0 !important;
+  overflow-wrap:break-word;
+}
+#post-4487.renacon-ix-v2 .wp-block-pullquote:hover{
+  border-inline-start-color:transparent !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+#post-4487 .wp-block-pullquote blockquote{
+  margin:0;
+}
+#post-4487 .wp-block-pullquote p{
+  color:inherit;
+  margin-top:0;
+}
+#post-4487 .wp-block-pullquote cite{
+  display:block;
+  color:inherit;
+}
+
+/* Accordions — Stackable default + green chevron, no ix-v2 cards */
+#post-4487 .wp-block-stackable-accordion,
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion{
+  border-radius:0 !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  animation:none !important;
+}
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion:hover,
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion[open]{
+  box-shadow:none !important;
+  border-color:transparent !important;
+  background:transparent !important;
+}
+#post-4487 .wp-block-stackable-accordion summary,
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary{
+  cursor:pointer;
+  list-style:none;
+  background:transparent !important;
+  min-height:0 !important;
+  padding-block:0 !important;
+}
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion summary:hover{
+  background-color:transparent !important;
+}
+#post-4487 .wp-block-stackable-accordion summary::-webkit-details-marker{
+  display:none;
+}
+#post-4487 .wp-block-stackable-accordion .stk-block-heading__text{
+  font-size:20px !important;
+  line-height:1.5 !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  text-transform:uppercase !important;
+}
+#post-4487 .wp-block-stackable-accordion .stk-block-icon,
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-icon{
+  color:#00984a !important;
+  transform:none !important;
+}
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion[open] .stk-block-icon{
+  color:#00984a !important;
+  transform:none !important;
+}
+#post-4487 .wp-block-stackable-accordion .stk-block-accordion__content,
+#post-4487.renacon-ix-v2 .wp-block-stackable-accordion .stk-block-accordion__content{
+  animation:none !important;
+}
+#post-4487 .wp-block-stackable-accordion ul{
+  list-style-type:disc !important;
+  list-style-position:outside !important;
+  padding-left:2.5em !important;
+  margin:0 0 1.5em !important;
+  font-size:15px !important;
+  color:#000000 !important;
+}
+#post-4487 .wp-block-stackable-accordion li{
+  list-style:disc outside !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  transform:none !important;
+  line-height:1.65;
+}
+
+/* Vision / Mission / We Serve — UGB + Stackable gray cards */
+#post-4487 .ugb-a10dec0{
+  display:flex !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+#post-4487 .ugb-a10dec0 .ugb-inner-block,
+#post-4487 .ugb-a10dec0 .ugb-block-content,
+#post-4487 .ugb-a10dec0 .ugb-container__side{
+  display:flex !important;
+  width:100%;
+}
+#post-4487 .ugb-a10dec0 .stk-b827d7a{
+  margin-bottom:0 !important;
+}
+#post-4487 .ugb-a10dec0 .ugb-container__wrapper,
+#post-4487 .ugb-a10dec0-wrapper{
+  display:flex !important;
+  background-color:#ffffff !important;
+  border-radius:12px !important;
+  box-shadow:0 5px 5px 0 rgba(18,63,82,0.035), 0 0 0 1px rgba(176,181,193,0.2) !important;
+  padding-top:60px !important;
+  padding-right:35px !important;
+  padding-bottom:60px !important;
+  padding-left:35px !important;
+  box-sizing:border-box;
+}
+@media screen and (max-width:999px){
+  #post-4487 .ugb-a10dec0 .ugb-container__wrapper,
+  #post-4487 .ugb-a10dec0-wrapper{
+    padding-top:40px !important;
+    padding-right:23.333px !important;
+    padding-bottom:40px !important;
+    padding-left:23.333px !important;
+  }
+}
+#post-4487 .ugb-a10dec0 .stk-block-column,
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column{
+  transform:none !important;
+  box-shadow:none !important;
+  background-color:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  padding:0 !important;
+}
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:hover,
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:active{
+  transform:none !important;
+  box-shadow:none !important;
+  background-color:transparent !important;
+  border-color:transparent !important;
+}
+#post-4487 .ugb-a10dec0 .stk-block-icon,
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-icon{
+  transform:none !important;
+  color:#167278 !important;
+}
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-block-column:hover .stk-block-icon{
+  transform:none !important;
+  color:#167278 !important;
+}
+#post-4487 .ugb-a10dec0 h4.stk-block-heading__text{
+  font-size:20px !important;
+  line-height:1.5 !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  text-transform:uppercase !important;
+  text-align:center !important;
+  margin-top:0 !important;
+  margin-bottom:0.5em !important;
+}
+#post-4487 .ugb-a10dec0 p.has-text-align-center{
+  font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
+  line-height:1.65 !important;
+  color:#000000 !important;
+  text-align:center !important;
+  display:block !important;
+  position:static !important;
+}
+#post-4487.renacon-ix-v2 .stk-ad91ac3 p.has-text-align-center::after,
+#post-4487.renacon-ix-v2 .renacon-reveal-in .stk-ad91ac3 p.has-text-align-center::after,
+#post-4487.renacon-ix-v2 .stk-ad91ac3.renacon-reveal-in p.has-text-align-center::after,
+#post-4487.renacon-ix-v2 .ugb-a10dec0 .stk-ad91ac3:hover p.has-text-align-center::after{
+  content:none !important;
+  display:none !important;
+  width:0 !important;
+}
+
+/* Kill ix-v2 scroll-reveal / hero stagger if JS still tags nodes */
+#post-4487.renacon-ix-v2 .renacon-reveal,
+#post-4487.renacon-ix-v2 .renacon-hero-piece{
+  opacity:1 !important;
+  transform:none !important;
+  filter:none !important;
+  transition:none !important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  #post-4487 *,
+  #post-4487 *::before,
+  #post-4487 *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+
+/* CACHE_BUST_MARKER about-us-recreation-202609171305 */

@@ -557,34 +557,10 @@ export function WpInteractions() {
     // or apply scroll-reveal chrome. Hotspots still init below.
     // (wrapHomeBands / renacon-home-ix intentionally unused for visual parity)
 
-    // About Us — obvious scroll reveals + hero stagger
+    // About Us — exact renacon.in parity: in-flow header, no reveal chrome
     const aboutRoot = document.getElementById("post-4487");
     if (aboutRoot) {
-      initPageInteractions(
-        aboutRoot,
-        {
-          revealSelector: [
-            ".wp-block-media-text",
-            ".entry-content > p",
-            ".entry-content > h2",
-            ".entry-content > h1",
-            ".wp-block-stackable-columns",
-            ".wp-block-getwid-image-box",
-            ".wp-block-pullquote",
-            ".wp-block-stackable-accordion",
-            ".ugb-container",
-            ".stk-block-column.stk-9ca72ed",
-            ".stk-block-column.stk-b9aef73",
-            ".stk-block-column.stk-ad91ac3",
-          ].join(", "),
-          heroSelectors: [
-            ".wp-block-media-text .stk-block-heading",
-            ".wp-block-media-text__media",
-            ".entry-content > p:first-of-type",
-          ],
-        },
-        cleanups,
-      );
+      document.body.classList.add("renacon-page-about-us");
     }
 
     // Why Renacon — exact renacon.in parity: do not wrap scroll-reveal chrome

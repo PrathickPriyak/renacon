@@ -24,7 +24,7 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-homepage-recreation-202609171255`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-about-us-recreation-202609171305`}
         />
       ) : null}
       {/* Hard cache-bust site overrides on calculator + product pages */}
