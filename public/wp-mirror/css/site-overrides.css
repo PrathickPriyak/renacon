@@ -2014,6 +2014,21 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
   }
 }
 
+/* Center service icons like renacon.in (aligncenter table + auto margins) */
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter {
+  display: table !important;
+  float: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter img {
+  display: inline !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 /* ---------- Section icons above centered headings (OUR PROJECTS, etc.) ---------- */
 .entry-content > .wp-block-image.aligncenter,
 .renacon-home-band > .wp-block-image.aligncenter,
@@ -4185,10 +4200,10 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
-/* CACHE_BUST_MARKER renacon-live-force-20260917093135-x9k2 */
+/* CACHE_BUST_MARKER renacon-services-exact-202609170935-v5 */
 
 /* ==========================================================================
-   LIVE FORCE WINNERS (renacon-live-force-20260917093135-x9k2)
+   LIVE FORCE WINNERS (renacon-services-exact-202609170935-v5)
    Last in cascade — OUR SERVICES side-by-side + highlights 64px gray box.
    Must beat any earlier site-overrides / renacon-all leftovers.
    ========================================================================== */
@@ -4281,4 +4296,25 @@ body.renacon-page-media .sgb-item img {
   border-style: solid !important;
   border-width: 1px !important;
   border-color: #178a47 !important;
+  box-shadow: none !important;
+}
+
+/* Center yellow service icons (match renacon.in aligncenter) */
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter {
+  display: table !important;
+  float: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+
+#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter img {
+  display: inline !important;
+  filter: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+#post-2306 .stk-e01c6a5 .wp-block-image img {
+  filter: none !important;
 }
