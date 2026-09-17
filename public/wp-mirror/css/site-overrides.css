@@ -456,24 +456,46 @@ html.ct-panel-open footer {
 #post-1192 .entry-content,
 #post-1067 .entry-content,
 .page-id-1192 .entry-content,
-.page-id-1067 .entry-content {
+.page-id-1067 .entry-content,
+.renacon-projects-gallery-ix .entry-content,
+.renacon-media-ix .entry-content {
   padding-inline: 1rem;
-  padding-right: max(1rem, calc(44px + 1.25rem));
+  padding-right: max(1.25rem, 3.75rem);
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
-#post-1192 .entry-content > .alignfull,
-#post-1067 .entry-content > .alignfull {
-  padding-right: 0;
+#post-1192 .entry-content > .wp-block-image.alignfull,
+#post-1067 .entry-content > .wp-block-image.alignfull,
+.renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull,
+.renacon-media-ix .entry-content > .wp-block-image.alignfull {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  padding: 0 !important;
+}
+
+#post-1192 .entry-content > .wp-block-image.alignfull img,
+#post-1067 .entry-content > .wp-block-image.alignfull img {
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  display: block;
 }
 
 #post-1192 .simply-gallery-amp,
 #post-1067 .simply-gallery-amp,
 #post-1192 .pgc_sgb_slider,
-#post-1067 .pgc_sgb_slider {
-  max-width: min(1290px, 100%);
-  margin-inline: auto;
+#post-1067 .pgc_sgb_slider,
+#post-1192 .simply-gallery-amp.alignwide,
+#post-1067 .simply-gallery-amp.alignwide {
+  max-width: min(1180px, 100%) !important;
+  width: 100% !important;
+  margin-inline: auto !important;
   margin-block: 0.75rem 1.75rem;
+  padding-inline: 0 !important;
+  box-sizing: border-box !important;
 }
 
 #post-1192 h1.wp-block-heading,
@@ -481,6 +503,8 @@ html.ct-panel-open footer {
 #post-1067 h2.wp-block-heading {
   margin-block: 1.5rem 0.75rem;
   padding-inline: 0.25rem;
+  max-width: min(1180px, 100%);
+  margin-inline: auto;
 }
 
 .simply-gallery-amp .sgb-gallery .sgb-item,
@@ -494,11 +518,14 @@ html.ct-panel-open footer {
   top: auto !important;
   width: auto !important;
   min-width: 0 !important;
+  height: auto !important;
 }
 
 .sgb-item > a {
-  display: block;
+  display: block !important;
   line-height: 0;
+  height: auto !important;
+  flex: 0 0 auto !important;
 }
 
 .sgb-item img {
@@ -518,8 +545,24 @@ html.ct-panel-open footer {
   font-size: 0.875rem;
   line-height: 1.35;
   margin-top: 0.45rem;
-  min-height: 2.6em;
+  min-height: 3.2em;
   color: #1a1e21;
+  background: transparent !important;
+  padding: 0.15rem 0.1rem 0 !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+/* Homepage projects: don't leave image boxes invisible/washed if observer lags */
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-block-image-box.renacon-reveal {
+  opacity: 1;
+  transform: none;
+}
+#post-2306.renacon-home-ix .renacon-home-band--projects .stk-img {
+  opacity: 1 !important;
+  filter: none !important;
 }
 
 /* Qubely tabs (media page) */
