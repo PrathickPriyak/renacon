@@ -59,7 +59,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid phone number" }, { status: 400 });
   }
 
-  // Brochure downloads no longer require OTP; optional token is ignored if present.
   await persistSubmission(kind, {
     ...record,
     name,

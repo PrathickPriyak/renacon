@@ -20,6 +20,18 @@ function absolutizeWpUrl(url: string): string {
   return trimmed;
 }
 
+/** Derive a short accessible label from a media URL when alt is missing. */
+function altFromMediaUrl(url: string): string {
+  try {
+    const path = new URL(url, WP_ORIGIN).pathname;
+    const base = path.split("/").pop() || "";
+    const name = base.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim();
+    return name ? name.replace(/\b\w/g, (c) => c.toUpperCase()) : "Renacon image";
+  } catch {
+    return "Renacon image";
+  }
+}
+
 /** Fix relative / lazy WordPress media so product images actually paint. */
 function hydrateWpImages(root: ParentNode): void {
   root.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
@@ -35,13 +47,22 @@ function hydrateWpImages(root: ParentNode): void {
       if (abs !== current) img.setAttribute("src", abs);
     }
 
-    const srcset = img.getAttribute("srcset");
+    const srcset =
+      img.getAttribute("srcset") ||
+      img.getAttribute("data-srcset") ||
+      img.getAttribute("data-lazy-srcset");
     if (srcset) {
       const next = srcset.replace(
         /(^|,\s*)(\/wp-content\/|\/wp-includes\/)/g,
         (_m, sep: string, path: string) => `${sep}${WP_ORIGIN}${path}`,
       );
-      if (next !== srcset) img.setAttribute("srcset", next);
+      img.setAttribute("srcset", next);
+    }
+
+    // A11y: mirrored WP markup often omits alt — fill from filename when absent
+    if (!img.hasAttribute("alt") || img.getAttribute("alt") === null) {
+      const src = img.getAttribute("src") || lazy || "";
+      img.setAttribute("alt", altFromMediaUrl(absolutizeWpUrl(src)));
     }
   });
 

@@ -151,7 +151,7 @@ function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
   let status = form.querySelector<HTMLParagraphElement>(".renacon-form-status, .renacon-otp-status");
   if (!status) {
     status = document.createElement("p");
-    status.className = "renacon-form-status renacon-otp-status";
+    status.className = "renacon-form-status";
     status.setAttribute("aria-live", "polite");
     const submitContainer =
       form.querySelector(
@@ -167,6 +167,8 @@ function ensureStatus(form: HTMLFormElement): HTMLParagraphElement {
     } else {
       form.appendChild(status);
     }
+  } else {
+    status.className = "renacon-form-status";
   }
   return status;
 }
