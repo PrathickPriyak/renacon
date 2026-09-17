@@ -839,3 +839,169 @@ button[type="submit"]:hover {
     max-width: 100%;
   }
 }
+
+/* ---------- Match live Renacon chrome ---------- */
+.ct-header .menu-container > .menu > li > a {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+}
+
+.ct-header .site-logo-container img {
+  max-height: 56px;
+  width: auto;
+}
+
+/* Green square social icons like live site */
+.ct-header .ct-social-box a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-inline: 2px;
+  border-radius: 4px;
+  background: #1b7a3d !important;
+  color: #fff !important;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.ct-header .ct-social-box a:hover {
+  background: #0f5a2b !important;
+  transform: translateY(-1px);
+}
+
+.ct-header .ct-social-box svg,
+.ct-header .ct-social-box .ct-icon-container {
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+.ct-header .ct-social-box svg path,
+.ct-header .ct-social-box svg circle {
+  fill: currentColor !important;
+}
+
+/* Hero video full-bleed like live homepage */
+.wp-block-getwid-section__background-video-wrapper,
+.wp-block-getwid-section__background-video {
+  width: 100%;
+}
+
+.wp-block-getwid-section__background-video {
+  display: block;
+  width: 100%;
+  min-height: min(70vh, 640px);
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .wp-block-getwid-section__background-video {
+    min-height: 42vh;
+  }
+
+  .eplus-wrapper.wp-block-spacer[style*="640px"] {
+    height: 42vh !important;
+  }
+}
+
+/* Right-side quick menu (Enquire / WhatsApp / Calculator) */
+.renacon-side-menu {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  z-index: 10040;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.renacon-side-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-decoration: none;
+  color: #fff;
+  background: #1b7a3d;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  transition: background 0.2s ease, padding 0.2s ease;
+}
+
+.renacon-side-item .renacon-side-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+}
+
+.renacon-side-item .renacon-side-label {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding-right: 0;
+  transition: max-width 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+}
+
+.renacon-side-item:hover .renacon-side-label,
+.renacon-side-item:focus-visible .renacon-side-label {
+  max-width: 140px;
+  opacity: 1;
+  padding-right: 0.85rem;
+}
+
+.renacon-side-item.whatsapp {
+  background: #25d366;
+}
+
+.renacon-side-item.whatsapp:hover {
+  background: #1ebe57;
+}
+
+.renacon-side-item.enquire:hover,
+.renacon-side-item.calculator:hover {
+  background: #0f5a2b;
+}
+
+/* Circular WhatsApp FAB (bottom-right), as on live site */
+.renacon-whatsapp-fab {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 10045;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.45);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.renacon-whatsapp-fab:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 28px rgba(37, 211, 102, 0.55);
+}
+
+@media (max-width: 768px) {
+  .renacon-side-menu {
+    display: none;
+  }
+
+  .renacon-whatsapp-fab {
+    right: 0.85rem;
+    bottom: 0.85rem;
+    width: 54px;
+    height: 54px;
+  }
+}
+

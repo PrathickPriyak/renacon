@@ -1,3 +1,4 @@
+import { FloatingSideMenu } from "@/components/FloatingSideMenu";
 import { FormBridge } from "@/components/FormBridge";
 import { WpInteractions } from "@/components/WpInteractions";
 import { readPartial } from "@/lib/wpPages";
@@ -13,6 +14,7 @@ export function WpShell({ children }: { children: React.ReactNode }) {
       <div dangerouslySetInnerHTML={{ __html: header }} />
       {children}
       <div dangerouslySetInnerHTML={{ __html: footer }} />
+      <FloatingSideMenu />
       <WpInteractions />
       <FormBridge />
     </div>
