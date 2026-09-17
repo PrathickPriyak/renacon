@@ -37,7 +37,9 @@ OTP API routes (`/api/otp/send`, `/api/otp/verify`) remain available but unused 
 
 ## Notes
 
+- **Home page** is an exact visual mirror of the pre-spam [renacon.in](https://renacon.in/) Blocksy/Editor Plus/Stackable homepage (`content/pages-html/home.html` + `content/page-styles/home.css`). Atmosphere-band redesigns are disabled; casino SEO spam from the compromised WP site is not included.
 - Product photography and news images are loaded from the existing `renacon.in` media library.
 - WordPress admin credentials must **not** be stored in this repo. Rotate the password that was shared in chat.
 - After deploy, connect form submissions to email/CRM if you need inbox delivery.
 - Content inventory audit: `docs/content-inventory-audit.md`
+- Mobile offcanvas toggles and active nav colors are handled in `WpInteractions` (not WordPress JS).
