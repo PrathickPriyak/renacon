@@ -1,0 +1,253 @@
+/* Renacon global design tokens — mirrored from https://renacon.in/ Blocksy type-1.
+   Page-specific CSS may override these; do not use these to restyle unique sections. */
+
+:root,
+body.renacon-mirror {
+  /* Type */
+  --renacon-font: Roboto, Sans-Serif;
+  --renacon-fs-body: 18px;
+  --renacon-lh-body: 1.65;
+  --renacon-ls-body: 0em;
+  --renacon-fs-nav: 13px;
+  --renacon-lh-nav: 1.3;
+  --renacon-fw-nav: 500;
+  --renacon-fs-h1: 30px;
+  --renacon-lh-h1: 1.5;
+  --renacon-fs-h2: 20px;
+  --renacon-lh-h2: 1.5;
+  --renacon-fs-h3: 20px;
+  --renacon-lh-h3: 1.5;
+  --renacon-fs-label: 15px;
+  --renacon-fs-button: 14px;
+  --renacon-fw-button: 700;
+  --renacon-fs-footer: 16px;
+  --renacon-fs-copyright: 15px;
+
+  /* Palette (Blocksy customizer) */
+  --renacon-color-primary: #039440;
+  --renacon-color-primary-hover: #ffcb2d;
+  --renacon-color-secondary: #163e7c;
+  --renacon-color-accent: #f4c709;
+  --renacon-color-accent-hover: #fecb00;
+  --renacon-color-background: #fefefe;
+  --renacon-color-bg: #fefefe;
+  --renacon-color-bg-dark: #1a1e21;
+  --renacon-color-bg-footer: #f4f4f4;
+  --renacon-color-bg-copyright: #ffcb2d;
+  --renacon-color-text: #484b4d;
+  --renacon-color-muted: #6b6e70;
+  --renacon-color-text-muted: #6b6e70;
+  --renacon-color-heading: #1a1e21;
+  --renacon-color-border: #d8d2cb;
+  --renacon-color-button: #039440;
+  --renacon-color-button-text: #ffffff;
+  --renacon-color-button-hover: #ffcb2d;
+  --renacon-color-button-hover-text: #1a1e21;
+  --renacon-color-nav: #163e7c;
+  --renacon-color-nav-active: #163e7c;
+  --renacon-color-offcanvas-current: #04a354;
+
+  /* Layout */
+  --renacon-container: min(1290px, 90vw);
+  --renacon-container-max: 1290px;
+  --renacon-container-edge: 90vw;
+  --renacon-section-pad-y: 60px;
+  --renacon-section-pad-x: 35px;
+  --renacon-container-pad-mobile: 23.5px;
+  --theme-normal-container-max-width: 1290px;
+  --theme-container-edge-spacing: 90vw;
+  --theme-content-vertical-spacing: 60px;
+
+  /* Header */
+  --header-height: 100px;
+  --header-sticky-height: 100px;
+  --renacon-header-min-h: 100px;
+  --renacon-logo-max: 90px;
+  --renacon-offcanvas-width: 500px;
+  --has-transparent-header: 0;
+}
+
+@media (max-width: 999.98px) {
+  :root,
+  body.renacon-mirror {
+    --header-height: 70px;
+    --header-sticky-height: 70px;
+    --renacon-header-min-h: 70px;
+    --renacon-logo-max: 50px;
+    --renacon-offcanvas-width: 65vw;
+    --renacon-section-pad-y: 40px;
+    --renacon-section-pad-x: 23.333px;
+    --theme-content-vertical-spacing: 50px;
+  }
+}
+
+@media (max-width: 689.98px) {
+  :root,
+  body.renacon-mirror {
+    --renacon-offcanvas-width: 90vw;
+    --renacon-container-edge: 88vw;
+    --theme-container-edge-spacing: 88vw;
+  }
+}
+
+body.renacon-mirror {
+  margin: 0;
+  background-color: var(--renacon-color-bg);
+  color: var(--renacon-color-text);
+  font-family: var(--renacon-font);
+  font-size: var(--renacon-fs-body);
+  font-weight: 400;
+  line-height: var(--renacon-lh-body);
+  letter-spacing: var(--renacon-ls-body);
+}
+
+body.renacon-mirror h1 {
+  font-family: var(--renacon-font);
+  font-size: var(--renacon-fs-h1);
+  font-weight: 700;
+  line-height: var(--renacon-lh-h1);
+  letter-spacing: normal;
+  color: var(--renacon-color-heading);
+}
+
+body.renacon-mirror h2 {
+  font-family: var(--renacon-font);
+  font-size: var(--renacon-fs-h2);
+  font-weight: 700;
+  line-height: var(--renacon-lh-h2);
+  letter-spacing: normal;
+  color: var(--renacon-color-heading);
+}
+
+body.renacon-mirror h3 {
+  font-family: var(--renacon-font);
+  font-size: var(--renacon-fs-h3);
+  font-weight: 700;
+  line-height: var(--renacon-lh-h3);
+  letter-spacing: normal;
+  color: var(--renacon-color-heading);
+}
+
+body.renacon-mirror p,
+body.renacon-mirror li,
+body.renacon-mirror label {
+  font-family: var(--renacon-font);
+}
+
+body.renacon-mirror label {
+  font-size: var(--renacon-fs-label);
+  font-weight: 500;
+}
+
+.ct-header .ct-container,
+.ct-footer .ct-container,
+.renacon-mirror .ct-container {
+  width: var(--renacon-container);
+  max-width: var(--renacon-container-max);
+  margin-inline: auto;
+}
+
+/* Shared buttons — Forminator/WPForms keep working; Stackable .stk-button stays page-owned */
+.renacon-btn,
+.renacon-btn-primary,
+.wpforms-submit:not(.renacon-careers-submit),
+.forminator-button:not(.stk-button),
+button[type="submit"]:not(.renacon-careers-submit):not(.stk-button) {
+  font-family: var(--renacon-font);
+  font-weight: var(--renacon-fw-button);
+  font-size: var(--renacon-fs-button);
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: var(--renacon-color-button);
+  color: var(--renacon-color-button-text);
+  border: 2px solid var(--renacon-color-heading);
+  padding: 5px 30px;
+  min-height: 55px;
+  border-radius: 0;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.renacon-btn:hover,
+.renacon-btn-primary:hover,
+.wpforms-submit:not(.renacon-careers-submit):hover,
+.forminator-button:not(.stk-button):hover,
+button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
+  background: var(--renacon-color-button-hover);
+  color: var(--renacon-color-button-hover-text);
+}
+
+.renacon-btn:focus-visible,
+.renacon-btn-primary:focus-visible,
+.renacon-btn-secondary:focus-visible,
+.renacon-btn-outline:focus-visible,
+.wpforms-submit:not(.renacon-careers-submit):focus-visible,
+.forminator-button:not(.stk-button):focus-visible,
+button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):focus-visible {
+  outline: 2px solid var(--renacon-color-secondary);
+  outline-offset: 2px;
+}
+
+.renacon-btn:disabled,
+.renacon-btn-primary:disabled,
+.renacon-btn-secondary:disabled,
+.renacon-btn-outline:disabled,
+.wpforms-submit:disabled,
+.forminator-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.renacon-btn-secondary {
+  font-family: var(--renacon-font);
+  font-weight: var(--renacon-fw-button);
+  font-size: var(--renacon-fs-button);
+  line-height: 1.3;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: var(--renacon-color-secondary);
+  color: #fff;
+  border: 2px solid var(--renacon-color-secondary);
+  padding: 5px 30px;
+  min-height: 55px;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.renacon-btn-secondary:hover {
+  background: #0f2d5c;
+  color: #fff;
+}
+
+.renacon-btn-outline {
+  font-family: var(--renacon-font);
+  font-weight: var(--renacon-fw-button);
+  font-size: var(--renacon-fs-button);
+  line-height: 1.3;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+  color: var(--renacon-color-secondary);
+  border: 2px solid var(--renacon-color-secondary);
+  padding: 5px 30px;
+  min-height: 55px;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.renacon-btn-outline:hover {
+  background: var(--renacon-color-secondary);
+  color: #fff;
+}
+
+/* CACHE_BUST_MARKER global-chrome-202609171430 */

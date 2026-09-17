@@ -361,8 +361,6 @@ export function WpInteractions() {
         inner.style.transform = "none";
         inner.style.translate = "none";
         inner.style.left = "0";
-        inner.style.maxWidth = "100%";
-        inner.style.width = "100%";
       }
       offcanvas
         .querySelectorAll<HTMLElement>(".ct-panel-content[data-device='mobile']")

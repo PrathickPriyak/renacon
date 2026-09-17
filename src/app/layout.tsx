@@ -31,16 +31,21 @@ export default function RootLayout({
         {/* Mirrored Blocksy/WordPress styles for visual parity */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link rel="stylesheet" href="/wp-mirror/css/renacon-all.css" />
+        {/* eslint-disable-next-line @next/next/no-css-tags */}
+        <link
+          rel="stylesheet"
+          href="/wp-mirror/css/design-tokens.css?v=renacon-global-chrome-202609171430"
+        />
         {/* Interactive layer — bg rhythm + product images + gallery/news/contact ix */}
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-why-renacon-exact-202609171305"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-global-chrome-202609171430"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-why-renacon-exact-202609171305"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-global-chrome-202609171430"
         />
       </head>
       <body
