@@ -589,30 +589,11 @@ export function WpInteractions() {
       );
     }
 
-    // Why Renacon — reveals, benefit stagger, hero zoom
+    // Why Renacon — exact renacon.in parity: do not wrap scroll-reveal chrome
+    // that restyles the benefit list, hero crop, or body copy.
     const whyRoot = document.getElementById("post-5659");
     if (whyRoot) {
-      initPageInteractions(
-        whyRoot,
-        {
-          revealSelector: [
-            ".entry-content > .wp-block-image.alignfull",
-            ".wp-block-stackable-columns",
-            ".entry-content > h2",
-            ".entry-content > p",
-            ".wp-block-embed",
-          ].join(", "),
-          heroSelectors: [
-            ".entry-content > .wp-block-image.alignfull:first-child",
-            "h1.wp-block-heading",
-            ".stk-72ab4ab .wp-block-image",
-            ".stk-72ab4ab > .stk-column-wrapper > .stk-block-content > p",
-          ],
-          benefitListSelector: ".ep-custom-list",
-          benefitsInClass: "renacon-why-benefits-in",
-        },
-        cleanups,
-      );
+      document.body.classList.add("renacon-page-why-renacon");
     }
 
     // Getwid image hotspots (tippy JS not shipped) — click + touch + hover
