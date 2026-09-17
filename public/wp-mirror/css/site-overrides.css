@@ -697,7 +697,7 @@ body.renacon-page-media article.post-1067,
   width: 100% !important;
 }
 
-/* Heroes: full-width with safe inset so baked-in titles (PROJECTS/MEDIA) clear edges */
+/* Heroes: edge-to-edge full-bleed (renacon.in parity — no invent inset) */
 #post-1192 .entry-content > .wp-block-image.alignfull,
 #post-1067 .entry-content > .wp-block-image.alignfull,
 .renacon-projects-gallery-ix .entry-content > .wp-block-image.alignfull,
@@ -708,8 +708,7 @@ body.renacon-page-media .entry-content > .wp-block-image.alignfull {
   max-width: 100% !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  /* Safe inset: MEDIA title sits flush in the artwork; keep letterforms readable */
-  padding-inline: clamp(0.85rem, 2.8vw, 2.25rem) clamp(0.85rem, 4vw, 3.75rem) !important;
+  padding-inline: 0 !important;
   box-sizing: border-box !important;
   left: auto !important;
   right: auto !important;
@@ -881,7 +880,7 @@ body.renacon-page-media .renacon-hotspot-tip,
   }
 }
 
-@media (max-width: 599px) {
+@media (max-width: 689px) {
   #post-1067 .stk-block-columns .stk-block-column,
   .renacon-media-ix .stk-block-columns .stk-block-column,
   body.renacon-page-media .stk-block-columns .stk-block-column {
@@ -1717,7 +1716,7 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
   }
 }
 
-/* CACHE_BUST_MARKER responsive-audit-202609171700 */
+/* CACHE_BUST_MARKER final-visual-qa-202609171825 */
 
 /* ---------- Match live Renacon chrome ---------- */
 .ct-header .menu-container > .menu > li > a {
@@ -5087,7 +5086,7 @@ body.renacon-page-calculator h1.eplus-styles-uid-538c5a {
   color: #f4c708 !important;
   font-size: 40px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: normal;
   margin: 0.35em 0 0.75em;
 }
 
