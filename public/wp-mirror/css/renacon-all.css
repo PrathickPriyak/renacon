@@ -4309,19 +4309,21 @@ button[type="submit"]:hover {
   }
 }
 
-/* ---------- Homepage: OUR SERVICES (restore Blocksy/Stackable layout) ---------- */
+/* ---------- Homepage: OUR SERVICES (exact renacon.in Stackable layout) ---------- */
+/* Do not invert the left-panel icon to white; keep yellow PNG as on renacon.in. */
 .entry-content > .stk-ee3acf8,
 .stk-ee3acf8 {
   max-width: min(1290px, calc(100% - 2rem)) !important;
   width: 100% !important;
   margin-inline: auto !important;
+  margin-bottom: 0 !important;
   box-sizing: border-box;
 }
 
 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
 .stk-ee3acf8-column {
   display: flex !important;
-  flex-wrap: wrap;
+  flex-wrap: wrap !important;
   align-items: stretch !important;
   gap: 0;
   width: 100%;
@@ -4330,12 +4332,12 @@ button[type="submit"]:hover {
 .stk-e01c6a5 {
   position: relative !important;
   overflow: hidden !important;
-  background-color: #0b2e1f !important;
+  background-color: #000000 !important;
   background-image: url(https://renacon.in/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
-  padding: 3.5rem 2.5rem !important;
+  padding: 90px 50px !important;
   box-sizing: border-box;
 }
 
@@ -4343,8 +4345,8 @@ button[type="submit"]:hover {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
-  background-color: #000 !important;
-  opacity: 0.55 !important;
+  background-color: #000000 !important;
+  opacity: 0.6 !important;
   z-index: 1 !important;
   pointer-events: none;
 }
@@ -4353,6 +4355,7 @@ button[type="submit"]:hover {
 .stk-e01c6a5 .stk-e01c6a5-inner-blocks {
   position: relative;
   z-index: 2;
+  justify-content: center !important;
 }
 
 .stk-e01c6a5 .has-palette-color-8-color,
@@ -4363,22 +4366,33 @@ button[type="submit"]:hover {
 }
 
 .stk-e01c6a5 .wp-block-image img {
-  filter: brightness(0) invert(1);
-  opacity: 0.95;
+  filter: none !important;
+  opacity: 1 !important;
 }
 
 .stk-df90d5b {
-  background-color: rgba(204, 204, 204, 0.2) !important;
-  padding: 1.5rem 1.25rem !important;
+  background-color: #cccccc33 !important;
   box-sizing: border-box;
-  align-self: stretch !important;
+  align-self: center !important;
 }
 
 .stk-df90d5b .stk-57da9d5-column,
 .stk-df90d5b .stk-473efc4-column {
   display: flex !important;
-  flex-wrap: wrap;
-  gap: 1.25rem 1.5rem !important;
+  flex-wrap: wrap !important;
+  --stk-column-gap: 40px !important;
+  row-gap: 50px !important;
+}
+
+.stk-b162ce9-container,
+.stk-0458ac2-container,
+.stk-2c3e48d-container,
+.stk-7623a40-container {
+  background-color: transparent !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: #178a47 !important;
+  box-shadow: none !important;
 }
 
 .stk-43533bb,
@@ -4387,33 +4401,45 @@ button[type="submit"]:hover {
 .stk-92754a5 {
   background-color: #ffffff !important;
   border-radius: 5px !important;
-  padding: 1.15rem 1rem !important;
+  overflow: hidden !important;
   box-sizing: border-box;
+  box-shadow: none !important;
 }
 
 @media screen and (min-width: 1000px) {
   .stk-e01c6a5 {
-    flex: 1 1 30% !important;
-    max-width: 32% !important;
-    min-height: 420px;
+    flex: var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    max-width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
   }
 
   .stk-df90d5b {
-    flex: 1 1 68% !important;
-    max-width: 68% !important;
-    padding-left: 1.5rem !important;
+    flex: var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    max-width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
   }
 
   .stk-b162ce9,
   .stk-0458ac2,
   .stk-2c3e48d,
   .stk-7623a40 {
-    flex: 1 1 calc(50% - 0.75rem) !important;
-    max-width: calc(50% - 0.75rem) !important;
+    flex: 1 1 calc(50% - 20px) !important;
+    max-width: calc(50% - 20px) !important;
+    padding: 10px !important;
+  }
+}
+
+@media screen and (min-width: 690px) and (max-width: 999px) {
+  .stk-e01c6a5,
+  .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
   }
 }
 
 @media screen and (max-width: 999px) {
+  .stk-ee3acf8-column {
+    row-gap: 80px !important;
+  }
+
   .stk-e01c6a5,
   .stk-df90d5b {
     flex: 1 1 100% !important;
@@ -4421,8 +4447,11 @@ button[type="submit"]:hover {
   }
 
   .stk-e01c6a5 {
-    min-height: 220px;
-    padding: 2.5rem 1.5rem !important;
+    padding: 60px 40px !important;
+  }
+
+  .stk-df90d5b {
+    padding-left: 0 !important;
   }
 }
 
