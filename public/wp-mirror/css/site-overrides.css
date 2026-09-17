@@ -2880,3 +2880,181 @@ button[type="submit"]:hover {
   }
 }
 
+
+
+/* ============================================================
+   Product pages — images + interactive polish (all products)
+   ============================================================ */
+article.renacon-product-page.renacon-ix-v2,
+article.renacon-product-page.renacon-product-ix {
+  --renacon-green: #00984a;
+  --renacon-green-deep: #0b3d2c;
+  --renacon-yellow: #f4c709;
+  --renacon-mist: #f3faf6;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay {
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  min-height: 280px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(11, 61, 44, 0.18) 0%,
+    rgba(0, 152, 74, 0.08) 45%,
+    rgba(244, 199, 9, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.45s ease;
+}
+
+article.renacon-product-page .stk-block-background.stk--has-background-overlay > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay.renacon-product-photo-in {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover {
+    transform: scale(1.02);
+  }
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover::before {
+    opacity: 0.72;
+  }
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.8rem, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-reveal.renacon-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+article.renacon-product-page.renacon-ix-v2 .renacon-hero-piece {
+  opacity: 0;
+  transform: translate3d(0, 1.2rem, 0);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--renacon-hero-delay, 0ms);
+}
+
+article.renacon-product-page.renacon-ix-v2.renacon-hero-in .renacon-hero-piece {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+article.renacon-product-page .renacon-product-media img {
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+  transform-origin: center center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .renacon-product-media:hover img {
+    transform: scale(1.04);
+    filter: saturate(1.08);
+  }
+}
+
+article.renacon-product-page details.renacon-product-accordion {
+  border-radius: 4px;
+  transition: box-shadow 0.35s ease, background-color 0.35s ease;
+}
+
+article.renacon-product-page details.renacon-product-accordion summary {
+  cursor: pointer;
+  list-style: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+article.renacon-product-page details.renacon-product-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+article.renacon-product-page details.renacon-product-accordion.renacon-product-accordion-open {
+  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.1);
+}
+
+article.renacon-product-page details.renacon-product-accordion summary:hover {
+  background-color: rgba(0, 152, 74, 0.06);
+}
+
+article.renacon-product-page details.renacon-product-accordion .stk-block-icon {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+article.renacon-product-page details.renacon-product-accordion[open] .stk-block-icon {
+  transform: rotate(180deg);
+}
+
+article.renacon-product-page .wpforms-submit,
+article.renacon-product-page button.wpforms-submit {
+  background-color: var(--renacon-green, #00984a) !important;
+  border-color: var(--renacon-green, #00984a) !important;
+  color: #fff !important;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  article.renacon-product-page .wpforms-submit:hover,
+  article.renacon-product-page button.wpforms-submit:hover {
+    background-color: var(--renacon-yellow, #f4c709) !important;
+    border-color: var(--renacon-yellow, #f4c709) !important;
+    color: var(--renacon-green-deep, #0b3d2c) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(244, 199, 9, 0.35) !important;
+  }
+}
+
+article.renacon-product-page .wpforms-submit:focus-visible {
+  outline: 3px solid var(--renacon-yellow, #f4c709);
+  outline-offset: 2px;
+}
+
+@media (max-width: 689px) {
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay {
+    min-height: 220px;
+    margin-top: 1rem;
+  }
+
+  article.renacon-product-page.renacon-ix-v2 .renacon-reveal {
+    transform: translate3d(0, 1.1rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  article.renacon-product-page.renacon-ix-v2 .renacon-reveal,
+  article.renacon-product-page.renacon-ix-v2 .renacon-hero-piece,
+  article.renacon-product-page .renacon-product-media img,
+  article.renacon-product-page .stk-block-background.stk--has-background-overlay,
+  article.renacon-product-page .wpforms-submit {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
