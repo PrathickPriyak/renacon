@@ -867,12 +867,13 @@ body.renacon-page-media .renacon-hotspot-tip,
   max-width: 100% !important;
   object-fit: cover;
   border-radius: 4px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: box-shadow 0.25s ease;
   flex: none !important;
+  transform: none !important;
 }
 
 .sgb-item:hover img {
-  transform: scale(1.02);
+  transform: none !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
@@ -1059,11 +1060,12 @@ body.renacon-page-media .renacon-hotspot-tip,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transform: none !important;
+  transition: none;
 }
 
 .news-card:hover .news-card-media img {
-  transform: scale(1.04);
+  transform: none !important;
 }
 
 .news-card-placeholder {
@@ -1718,7 +1720,7 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
 }
 
 .sgb-item:focus-within img {
-  transform: scale(1.02);
+  transform: none !important;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
@@ -2312,10 +2314,9 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
 
 #post-4487.renacon-ix-v2 .wp-block-media-text__media img,
 #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image {
-  transition:
-    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.4s ease;
-  will-change: transform;
+  transition: filter 0.4s ease;
+  transform: none !important;
+  will-change: auto;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -2326,14 +2327,14 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
 
   #post-4487.renacon-ix-v2 .wp-block-media-text__media:hover img,
   #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper:hover .wp-block-getwid-image-box__image {
-    transform: scale(1.07) !important;
+    transform: none !important;
     filter: saturate(1.08) contrast(1.03);
   }
 }
 
 #post-4487.renacon-ix-v2 .wp-block-media-text__media:active img,
 #post-4487.renacon-ix-v2 .wp-block-getwid-image-box__image-wrapper:active .wp-block-getwid-image-box__image {
-  transform: scale(1.04) !important;
+  transform: none !important;
 }
 
 #post-4487.renacon-ix-v2 #erp .stk-block-column,
@@ -2565,19 +2566,17 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
   height: auto;
   max-height: min(52vh, 28rem);
   object-fit: cover;
-  transform: scale(1.08);
-  transition:
-    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.45s ease;
+  transform: none;
+  transition: filter 0.45s ease;
 }
 
 #post-5659.renacon-ix-v2.renacon-hero-in .entry-content > .wp-block-image.alignfull:first-child img {
-  transform: scale(1);
+  transform: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   #post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child:hover img {
-    transform: scale(1.05);
+    transform: none !important;
     filter: saturate(1.08);
   }
 }
@@ -2612,12 +2611,13 @@ button[type="submit"]:not(.renacon-careers-submit):hover {
   }
 
   #post-5659.renacon-ix-v2 .stk-72ab4ab > .stk-column-wrapper:hover .wp-block-image img {
-    transform: translateY(-3px) scale(1.08);
+    transform: none !important;
   }
 }
 
 #post-5659.renacon-ix-v2 .stk-72ab4ab .wp-block-image img {
-  transition: transform 0.4s ease;
+  transition: none;
+  transform: none !important;
 }
 
 #post-5659.renacon-ix-v2 .ep-custom-list {
@@ -3016,10 +3016,10 @@ article.renacon-product-page .stk-block-background.stk--has-background-overlay >
 
 @media (hover: hover) and (pointer: fine) {
   article.renacon-product-page .stk-block-background.stk--has-background-overlay.renacon-product-photo-in {
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: none;
   }
   article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover {
-    transform: scale(1.02);
+    transform: none !important;
   }
   article.renacon-product-page .stk-block-background.stk--has-background-overlay:hover::before {
     opacity: 0.72;
@@ -3056,14 +3056,15 @@ article.renacon-product-page.renacon-ix-v2.renacon-hero-in .renacon-hero-piece {
 }
 
 article.renacon-product-page .renacon-product-media img {
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+  transition: none;
+  transform: none !important;
   transform-origin: center center;
 }
 
 @media (hover: hover) and (pointer: fine) {
   article.renacon-product-page .renacon-product-media:hover img {
-    transform: scale(1.04);
-    filter: saturate(1.08);
+    transform: none !important;
+    filter: none;
   }
 }
 
@@ -3419,7 +3420,8 @@ body.renacon-page-our-products #post-635 {
 
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-img,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-img {
-  transition: transform 0.4s ease, filter 0.35s ease;
+  transition: none;
+  transform: none !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -3431,8 +3433,8 @@ body.renacon-page-our-products #post-635 {
 
   #post-635.renacon-our-products-ix .renacon-product-hub-card:hover .stk-img,
   #post-635[data-renacon-products-ix] .renacon-product-hub-card:hover .stk-img {
-    transform: scale(1.04);
-    filter: saturate(1.06);
+    transform: none !important;
+    filter: none;
   }
 
   #post-635.renacon-our-products-ix a.stk-button:hover .stk-button__inner-text,
@@ -3510,13 +3512,14 @@ body.renacon-page-our-products #post-635 {
 }
 
 .renacon-gallery-item img {
-  transition: transform 0.35s ease, filter 0.35s ease;
+  transition: none;
+  transform: none !important;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .renacon-gallery-item:hover img {
-    transform: scale(1.03);
-    filter: brightness(1.03);
+    transform: none !important;
+    filter: none;
   }
 }
 
@@ -4040,10 +4043,8 @@ body.renacon-page-media .sgb-gallery .sgb-item.renacon-reveal.renacon-reveal-in 
 .renacon-media-ix .sgb-item img,
 body.renacon-page-projects-2 .sgb-item img,
 body.renacon-page-media .sgb-item img {
-  transition:
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.35s ease,
-    filter 0.35s ease !important;
+  transition: box-shadow 0.35s ease, filter 0.35s ease !important;
+  transform: none !important;
 }
 
 .renacon-projects-gallery-ix .sgb-item > a,
@@ -4065,8 +4066,8 @@ body.renacon-page-media .sgb-item img {
   .renacon-media-ix .sgb-item:hover img,
   body.renacon-page-projects-2 .sgb-item:hover img,
   body.renacon-page-media .sgb-item:hover img {
-    transform: scale(1.045) !important;
-    filter: brightness(1.04) saturate(1.04);
+    transform: none !important;
+    filter: none;
     box-shadow: 0 10px 24px rgba(0, 152, 74, 0.18);
   }
 
@@ -4076,10 +4077,10 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
-/* Active/touch feedback */
+/* Active/touch feedback — no image scale */
 .renacon-projects-gallery-ix .sgb-item:active img,
 .renacon-media-ix .sgb-item:active img {
-  transform: scale(0.985) !important;
+  transform: none !important;
 }
 
 /* Hero banner entrance */
@@ -4237,7 +4238,8 @@ body.renacon-page-media .sgb-item img {
   --renacon-careers-surface: #f3f9f5;
   position: relative;
   isolation: isolate;
-  max-width: 760px;
+  max-width: min(1290px, calc(100% - 2rem));
+  width: 100%;
   margin: 2.5rem auto 3.5rem;
   padding: 2.15rem 1.85rem 1.85rem;
   background:
@@ -4931,4 +4933,178 @@ body.renacon-page-calculator .ugb-container__side {
   body.renacon-page-calculator details.stk-block-accordion > summary {
     padding: 12px 14px;
   }
+}
+
+/* ============================================================
+   Products spacing + no image hover + full-width forms
+   Marker: renacon-products-spacing-no-img-hover-202609171015
+   ============================================================ */
+
+/* --- Product detail pages: tighter vertical rhythm --- */
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child {
+  margin-block: 0 !important;
+  margin-top: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+/* Collapse oversized spacers between banner / sections (not in-column image spacers) */
+article.renacon-product-page .entry-content > .wp-block-spacer {
+  height: 0.85rem !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .wp-block-image.alignfull:first-child + .wp-block-spacer {
+  height: 0.65rem !important;
+}
+
+article.renacon-product-page .entry-content > .stk-block-columns {
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
+  padding-top: 0 !important;
+}
+
+article.renacon-product-page .entry-content > .stk-block-columns .stk-b745e0f-inner-blocks > :first-child,
+article.renacon-product-page .entry-content > .stk-block-columns h3.wp-block-heading:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+article.renacon-product-page .stk-block-accordion,
+article.renacon-product-page details.stk-block-accordion {
+  margin-top: 0.35rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+article.renacon-product-page .wp-block-ugb-container,
+article.renacon-product-page .ugb-container {
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+  margin-inline: auto !important;
+}
+
+/* Brochure / product forms — full usable content width (kill 70% strip) */
+article.renacon-product-page .ugb-container__content-wrapper,
+article.renacon-product-page [class*="ugb-"][class*="-content-wrapper"].ugb-container__content-wrapper,
+article.renacon-product-page .wpforms-container,
+article.renacon-product-page .wpforms-container form {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+article.renacon-product-page .ugb-container__side {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding-inline: clamp(0.75rem, 2vw, 1.5rem) !important;
+  box-sizing: border-box;
+}
+
+article.renacon-product-page .wpforms-field input,
+article.renacon-product-page .wpforms-field textarea,
+article.renacon-product-page .wpforms-field select {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Our Products hub — less top air under banner */
+#post-635.renacon-our-products-ix .entry-content > .wp-block-image.alignfull:first-child,
+#post-635[data-renacon-products-ix] .entry-content > .wp-block-image.alignfull:first-child {
+  margin-bottom: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .entry-content > .stk-f308afb,
+#post-635[data-renacon-products-ix] .entry-content > .stk-f308afb {
+  padding-top: 0.75rem !important;
+  padding-bottom: 1.25rem !important;
+  margin-top: 0 !important;
+}
+
+#post-635.renacon-our-products-ix .stk-6c7f365,
+#post-635.renacon-our-products-ix .stk-c602183,
+#post-635[data-renacon-products-ix] .stk-6c7f365,
+#post-635[data-renacon-products-ix] .stk-c602183 {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+/* Contact / careers forms — use full content rail */
+.renacon-contact-ix .forminator-ui,
+.renacon-contact-ix .forminator-custom-form,
+.renacon-contact-form,
+#post-4301 .forminator-ui,
+#post-4301 .wp-block-group.alignwide,
+body.renacon-page-contact-us .forminator-ui {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.renacon-contact-ix .ugb-container__content-wrapper,
+body.renacon-page-contact-us .ugb-container__content-wrapper {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+body.renacon-page-contact-us .wp-block-group.alignwide,
+body.renacon-page-contact-us .wp-block-group.is-layout-constrained {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+}
+
+body.renacon-page-contact-us iframe[src*="forms.infozub"],
+body.renacon-page-contact-us iframe[src*="renacon-contact"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.renacon-mirror .renacon-careers-form-wrap {
+  max-width: min(1290px, calc(100% - 2rem)) !important;
+  width: 100% !important;
+}
+
+/* --- Site-wide: kill ALL image hover scale / lift / zoom --- */
+body.renacon-mirror img,
+body.renacon-mirror .stk-img,
+body.renacon-mirror .wp-block-image img,
+body.renacon-mirror .sgb-item img,
+body.renacon-mirror .news-card-media img,
+body.renacon-mirror .stk-img-wrapper img,
+body.renacon-mirror .renacon-product-media img,
+body.renacon-mirror .wp-block-media-text__media img,
+body.renacon-mirror .wp-block-getwid-image-box__image,
+body.renacon-mirror .stk-block-background.stk--has-background-overlay {
+  transform: none !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.renacon-mirror img:hover,
+  body.renacon-mirror a:hover img,
+  body.renacon-mirror figure:hover img,
+  body.renacon-mirror .stk-img-wrapper:hover img,
+  body.renacon-mirror .stk-img-wrapper:hover .stk-img,
+  body.renacon-mirror .sgb-item:hover img,
+  body.renacon-mirror .news-card:hover img,
+  body.renacon-mirror .renacon-gallery-item:hover img,
+  body.renacon-mirror .renacon-product-hub-card:hover .stk-img,
+  body.renacon-mirror .renacon-product-media:hover img,
+  body.renacon-mirror .wp-block-media-text__media:hover img,
+  body.renacon-mirror .wp-block-getwid-image-box__image-wrapper:hover .wp-block-getwid-image-box__image,
+  body.renacon-mirror .stk-block-background.stk--has-background-overlay:hover,
+  body.renacon-mirror [class*="image"]:hover img {
+    transform: none !important;
+  }
+}
+
+body.renacon-mirror a:active img,
+body.renacon-mirror .sgb-item:active img,
+body.renacon-mirror .stk-img-wrapper:active img {
+  transform: none !important;
 }
