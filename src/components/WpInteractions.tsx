@@ -2,6 +2,139 @@
 
 import { useEffect } from "react";
 
+const IX_MARKER = "renacon-ix-v2";
+const IX_ATTR = "v2-sep2026";
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function dedupeNested(candidates: HTMLElement[]): HTMLElement[] {
+  return candidates.filter(
+    (el) => !candidates.some((other) => other !== el && other.contains(el)),
+  );
+}
+
+function observeReveals(
+  revealEls: HTMLElement[],
+  reduceMotion: boolean,
+  cleanups: Array<() => void>,
+): void {
+  if (reduceMotion) {
+    revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+    return;
+  }
+
+  if (typeof IntersectionObserver === "undefined") {
+    revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+    return;
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        el.classList.add("renacon-reveal-in");
+        io.unobserve(el);
+      });
+    },
+    { root: null, rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
+  );
+
+  revealEls.forEach((el) => io.observe(el));
+  cleanups.push(() => io.disconnect());
+}
+
+function initPageInteractions(
+  root: HTMLElement,
+  options: {
+    revealSelector: string;
+    heroSelectors: string[];
+    benefitListSelector?: string;
+    benefitsInClass?: string;
+  },
+  cleanups: Array<() => void>,
+): void {
+  root.classList.add(IX_MARKER);
+  root.setAttribute("data-renacon-ix", IX_ATTR);
+
+  const reduceMotion = prefersReducedMotion();
+
+  const candidates = Array.from(
+    root.querySelectorAll<HTMLElement>(options.revealSelector),
+  ).filter((el) => {
+    if (el.classList.contains("renacon-reveal")) return false;
+    if (el.classList.contains("wp-block-spacer")) return false;
+    return true;
+  });
+
+  const revealEls = dedupeNested(candidates);
+  revealEls.forEach((el, i) => {
+    el.classList.add("renacon-reveal");
+    el.style.setProperty(
+      "--renacon-reveal-delay",
+      `${Math.min(i * 55, 360)}ms`,
+    );
+  });
+  observeReveals(revealEls, reduceMotion, cleanups);
+
+  // Staggered hero / title entrance (always visible on load)
+  const heroPieces: HTMLElement[] = [];
+  options.heroSelectors.forEach((sel) => {
+    root.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+      if (!heroPieces.includes(el)) heroPieces.push(el);
+    });
+  });
+
+  heroPieces.forEach((el, i) => {
+    el.classList.add("renacon-hero-piece");
+    el.style.setProperty("--renacon-hero-delay", `${80 + i * 110}ms`);
+  });
+
+  const runHero = () => root.classList.add("renacon-hero-in");
+  if (reduceMotion) {
+    runHero();
+  } else {
+    const t = window.setTimeout(runHero, 60);
+    cleanups.push(() => window.clearTimeout(t));
+  }
+
+  if (options.benefitListSelector && options.benefitsInClass) {
+    const items = Array.from(
+      root.querySelectorAll<HTMLElement>(`${options.benefitListSelector} > li`),
+    );
+    items.forEach((li, i) => {
+      li.classList.add("renacon-why-benefit");
+      li.style.setProperty("--renacon-benefit-delay", `${120 + i * 90}ms`);
+      li.tabIndex = 0;
+    });
+
+    const markBenefitsIn = () => root.classList.add(options.benefitsInClass!);
+
+    if (reduceMotion) {
+      markBenefitsIn();
+    } else if (typeof IntersectionObserver !== "undefined") {
+      const list =
+        root.querySelector<HTMLElement>(options.benefitListSelector) || root;
+      const bio = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            markBenefitsIn();
+            bio.disconnect();
+          });
+        },
+        { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.15 },
+      );
+      bio.observe(list);
+      cleanups.push(() => bio.disconnect());
+    } else {
+      markBenefitsIn();
+    }
+  }
+}
+
 /** Enables Blocksy mobile menu and desktop dropdowns without WordPress JS. */
 export function WpInteractions() {
   useEffect(() => {
@@ -44,12 +177,10 @@ export function WpInteractions() {
         close();
         return;
       }
-      // Close when tapping the backdrop (the panel itself, not inner content)
       if (t === offcanvas) {
         close();
         return;
       }
-      // Follow links: close drawer after navigation intent
       const link = t.closest("a");
       if (link && !link.getAttribute("href")?.startsWith("#")) {
         close();
@@ -64,7 +195,6 @@ export function WpInteractions() {
     };
     document.addEventListener("keydown", onKeyDown);
 
-    // Mobile offcanvas accordion: Blocksy uses `.dropdown-active` on parents
     const mobileToggles = Array.from(
       document.querySelectorAll<HTMLElement>(".ct-toggle-dropdown-mobile"),
     );
@@ -73,18 +203,24 @@ export function WpInteractions() {
       e.preventDefault();
       e.stopPropagation();
       const btn = e.currentTarget as HTMLElement;
-      const item = btn.closest<HTMLElement>(".menu-item-has-children, [class*='children']");
+      const item = btn.closest<HTMLElement>(
+        ".menu-item-has-children, [class*='children']",
+      );
       if (!item) return;
       const willOpen = !item.classList.contains("dropdown-active");
-      // Accordion: close siblings at the same level
       const parentList = item.parentElement;
       if (parentList) {
         Array.from(parentList.children).forEach((sib) => {
           if (!(sib instanceof HTMLElement) || sib === item) return;
-          if (sib.classList.contains("menu-item-has-children") || /children/.test(sib.className)) {
+          if (
+            sib.classList.contains("menu-item-has-children") ||
+            /children/.test(sib.className)
+          ) {
             sib.classList.remove("dropdown-active", "ct-active");
             sib
-              .querySelectorAll<HTMLElement>(":scope > .ct-sub-menu-parent .ct-toggle-dropdown-mobile, :scope > a + .ct-toggle-dropdown-mobile")
+              .querySelectorAll<HTMLElement>(
+                ":scope > .ct-sub-menu-parent .ct-toggle-dropdown-mobile, :scope > a + .ct-toggle-dropdown-mobile",
+              )
               .forEach((b) => b.setAttribute("aria-expanded", "false"));
           }
         });
@@ -99,7 +235,6 @@ export function WpInteractions() {
       btn.addEventListener("click", onMobileToggle);
     });
 
-    // Blocksy desktop dropdowns expect `.ct-active` on parents
     const parents = Array.from(
       document.querySelectorAll<HTMLElement>(
         ".ct-header .menu > .menu-item-has-children, .ct-header .menu .menu-item-has-children",
@@ -142,7 +277,6 @@ export function WpInteractions() {
       });
     });
 
-    // Sticky header elevation after scroll (desktop + mobile)
     const header =
       document.getElementById("header") ||
       document.querySelector<HTMLElement>(".ct-header");
@@ -154,199 +288,69 @@ export function WpInteractions() {
     window.addEventListener("scroll", onScroll, { passive: true });
     cleanups.push(() => window.removeEventListener("scroll", onScroll));
 
-    // About Us: scroll-reveal + soft image lift (CSS handles reduced-motion)
+    // About Us — obvious scroll reveals + hero stagger
     const aboutRoot = document.getElementById("post-4487");
     if (aboutRoot) {
-      aboutRoot.classList.add("renacon-about-interactive");
-      const revealSelector = [
-        ".wp-block-media-text",
-        ".entry-content > p",
-        ".entry-content > h2",
-        ".entry-content > h1",
-        ".wp-block-stackable-columns",
-        ".wp-block-getwid-image-box",
-        ".wp-block-pullquote",
-        ".wp-block-stackable-accordion",
-        ".ugb-container",
-        ".stk-block-column.stk-9ca72ed",
-        ".stk-block-column.stk-b9aef73",
-        ".stk-block-column.stk-ad91ac3",
-      ].join(", ");
-
-      const candidates = Array.from(
-        aboutRoot.querySelectorAll<HTMLElement>(revealSelector),
-      ).filter((el) => {
-        // Prefer leaf-ish blocks; skip nested duplicates already marked
-        if (el.classList.contains("renacon-reveal")) return false;
-        // Skip spacers / empty wrappers
-        if (el.classList.contains("wp-block-spacer")) return false;
-        return true;
-      });
-
-      // Deduplicate nested: if a parent is also a candidate, keep the parent only
-      const revealEls = candidates.filter((el) => {
-        return !candidates.some(
-          (other) => other !== el && other.contains(el),
-        );
-      });
-
-      revealEls.forEach((el, i) => {
-        el.classList.add("renacon-reveal");
-        el.style.setProperty("--renacon-reveal-delay", `${Math.min(i * 40, 280)}ms`);
-      });
-
-      const reduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (reduceMotion) {
-        revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-      } else if (typeof IntersectionObserver !== "undefined") {
-        const io = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              const el = entry.target as HTMLElement;
-              el.classList.add("renacon-reveal-in");
-              io.unobserve(el);
-            });
-          },
-          { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
-        );
-        revealEls.forEach((el) => io.observe(el));
-        cleanups.push(() => io.disconnect());
-      } else {
-        revealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-      }
-
-      // Soft parallax-ish lift on hero / founder images while scrolling (very light)
-      const mediaImgs = Array.from(
-        aboutRoot.querySelectorAll<HTMLElement>(
-          ".wp-block-media-text__media img, .wp-block-getwid-image-box__image",
-        ),
+      initPageInteractions(
+        aboutRoot,
+        {
+          revealSelector: [
+            ".wp-block-media-text",
+            ".entry-content > p",
+            ".entry-content > h2",
+            ".entry-content > h1",
+            ".wp-block-stackable-columns",
+            ".wp-block-getwid-image-box",
+            ".wp-block-pullquote",
+            ".wp-block-stackable-accordion",
+            ".ugb-container",
+            ".stk-block-column.stk-9ca72ed",
+            ".stk-block-column.stk-b9aef73",
+            ".stk-block-column.stk-ad91ac3",
+          ].join(", "),
+          heroSelectors: [
+            ".wp-block-media-text .stk-block-heading",
+            ".wp-block-media-text__media",
+            ".entry-content > p:first-of-type",
+          ],
+        },
+        cleanups,
       );
-      if (!reduceMotion && mediaImgs.length) {
-        let ticking = false;
-        const onAboutScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            const mid = window.innerHeight * 0.5;
-            mediaImgs.forEach((img) => {
-              const rect = img.getBoundingClientRect();
-              const delta = (rect.top + rect.height / 2 - mid) / window.innerHeight;
-              const y = Math.max(-8, Math.min(8, delta * -12));
-              img.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
-            });
-            ticking = false;
-          });
-        };
-        onAboutScroll();
-        window.addEventListener("scroll", onAboutScroll, { passive: true });
-        cleanups.push(() => {
-          window.removeEventListener("scroll", onAboutScroll);
-          mediaImgs.forEach((img) => {
-            img.style.transform = "";
-          });
-        });
-      }
     }
 
-    // Why Renacon: scroll-reveal + benefit list stagger (CSS handles reduced-motion)
+    // Why Renacon — reveals, benefit stagger, hero zoom
     const whyRoot = document.getElementById("post-5659");
     if (whyRoot) {
-      whyRoot.classList.add("renacon-why-interactive");
-
-      const whyRevealSelector = [
-        ".entry-content > .wp-block-image.alignfull",
-        ".stk-block-columns.stk-8eed3ae",
-        ".entry-content > h2",
-        ".entry-content > p",
-        ".wp-block-embed-youtube",
-      ].join(", ");
-
-      const whyCandidates = Array.from(
-        whyRoot.querySelectorAll<HTMLElement>(whyRevealSelector),
-      ).filter((el) => {
-        if (el.classList.contains("renacon-reveal")) return false;
-        if (el.classList.contains("wp-block-spacer")) return false;
-        return true;
-      });
-
-      const whyRevealEls = whyCandidates.filter((el) => {
-        return !whyCandidates.some(
-          (other) => other !== el && other.contains(el),
-        );
-      });
-
-      whyRevealEls.forEach((el, i) => {
-        el.classList.add("renacon-reveal");
-        el.style.setProperty(
-          "--renacon-reveal-delay",
-          `${Math.min(i * 45, 300)}ms`,
-        );
-      });
-
-      const benefitItems = Array.from(
-        whyRoot.querySelectorAll<HTMLElement>(".ep-custom-list > li"),
+      initPageInteractions(
+        whyRoot,
+        {
+          revealSelector: [
+            ".entry-content > .wp-block-image.alignfull",
+            ".wp-block-stackable-columns",
+            ".entry-content > h2",
+            ".entry-content > p",
+            ".wp-block-embed",
+          ].join(", "),
+          heroSelectors: [
+            ".entry-content > .wp-block-image.alignfull:first-child",
+            "h1.wp-block-heading",
+            ".stk-72ab4ab .wp-block-image",
+            ".stk-72ab4ab > .stk-column-wrapper > .stk-block-content > p",
+          ],
+          benefitListSelector: ".ep-custom-list",
+          benefitsInClass: "renacon-why-benefits-in",
+        },
+        cleanups,
       );
-      benefitItems.forEach((li, i) => {
-        li.classList.add("renacon-why-benefit");
-        li.style.setProperty("--renacon-benefit-delay", `${80 + i * 55}ms`);
-        if (!li.hasAttribute("tabindex")) li.setAttribute("tabindex", "0");
-      });
-
-      const whyReduceMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      const markBenefitsIn = () => {
-        whyRoot.classList.add("renacon-why-benefits-in");
-      };
-
-      if (whyReduceMotion) {
-        whyRevealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-        markBenefitsIn();
-      } else if (typeof IntersectionObserver !== "undefined") {
-        const whyIo = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (!entry.isIntersecting) return;
-              const el = entry.target as HTMLElement;
-              el.classList.add("renacon-reveal-in");
-              if (
-                el.classList.contains("stk-8eed3ae") ||
-                el.querySelector(".ep-custom-list")
-              ) {
-                markBenefitsIn();
-              }
-              whyIo.unobserve(el);
-            });
-          },
-          { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
-        );
-        whyRevealEls.forEach((el) => whyIo.observe(el));
-        cleanups.push(() => whyIo.disconnect());
-
-        // If columns already in view on load, still stagger benefits
-        const cols = whyRoot.querySelector(".stk-8eed3ae");
-        if (cols) {
-          const rect = cols.getBoundingClientRect();
-          if (rect.top < window.innerHeight * 0.92) {
-            // observer will fire; benefits gated on reveal class via CSS sibling path too
-          }
-        }
-      } else {
-        whyRevealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
-        markBenefitsIn();
-      }
     }
 
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);
       document.removeEventListener("keydown", onKeyDown);
-      mobileToggles.forEach((btn) => btn.removeEventListener("click", onMobileToggle));
+      mobileToggles.forEach((btn) =>
+        btn.removeEventListener("click", onMobileToggle),
+      );
       cleanups.forEach((fn) => fn());
       document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";
