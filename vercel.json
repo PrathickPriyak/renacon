@@ -1,4 +1,6 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "name": "renacon",
   "framework": "nextjs",
   "buildCommand": "next build",
   "regions": ["iad1"]
