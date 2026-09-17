@@ -883,6 +883,21 @@ function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fal
   return `<div class="wp-block-getwid-image-hotspot__tooltip"><div class="wp-block-getwid-image-hotspot__tooltip-title">${titleHtml}</div>${contentHtml}<a class="renacon-hotspot-cta" href="${href}"${target}>View product</a></div>`;
 }
 
+/**
+ * Move iframe title → aria-label so native browser title tooltips
+ * don't stick over the VIDEOS row (seen as a grey floating title box).
+ */
+function sanitizeEmbedTitles(scope: ParentNode = document): void {
+  scope.querySelectorAll<HTMLIFrameElement>("iframe[title]").forEach((iframe) => {
+    const label = iframe.getAttribute("title")?.trim();
+    if (!label) return;
+    if (!iframe.getAttribute("aria-label")) {
+      iframe.setAttribute("aria-label", label);
+    }
+    iframe.removeAttribute("title");
+  });
+}
+
 /** Qubely tabs (media page Recent Events / Media) — plugin JS not shipped. */
 function initQubelyTabs(scope: ParentNode = document): () => void {
   const roots = Array.from(
