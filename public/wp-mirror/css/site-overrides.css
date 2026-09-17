@@ -511,12 +511,6 @@ html.ct-panel-open #offcanvas * {
 
 /* Ensure desktop menu items are visible even without Blocksy JS.
    Scoped to #header so rules do NOT leak into #offcanvas (also .ct-header). */
-.renacon-site-header,
-.renacon-site-footer,
-.renacon-site-offcanvas {
-  display: contents;
-}
-
 #header.ct-header .menu-container > .menu {
   display: flex !important;
   flex-wrap: wrap;
@@ -1788,8 +1782,7 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
 /* Offcanvas link hover / focus / active polish */
 .renacon-mirror #offcanvas .mobile-menu .ct-menu-link:hover,
 .renacon-mirror #offcanvas .mobile-menu .ct-menu-link:focus-visible {
-  color: var(--renacon-yellow, #f4c709) !important;
-  padding-inline-start: 0.35rem;
+  color: #04a354 !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-menu-link,
@@ -1798,21 +1791,21 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
 .renacon-mirror #offcanvas .mobile-menu .current-menu-item > .ct-sub-menu-parent > .ct-menu-link,
 .renacon-mirror #offcanvas .mobile-menu .current-menu-ancestor > .ct-sub-menu-parent > .ct-menu-link,
 .renacon-mirror #offcanvas .mobile-menu .renacon-nav-active > .ct-sub-menu-parent > .ct-menu-link {
-  color: var(--renacon-yellow, #f4c709) !important;
-  font-weight: 700 !important;
+  color: #04a354 !important;
+  font-weight: 500 !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:hover,
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile:focus-visible {
   background: rgba(255, 255, 255, 0.12);
-  border-color: var(--renacon-yellow, #f4c709);
-  color: var(--renacon-yellow, #f4c709);
+  border-color: #04a354;
+  color: #04a354;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.dropdown-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile,
 .renacon-mirror #offcanvas .mobile-menu .menu-item-has-children.ct-active > .ct-sub-menu-parent .ct-toggle-dropdown-mobile {
-  border-color: var(--renacon-yellow, #f4c709);
-  color: var(--renacon-yellow, #f4c709);
+  border-color: #04a354;
+  color: #04a354;
 }
 
 /* Sticky header subtle elevation once scrolled (class toggled in WpInteractions) */
@@ -5247,4 +5240,4 @@ body.renacon-mirror .stk-img-wrapper:active img {
   transform: none !important;
 }
 
-/* CACHE_BUST_MARKER global-chrome-202609171430 */
+/* CACHE_BUST_MARKER global-chrome-202609171445 */
