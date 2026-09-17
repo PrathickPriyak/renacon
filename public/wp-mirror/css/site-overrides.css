@@ -4214,15 +4214,13 @@ body.renacon-page-media .sgb-item img {
   }
 }
 
-/* CACHE_BUST_MARKER renacon-prod-visible-20260917093607-mustsee */
+/* CACHE_BUST_MARKER services-fix-1789637876 */
 
 /* ==========================================================================
-   LIVE FORCE WINNERS (renacon-prod-visible-20260917093607-mustsee)
-   Last in cascade — OUR SERVICES side-by-side + highlights 64px gray box.
-   Must beat any earlier site-overrides / renacon-all leftovers.
+   LIVE FORCE WINNERS (services-fix-1789637876)
+   Last in cascade — OUR SERVICES side-by-side + highlights equal 64px.
    ========================================================================== */
 
-/* Highlights: equal 64px icons in centered gray wash */
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e {
   display: flex !important;
@@ -4231,7 +4229,6 @@ body.renacon-page-media .sgb-item img {
   max-width: 1290px !important;
   width: min(1290px, calc(100% - 2rem)) !important;
   margin-inline: auto !important;
-  background-color: transparent !important;
   background-image: linear-gradient(rgba(204, 204, 204, 0.19), rgba(204, 204, 204, 0.19)) !important;
   padding: 5% !important;
   gap: 0 !important;
@@ -4250,15 +4247,6 @@ body.renacon-page-media .sgb-item img {
   min-width: 0 !important;
   width: auto !important;
   max-width: none !important;
-  float: none !important;
-}
-
-#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image,
-.entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image {
-  width: 64px !important;
-  max-width: 64px !important;
-  margin: 0 auto !important;
-  float: none !important;
 }
 
 #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e .wp-block-image img,
@@ -4271,26 +4259,37 @@ body.renacon-page-media .sgb-item img {
   margin-inline: auto !important;
 }
 
-/* OUR SERVICES: left tall panel + right 2x2 green-border cards (NOT stacked) */
 #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
-#post-2306 .stk-ee3acf8-column {
+#post-2306 .stk-ee3acf8-column,
+.entry-content > .stk-ee3acf8 > .stk-row.stk-ee3acf8-column {
   display: flex !important;
-  flex-wrap: wrap !important;
+  flex-direction: row !important;
   align-items: stretch !important;
   width: 100% !important;
   gap: 0 !important;
 }
 
 @media screen and (min-width: 1000px) {
-  #post-2306 .stk-e01c6a5 {
-    flex: var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
-    max-width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
-    min-height: 0 !important;
+  #post-2306 .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+  #post-2306 .stk-ee3acf8-column,
+  .entry-content > .stk-ee3acf8 > .stk-row.stk-ee3acf8-column {
+    flex-wrap: nowrap !important;
   }
 
-  #post-2306 .stk-df90d5b {
-    flex: var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
-    max-width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+  #post-2306 .stk-e01c6a5,
+  .entry-content .stk-e01c6a5 {
+    flex: 1 1 30% !important;
+    max-width: 30% !important;
+    width: 30% !important;
+    min-width: 0 !important;
+  }
+
+  #post-2306 .stk-df90d5b,
+  .entry-content .stk-df90d5b {
+    flex: 1 1 70% !important;
+    max-width: 70% !important;
+    width: 70% !important;
+    min-width: 0 !important;
   }
 
   #post-2306 .stk-b162ce9,
@@ -4299,6 +4298,19 @@ body.renacon-page-media .sgb-item img {
   #post-2306 .stk-7623a40 {
     flex: 1 1 calc(50% - 20px) !important;
     max-width: calc(50% - 20px) !important;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  #post-2306 .stk-ee3acf8-column {
+    flex-wrap: wrap !important;
+  }
+
+  #post-2306 .stk-e01c6a5,
+  #post-2306 .stk-df90d5b {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
 
@@ -4311,24 +4323,4 @@ body.renacon-page-media .sgb-item img {
   border-width: 1px !important;
   border-color: #178a47 !important;
   box-shadow: none !important;
-}
-
-/* Center yellow service icons (match renacon.in aligncenter) */
-#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter {
-  display: table !important;
-  float: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  text-align: center !important;
-}
-
-#post-2306 .stk-ee3acf8 .wp-block-image.aligncenter img {
-  display: inline !important;
-  filter: none !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-#post-2306 .stk-e01c6a5 .wp-block-image img {
-  filter: none !important;
 }

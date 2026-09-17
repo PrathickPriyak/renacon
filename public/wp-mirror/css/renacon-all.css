@@ -4412,14 +4412,24 @@ button[type="submit"]:hover {
 }
 
 @media screen and (min-width: 1000px) {
+  .stk-ee3acf8 > .stk-row.stk-ee3acf8-column,
+  .stk-ee3acf8-column {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+
   .stk-e01c6a5 {
-    flex: var(--stk-flex-grow, 1) 1 calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
-    max-width: calc(30% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    flex: 1 1 30% !important;
+    max-width: 30% !important;
+    width: 30% !important;
+    min-width: 0 !important;
   }
 
   .stk-df90d5b {
-    flex: var(--stk-flex-grow, 1) 1 calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
-    max-width: calc(70% - var(--stk-column-gap, 0px) * 1 / 2) !important;
+    flex: 1 1 70% !important;
+    max-width: 70% !important;
+    width: 70% !important;
+    min-width: 0 !important;
   }
 
   .stk-b162ce9,
