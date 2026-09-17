@@ -252,6 +252,96 @@ export function WpInteractions() {
       }
     }
 
+    // Why Renacon: scroll-reveal + benefit list stagger (CSS handles reduced-motion)
+    const whyRoot = document.getElementById("post-5659");
+    if (whyRoot) {
+      whyRoot.classList.add("renacon-why-interactive");
+
+      const whyRevealSelector = [
+        ".entry-content > .wp-block-image.alignfull",
+        ".stk-block-columns.stk-8eed3ae",
+        ".entry-content > h2",
+        ".entry-content > p",
+        ".wp-block-embed-youtube",
+      ].join(", ");
+
+      const whyCandidates = Array.from(
+        whyRoot.querySelectorAll<HTMLElement>(whyRevealSelector),
+      ).filter((el) => {
+        if (el.classList.contains("renacon-reveal")) return false;
+        if (el.classList.contains("wp-block-spacer")) return false;
+        return true;
+      });
+
+      const whyRevealEls = whyCandidates.filter((el) => {
+        return !whyCandidates.some(
+          (other) => other !== el && other.contains(el),
+        );
+      });
+
+      whyRevealEls.forEach((el, i) => {
+        el.classList.add("renacon-reveal");
+        el.style.setProperty(
+          "--renacon-reveal-delay",
+          `${Math.min(i * 45, 300)}ms`,
+        );
+      });
+
+      const benefitItems = Array.from(
+        whyRoot.querySelectorAll<HTMLElement>(".ep-custom-list > li"),
+      );
+      benefitItems.forEach((li, i) => {
+        li.classList.add("renacon-why-benefit");
+        li.style.setProperty("--renacon-benefit-delay", `${80 + i * 55}ms`);
+        if (!li.hasAttribute("tabindex")) li.setAttribute("tabindex", "0");
+      });
+
+      const whyReduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      const markBenefitsIn = () => {
+        whyRoot.classList.add("renacon-why-benefits-in");
+      };
+
+      if (whyReduceMotion) {
+        whyRevealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+        markBenefitsIn();
+      } else if (typeof IntersectionObserver !== "undefined") {
+        const whyIo = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              const el = entry.target as HTMLElement;
+              el.classList.add("renacon-reveal-in");
+              if (
+                el.classList.contains("stk-8eed3ae") ||
+                el.querySelector(".ep-custom-list")
+              ) {
+                markBenefitsIn();
+              }
+              whyIo.unobserve(el);
+            });
+          },
+          { root: null, rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+        );
+        whyRevealEls.forEach((el) => whyIo.observe(el));
+        cleanups.push(() => whyIo.disconnect());
+
+        // If columns already in view on load, still stagger benefits
+        const cols = whyRoot.querySelector(".stk-8eed3ae");
+        if (cols) {
+          const rect = cols.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.92) {
+            // observer will fire; benefits gated on reveal class via CSS sibling path too
+          }
+        }
+      } else {
+        whyRevealEls.forEach((el) => el.classList.add("renacon-reveal-in"));
+        markBenefitsIn();
+      }
+    }
+
     return () => {
       openers.forEach((el) => el.removeEventListener("click", onOpenerClick));
       offcanvas?.removeEventListener("click", onOffcanvasClick);
