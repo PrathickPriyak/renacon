@@ -24,7 +24,14 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-our-products-ix-202609170955-v3`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-calculator-202609171015`}
+        />
+      ) : null}
+      {/* Calculator page — hard cache-bust for Involve.me shell styles */}
+      {slug === "calculator" ? (
+        <link
+          rel="stylesheet"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-calculator-202609171015"
         />
       ) : null}
       <WpMain html={html} />

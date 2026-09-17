@@ -850,6 +850,36 @@ export function WpInteractions() {
       );
     }
 
+    // Calculator — Involve.me embeds + accordion polish
+    const calculatorRoot =
+      document.getElementById("post-6793") ||
+      document.querySelector<HTMLElement>("article.post-6793, .page-id-6793");
+    if (calculatorRoot || /\/calculator\/?$/.test(window.location.pathname)) {
+      const root =
+        calculatorRoot ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      root.classList.add("renacon-calculator-ix");
+      root.setAttribute("data-renacon-calc-ix", "calculator-v1");
+      document.body.classList.add("renacon-page-calculator", "stk--anim-init");
+      initProductAccordions(root, cleanups);
+      initPageInteractions(
+        root,
+        {
+          revealSelector: [
+            ".wp-block-stackable-accordion",
+            ".ugb-container",
+            "h1.wp-block-heading",
+          ].join(", "),
+          heroSelectors: [
+            "h1.wp-block-heading",
+            ".ugb-e75cca7-content-wrapper > h1",
+          ],
+        },
+        cleanups,
+      );
+    }
+
     // News pages — ensure mirrored media URLs resolve
     if (
       document.querySelector(".news-index, article.post.type-post") ||

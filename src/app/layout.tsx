@@ -35,7 +35,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-our-products-ix-202609170955-v3"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-calculator-202609171015"
         />
       </head>
       <body className={`renacon-mirror ${roboto.className}`}>{children}</body>
