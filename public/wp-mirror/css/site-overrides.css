@@ -1,4 +1,4 @@
-/* renacon-hero-products-gallery-sep2026 — full-bleed hero + old product cards + gallery fixes */
+/* renacon-match-mobile-gallery-sep2026 — offcanvas + highlights/products + gallery grid */
 
 :root {
   --renacon-header-pad-y: 1.35rem;
@@ -112,43 +112,101 @@ textarea:focus-visible {
 }
 
 /* ---------- Mobile offcanvas ---------- */
+/* Blocksy left-side keeps translate3d(-20%) even when .active (equal specificity
+   after the active rule). Force a full-viewport readable drawer. */
 .renacon-mirror #offcanvas[inert] {
-  display: none;
+  display: none !important;
 }
 
 .renacon-mirror #offcanvas.is-open,
 .renacon-mirror #offcanvas.active {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column !important;
   position: fixed !important;
   inset: 0 !important;
   z-index: 100000 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
   background: rgba(10, 30, 20, 0.96) !important;
   color: #fff;
-  overflow: auto;
-  padding: 1.25rem 1.5rem 2rem;
+  overflow: hidden;
+  padding: 0 !important;
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
   pointer-events: auto !important;
-  animation: renacon-panel-in 0.22s ease-out;
+}
+
+/* Kill Blocksy side-panel reveal offset that clipped labels on the left */
+.renacon-mirror #offcanvas.is-open .ct-panel-inner,
+.renacon-mirror #offcanvas.active .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="left-side"].is-open .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="left-side"].active .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="side"].is-open .ct-panel-inner,
+.renacon-mirror #offcanvas[data-behaviour*="side"].active .ct-panel-inner {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  transform: none !important;
+  translate: none !important;
+  align-self: stretch !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background-color: rgba(10, 30, 20, 0.98) !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content,
+.renacon-mirror #offcanvas.active .ct-panel-content,
+.renacon-mirror #offcanvas.is-open .ct-panel-content-inner,
+.renacon-mirror #offcanvas.active .ct-panel-content-inner {
+  width: 100% !important;
+  max-width: 100% !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+.renacon-mirror #offcanvas.is-open .ct-panel-content-inner,
+.renacon-mirror #offcanvas.active .ct-panel-content-inner {
+  overflow-y: auto !important;
+  padding: 0.75rem 1.25rem 2rem !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
 }
 
 html.ct-panel-open #main,
 html.ct-panel-open .site-main,
-html.ct-panel-open #header.ct-header,
 html.ct-panel-open footer {
   pointer-events: none !important;
 }
 
-@keyframes renacon-panel-in {
-  from {
-    opacity: 0;
-    transform: translateX(-12px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+/* Hide hamburger while drawer is open (X must not overlap it) */
+html.ct-panel-open .ct-header-trigger,
+html.ct-panel-open .ct-toggle-button[data-toggle-panel="#offcanvas"],
+html.ct-panel-open [data-toggle-panel="#offcanvas"] {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+html.ct-panel-open #header.ct-header {
+  pointer-events: none !important;
+}
+
+html.ct-panel-open #offcanvas,
+html.ct-panel-open #offcanvas * {
+  pointer-events: auto !important;
 }
 
 .renacon-mirror #offcanvas.is-open a,
@@ -159,40 +217,70 @@ html.ct-panel-open footer {
 .renacon-mirror #offcanvas .ct-panel-actions {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1rem;
+  align-items: center;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.85rem 1rem 0.35rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .renacon-mirror #offcanvas .ct-toggle-close {
-  background: transparent;
-  border: 0;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
   color: #fff;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.55rem;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.renacon-mirror #offcanvas .ct-toggle-close .ct-icon,
+.renacon-mirror #offcanvas .ct-toggle-close svg {
+  fill: currentColor;
+  color: #fff;
 }
 
 .renacon-mirror #offcanvas .mobile-menu {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .renacon-mirror #offcanvas .mobile-menu > ul {
   list-style: none;
   margin: 0;
   padding: 0;
+  width: 100%;
 }
 
 .renacon-mirror #offcanvas .mobile-menu li {
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-menu-link {
   display: block;
-  padding: 0.85rem 0;
-  color: #fff;
+  padding: 0.95rem 0.15rem;
+  color: #fff !important;
   text-decoration: none;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-sub-menu-parent {
@@ -201,6 +289,7 @@ html.ct-panel-open footer {
   justify-content: space-between;
   gap: 0.75rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .ct-toggle-dropdown-mobile {
@@ -257,12 +346,23 @@ html.ct-panel-open footer {
   font-size: 0.95rem;
   font-weight: 400;
   opacity: 0.92;
-  padding: 0.55rem 0;
+  padding: 0.55rem 0.15rem;
   color: #e8fff4 !important;
 }
 
 .renacon-mirror #offcanvas .mobile-menu .sub-menu .menu-item-has-children > .sub-menu {
   padding-inline-start: 0.75rem;
+}
+
+.renacon-mirror #offcanvas .ct-header-socials,
+.renacon-mirror #offcanvas .ct-social-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  padding-inline: 0.15rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ---------- Header: mobile / desktop ---------- */
@@ -441,15 +541,21 @@ html.ct-panel-open footer {
 .pgc_sgb_slider .sgb-gallery,
 .sgb-gallery {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem 1.1rem;
+  /* auto-fit collapses empty tracks so 3 hospital cards fill/center the row */
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  justify-content: center;
+  justify-items: stretch;
+  gap: 1.15rem 1.25rem;
   position: relative !important;
   height: auto !important;
+  min-height: 0 !important;
   opacity: 1 !important;
   visibility: visible !important;
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+  /* Kill Simply Gallery absolute masonry leftovers */
+  transform: none !important;
 }
 
 /* Leave room for fixed right-side menu so captions/images aren't cropped */
@@ -516,24 +622,35 @@ html.ct-panel-open footer {
   position: relative !important;
   left: auto !important;
   top: auto !important;
-  width: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
   min-width: 0 !important;
   height: auto !important;
+  float: none !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-.sgb-item > a {
+.sgb-item > a,
+.sgb-item figure {
   display: block !important;
   line-height: 0;
   height: auto !important;
   flex: 0 0 auto !important;
+  width: 100% !important;
+  position: relative !important;
 }
 
 .sgb-item img {
   height: 220px !important;
   width: 100% !important;
+  max-width: 100% !important;
   object-fit: cover;
   border-radius: 4px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  flex: none !important;
 }
 
 .sgb-item:hover img {
@@ -541,18 +658,38 @@ html.ct-panel-open footer {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.sgb-item-caption {
-  font-size: 0.875rem;
-  line-height: 1.35;
-  margin-top: 0.45rem;
-  min-height: 3.2em;
-  color: #1a1e21;
+.sgb-item-caption,
+.sgb-gallery .sgb-item-caption {
+  display: block !important;
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  margin: 0.45rem 0 0 !important;
+  min-height: 2.8em;
+  color: #1a1e21 !important;
   background: transparent !important;
   padding: 0.15rem 0.1rem 0 !important;
   box-shadow: none !important;
   border: 0 !important;
-  text-align: left;
+  text-align: left !important;
   overflow-wrap: anywhere;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 1;
+}
+
+/* Cap very wide galleries so sparse rows (3 hospitals) don't look tiny */
+#post-1192 .sgb-gallery,
+#post-1067 .sgb-gallery,
+.renacon-projects-gallery-ix .sgb-gallery,
+.renacon-media-ix .sgb-gallery {
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  max-width: min(1180px, 100%);
+  margin-inline: auto;
 }
 
 /* Homepage projects: don't leave image boxes invisible/washed if observer lags */
@@ -614,7 +751,7 @@ html.ct-panel-open footer {
   .pgc_sgb_slider .sgb-gallery,
   .sgb-gallery {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.65rem;
+    gap: 0.75rem;
   }
 
   .sgb-item img {
@@ -626,8 +763,9 @@ html.ct-panel-open footer {
     padding-right: 1rem;
   }
 
-  .sgb-item-caption {
-    min-height: 2.4em;
+  .sgb-item-caption,
+  .sgb-gallery .sgb-item-caption {
+    min-height: 2.6em;
     font-size: 0.8rem;
   }
 }
@@ -1358,37 +1496,41 @@ button[type="submit"]:hover {
 }
 
 /* ---------- Homepage: highlights strip (3 brand claims) ---------- */
-/* Also match inside .renacon-home-band (JS wraps blocks; > child selectors break) */
+/* Centered light-gray bar like renacon.in — not a full-bleed gray band */
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
 .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
-#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+#post-2306 .renacon-home-band--highlights .wp-block-columns {
   display: flex !important;
   flex-direction: row !important;
-  flex-wrap: wrap !important;
-  max-width: min(1100px, 100%) !important;
+  flex-wrap: nowrap !important;
+  max-width: min(1100px, calc(100% - 2rem)) !important;
   width: 100% !important;
   margin-inline: auto !important;
-  margin-block: 0.35rem 0.75rem !important;
-  padding: 1.15rem 1.35rem !important;
-  gap: 1.25rem 1.75rem !important;
+  margin-block: 0.5rem 1rem !important;
+  padding: 1.35rem 1.5rem !important;
+  gap: 1rem 1.5rem !important;
   align-items: stretch !important;
-  background: transparent !important;
+  justify-content: space-around !important;
+  background: #f2f2f2 !important;
   border: none !important;
   box-sizing: border-box;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
 .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
-#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+#post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+#post-2306 .renacon-home-band--highlights .wp-block-column {
   display: flex !important;
   flex-direction: column !important;
   align-items: center;
   justify-content: flex-start;
   text-align: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   flex: 1 1 0 !important;
   min-width: 0;
-  max-width: 100%;
+  max-width: none !important;
+  width: auto !important;
   float: none !important;
 }
 
@@ -1413,6 +1555,8 @@ button[type="submit"]:hover {
   object-fit: contain;
   display: block;
   margin-inline: auto;
+  /* Keep yellow icon look */
+  filter: none;
 }
 
 .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e p,
@@ -1434,15 +1578,18 @@ button[type="submit"]:hover {
 @media (max-width: 689px) {
   .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e,
   .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e,
-  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e {
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e,
+  #post-2306 .renacon-home-band--highlights .wp-block-columns {
     flex-direction: column !important;
-    padding: 1rem 0.85rem !important;
+    flex-wrap: wrap !important;
+    padding: 1.1rem 0.95rem !important;
     gap: 1.1rem !important;
   }
 
   .entry-content > .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
   .renacon-home-band--highlights .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
-  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column {
+  #post-2306 .wp-block-columns.eplus-styles-uid-2b8c9e > .wp-block-column,
+  #post-2306 .renacon-home-band--highlights .wp-block-column {
     flex-basis: 100% !important;
     max-width: 100% !important;
     width: 100% !important;
@@ -2463,18 +2610,25 @@ button[type="submit"]:hover {
 /* Also force hero full-bleed before/without JS band wrap */
 #post-2306 .entry-content > .stk-52d755f.alignfull,
 #post-2306 .entry-content > .stk-52d755f.alignfull > .stk-content-align,
-#post-2306 .entry-content > .stk-52d755f .wp-block-getwid-section.alignfull {
+#post-2306 .entry-content > .stk-52d755f .wp-block-getwid-section.alignfull,
+#post-2306 .entry-content > .stk-52d755f,
+#post-2306 .renacon-home-band--hero,
+#post-2306 .renacon-home-band--hero .stk-52d755f {
   width: 100vw !important;
   max-width: 100vw !important;
   margin-left: calc(50% - 50vw) !important;
   margin-right: calc(50% - 50vw) !important;
   padding-inline: 0 !important;
+  left: auto !important;
+  right: auto !important;
+  box-sizing: border-box !important;
 }
 
 #post-2306 .entry-content > .stk-52d755f .stk-column-wrapper,
 #post-2306 .entry-content > .stk-52d755f .stk-block-column,
 #post-2306 .renacon-home-band--hero .stk-column-wrapper,
-#post-2306 .renacon-home-band--hero .stk-block-column {
+#post-2306 .renacon-home-band--hero .stk-block-column,
+#post-2306 .renacon-home-band--hero .stk-content-align {
   max-width: none !important;
   width: 100% !important;
   padding: 0 !important;
@@ -2486,7 +2640,13 @@ button[type="submit"]:hover {
 #post-2306 .renacon-home-band--hero .wp-block-getwid-section__inner-wrapper,
 #post-2306 .renacon-home-band--hero .wp-block-getwid-section__background-holder,
 #post-2306 .renacon-home-band--hero .wp-block-getwid-section__background,
-#post-2306 .renacon-home-band--hero .wp-block-getwid-section__background-video-wrapper {
+#post-2306 .renacon-home-band--hero .wp-block-getwid-section__background-video-wrapper,
+#post-2306 .stk-52d755f .wp-block-getwid-section,
+#post-2306 .stk-52d755f .wp-block-getwid-section__wrapper,
+#post-2306 .stk-52d755f .wp-block-getwid-section__inner-wrapper,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background-holder,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background,
+#post-2306 .stk-52d755f .wp-block-getwid-section__background-video-wrapper {
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
@@ -2495,8 +2655,7 @@ button[type="submit"]:hover {
 }
 
 /* Product / highlight column rows */
-#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-columns,
-#post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-columns {
+#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-columns {
   display: flex !important;
   flex-wrap: wrap !important;
   flex-direction: row !important;
@@ -2507,8 +2666,7 @@ button[type="submit"]:hover {
   gap: 1.75rem 2rem !important;
 }
 
-#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-column,
-#post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-column {
+#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-column {
   float: none !important;
   flex: 1 1 calc(50% - 1rem) !important;
   min-width: 0 !important;
@@ -2516,7 +2674,31 @@ button[type="submit"]:hover {
   box-sizing: border-box !important;
 }
 
-/* OLD DESIGN product cards: image on top (yellow banner GIFs), title+copy below */
+/* Highlights: three equal columns — do NOT reuse the 50% product rule */
+#post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-columns {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  max-width: min(1100px, 100%) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+  gap: 1rem 1.5rem !important;
+  background: #f2f2f2 !important;
+  padding: 1.35rem 1.5rem !important;
+}
+
+#post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-column {
+  float: none !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* OLD DESIGN product cards: image on top (yellow banner GIFs), title+copy below.
+   Apply with and without JS band wrappers so getwid has-image-left cannot win. */
+#post-2306 .wp-block-getwid-image-box.has-image-left,
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box,
 #post-2306 .renacon-home-band--products .wp-block-getwid-image-box,
 #post-2306 .entry-content .wp-block-getwid-image-box.has-image-left {
@@ -2531,6 +2713,7 @@ button[type="submit"]:hover {
   gap: 0 !important;
 }
 
+#post-2306 .has-image-left .wp-block-getwid-image-box__image-container,
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box__image-container,
 #post-2306 .renacon-home-band--products .wp-block-getwid-image-box__image-container,
 #post-2306 .entry-content .wp-block-getwid-image-box.has-image-left .wp-block-getwid-image-box__image-container {
@@ -2541,21 +2724,24 @@ button[type="submit"]:hover {
   margin: 0 0 0.85rem !important;
   align-self: stretch !important;
   line-height: 0;
+  order: 0 !important;
 }
 
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box__image-wrapper,
-#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__image-wrapper {
+#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__image-wrapper,
+#post-2306 .has-image-left .wp-block-getwid-image-box__image-wrapper {
   display: block !important;
   width: 100% !important;
 }
 
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box__image,
-#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__image {
+#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__image,
+#post-2306 .wp-block-getwid-image-box__image {
   display: block !important;
   width: 100% !important;
   max-width: 100% !important;
   height: auto !important;
-  /* GIFs are ~328x509 portrait and include yellow label bars at the bottom —
+  /* GIFs are portrait and include yellow label bars at the bottom —
      do NOT crop to square or the banners disappear */
   aspect-ratio: auto !important;
   object-fit: contain;
@@ -2563,7 +2749,8 @@ button[type="submit"]:hover {
 }
 
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box__content,
-#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__content {
+#post-2306 .renacon-home-band--products .wp-block-getwid-image-box__content,
+#post-2306 .has-image-left .wp-block-getwid-image-box__content {
   float: none !important;
   width: 100% !important;
   max-width: 100% !important;
@@ -2571,10 +2758,13 @@ button[type="submit"]:hover {
   align-self: stretch !important;
   text-align: left !important;
   padding: 0 !important;
+  order: 1 !important;
 }
 
 #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box .wp-block-heading,
-#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box p {
+#post-2306.renacon-home-ix .renacon-home-band--products .wp-block-getwid-image-box p,
+#post-2306 .wp-block-getwid-image-box .wp-block-heading,
+#post-2306 .wp-block-getwid-image-box p {
   text-align: left !important;
 }
 
@@ -2582,6 +2772,7 @@ button[type="submit"]:hover {
   #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-columns,
   #post-2306.renacon-home-ix .renacon-home-band--highlights .wp-block-columns {
     flex-direction: column !important;
+    flex-wrap: wrap !important;
   }
 
   #post-2306.renacon-home-ix .renacon-home-band--products .wp-block-column,
@@ -2593,15 +2784,53 @@ button[type="submit"]:hover {
 }
 
 /* ---- Section backgrounds ---- */
+/* Highlights band stays white; gray lives on the centered strip itself */
 #post-2306.renacon-home-ix .renacon-home-band--highlights {
-  background-color: var(--renacon-gray);
+  background-color: #ffffff;
+  padding-block: 0.75rem 0.5rem;
 }
 
-/* Pale mint product categories (old Blocksy/Elementor look) */
-#post-2306.renacon-home-ix .renacon-home-band--products {
+/* Pale mint product categories (old Blocksy look matching renacon.in) */
+#post-2306.renacon-home-ix .renacon-home-band--products,
+#post-2306 .renacon-home-band--products {
   background-color: #e5f3ea;
   padding-block: 2rem 2.35rem;
 }
+
+/* Product category column rows even before JS wraps bands */
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e,
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17,
+#post-2306 .renacon-home-band--products > .wp-block-columns {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  flex-direction: row !important;
+  width: 100% !important;
+  max-width: min(1100px, calc(100% - 2rem)) !important;
+  margin-inline: auto !important;
+  box-sizing: border-box !important;
+  gap: 1.75rem 2rem !important;
+}
+
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e > .wp-block-column,
+#post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17 > .wp-block-column,
+#post-2306 .renacon-home-band--products > .wp-block-columns > .wp-block-column {
+  float: none !important;
+  flex: 1 1 calc(50% - 1rem) !important;
+  min-width: 0 !important;
+  max-width: calc(50% - 1rem) !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 781px) {
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-afaa2e > .wp-block-column,
+  #post-2306 .entry-content > .wp-block-columns.eplus-styles-uid-5b3f17 > .wp-block-column,
+  #post-2306 .renacon-home-band--products > .wp-block-columns > .wp-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
 
 #post-2306.renacon-home-ix .renacon-home-band--services {
   background-color: var(--renacon-mist);

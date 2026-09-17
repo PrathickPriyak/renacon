@@ -381,28 +381,50 @@ export function WpInteractions() {
       ),
     );
 
+    const setOpenerState = (isOpen: boolean) => {
+      openers.forEach((el) => {
+        el.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        el.classList.toggle("renacon-menu-open", isOpen);
+      });
+    };
+
     const open = () => {
       if (!offcanvas) return;
       offcanvas.classList.add("is-open", "active");
       offcanvas.removeAttribute("inert");
+      offcanvas.setAttribute("aria-hidden", "false");
+      // Neutralize Blocksy left-side reveal offset on the inner panel
+      const inner = offcanvas.querySelector<HTMLElement>(".ct-panel-inner");
+      if (inner) {
+        inner.style.transform = "none";
+        inner.style.translate = "none";
+        inner.style.left = "0";
+        inner.style.maxWidth = "100%";
+        inner.style.width = "100%";
+      }
       document.documentElement.classList.add("ct-panel-open");
       document.body.style.overflow = "hidden";
+      setOpenerState(true);
     };
     const close = () => {
       if (!offcanvas) return;
       offcanvas.classList.remove("is-open", "active");
       offcanvas.setAttribute("inert", "");
+      offcanvas.setAttribute("aria-hidden", "true");
       document.documentElement.classList.remove("ct-panel-open");
       document.body.style.overflow = "";
+      setOpenerState(false);
     };
 
     const onOpenerClick = (e: Event) => {
       e.preventDefault();
+      e.stopPropagation();
       if (!offcanvas) return;
       if (offcanvas.classList.contains("is-open")) close();
       else open();
     };
 
+    setOpenerState(false);
     openers.forEach((el) => el.addEventListener("click", onOpenerClick));
 
     const onOffcanvasClick = (e: Event) => {
@@ -698,8 +720,22 @@ export function WpInteractions() {
       document.getElementById("post-1192") ||
       document.querySelector<HTMLElement>(".page-id-1192, article.post-1192");
     if (projectsGalleryRoot || /\/projects-2\/?$/.test(window.location.pathname)) {
-      (projectsGalleryRoot || document.body).classList.add("renacon-projects-gallery-ix");
-      hydrateWpImages(projectsGalleryRoot || document.body);
+      const root =
+        projectsGalleryRoot ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      root.classList.add("renacon-projects-gallery-ix");
+      hydrateWpImages(root);
+      normalizeSimplyGalleries(root);
+    }
+
+    // Media page galleries also need caption/grid hardening
+    if (mediaRoot || /\/media\/?$/.test(window.location.pathname)) {
+      const root =
+        mediaRoot ||
+        document.querySelector<HTMLElement>("main.site-main") ||
+        document.body;
+      normalizeSimplyGalleries(root);
     }
 
     // Contact page — interactive form polish marker
@@ -939,6 +975,54 @@ function largestImageUrl(img: HTMLImageElement): string {
     }
   });
   return absolutizeWpUrl(best);
+}
+
+/**
+ * Simply Gallery plugin relies on absolute masonry. Without its JS, leftover
+ * positioning can leave sparse rows left-aligned and hide captions. Normalize
+ * to a plain flow/grid and fill blank captions from the linked slug.
+ */
+function normalizeSimplyGalleries(root: ParentNode): void {
+  root.querySelectorAll<HTMLElement>(".sgb-gallery").forEach((gallery) => {
+    gallery.style.height = "auto";
+    gallery.style.position = "relative";
+    gallery.querySelectorAll<HTMLElement>(".sgb-item").forEach((item) => {
+      item.style.position = "relative";
+      item.style.left = "auto";
+      item.style.top = "auto";
+      item.style.width = "100%";
+      item.style.height = "auto";
+      item.style.maxWidth = "none";
+      item.style.transform = "none";
+      item.style.opacity = "1";
+      item.style.visibility = "visible";
+
+      let caption = item.querySelector<HTMLElement>(".sgb-item-caption");
+      const captionText = caption?.textContent?.replace(/\s+/g, " ").trim() || "";
+      if (!caption) {
+        caption = document.createElement("div");
+        caption.className = "sgb-item-caption";
+        item.appendChild(caption);
+      }
+      if (!captionText) {
+        const href =
+          item.querySelector("a")?.getAttribute("href") ||
+          item.querySelector("img")?.getAttribute("src") ||
+          "";
+        const slug = href.split("/").filter(Boolean).pop() || "";
+        const label = slug
+          .replace(/\.[a-z0-9]+$/i, "")
+          .replace(/[-_]+/g, " ")
+          .replace(/\b\w/g, (c) => c.toUpperCase())
+          .trim();
+        if (label) caption.textContent = label;
+      }
+      caption.style.display = "block";
+      caption.style.position = "relative";
+      caption.style.opacity = "1";
+      caption.style.visibility = "visible";
+    });
+  });
 }
 
 /**
