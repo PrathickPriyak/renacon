@@ -9,6 +9,113 @@ type BrochureSubmitResponse = {
   downloadUrl?: string;
 };
 
+const RESUME_MAX_BYTES = 5 * 1024 * 1024;
+const RESUME_EXT = /\.(pdf|doc|docx)$/i;
+
+function formatFileSize(bytes: number): string {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function validateResumeClient(file: File | null | undefined): string | null {
+  if (!file || file.size <= 0) {
+    return "Please attach your resume (PDF, DOC, or DOCX).";
+  }
+  if (file.size > RESUME_MAX_BYTES) {
+    return "Resume must be 5MB or smaller.";
+  }
+  if (!RESUME_EXT.test(file.name)) {
+    return "Resume must be a PDF, DOC, or DOCX file.";
+  }
+  return null;
+}
+
+function setResumeError(form: HTMLFormElement, message: string | null): void {
+  const errorEl = form.querySelector<HTMLElement>(".renacon-resume-error, #careers-resume-error");
+  const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone");
+  if (errorEl) {
+    if (message) {
+      errorEl.hidden = false;
+      errorEl.textContent = message;
+    } else {
+      errorEl.hidden = true;
+      errorEl.textContent = "";
+    }
+  }
+  if (zone) {
+    zone.classList.toggle("is-invalid", Boolean(message));
+  }
+}
+
+function updateResumeFilename(form: HTMLFormElement, file: File | null): void {
+  const nameEl = form.querySelector<HTMLElement>("[data-renacon-resume-filename], .renacon-resume-filename");
+  const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone");
+  if (nameEl) {
+    if (file) {
+      nameEl.hidden = false;
+      nameEl.textContent = `${file.name} (${formatFileSize(file.size)})`;
+    } else {
+      nameEl.hidden = true;
+      nameEl.textContent = "";
+    }
+  }
+  if (zone) {
+    zone.classList.toggle("has-file", Boolean(file));
+  }
+}
+
+/** Wire resume drag-drop + filename display for careers forms. */
+function enhanceCareersForm(form: HTMLFormElement): void {
+  if (form.dataset.renaconCareersEnhanced === "1") return;
+  form.dataset.renaconCareersEnhanced = "1";
+  form.classList.add("renacon-careers-form");
+  if (!form.getAttribute("enctype")) {
+    form.setAttribute("enctype", "multipart/form-data");
+  }
+
+  const input = form.querySelector<HTMLInputElement>('input[type="file"][name="resume"], #careers-resume');
+  const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone");
+  if (!input) return;
+
+  const onFileChosen = (file: File | null) => {
+    const error = validateResumeClient(file);
+    setResumeError(form, error);
+    updateResumeFilename(form, file);
+  };
+
+  input.addEventListener("change", () => {
+    const file = input.files?.[0] || null;
+    onFileChosen(file);
+  });
+
+  if (zone) {
+    ["dragenter", "dragover"].forEach((type) => {
+      zone.addEventListener(type, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        zone.classList.add("is-dragover");
+      });
+    });
+    ["dragleave", "drop"].forEach((type) => {
+      zone.addEventListener(type, (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        zone.classList.remove("is-dragover");
+      });
+    });
+    zone.addEventListener("drop", (event) => {
+      const dragEvent = event as DragEvent;
+      const file = dragEvent.dataTransfer?.files?.[0] || null;
+      if (!file) return;
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      input.files = transfer.files;
+      onFileChosen(file);
+    });
+  }
+}
+
 function fieldValue(form: HTMLFormElement, selectors: string[]): string {
   for (const selector of selectors) {
     const el = form.querySelector(selector);
@@ -163,6 +270,13 @@ export function FormBridge() {
         if (isBrochureForm(form)) {
           enhanceBrochureForm(form);
         }
+        const isCareers =
+          form.classList.contains("renacon-careers-form") ||
+          form.id === "renacon-careers-form" ||
+          /\/careers\/?$/.test(window.location.pathname);
+        if (isCareers) {
+          enhanceCareersForm(form);
+        }
         if (
           form.className.includes("forminator") ||
           form.className.includes("wpforms") ||
@@ -172,7 +286,7 @@ export function FormBridge() {
         ) {
           form.classList.add("renacon-contact-form");
           form.querySelectorAll<HTMLElement>(
-            "input, textarea, select, .forminator-input, .forminator-textarea",
+            "input:not([type='file']), textarea, select, .forminator-input, .forminator-textarea",
           ).forEach((el) => {
             if (el.dataset.renaconFocusReady === "1") return;
             el.dataset.renaconFocusReady = "1";
@@ -316,6 +430,7 @@ export function FormBridge() {
         form.querySelectorAll(".renacon-field-invalid").forEach((el) =>
           el.classList.remove("renacon-field-invalid"),
         );
+        if (kind === "careers") setResumeError(form, null);
       };
       clearFieldStates();
 
@@ -344,8 +459,45 @@ export function FormBridge() {
       }
       const phoneForApi = phone.trim() || "0000000000";
 
+      let resumeFile: File | null = null;
+      if (kind === "careers") {
+        enhanceCareersForm(form);
+        if (!(payload.role || "").trim()) {
+          setStatus(form, "Please select the position you are applying for.", "error");
+          markInvalid('select[name="role"], #careers-role');
+          return;
+        }
+        if (!(payload.experience || "").trim()) {
+          setStatus(form, "Please enter your experience.", "error");
+          markInvalid('input[name="experience"], #careers-experience');
+          return;
+        }
+        if (!(payload.location || "").trim()) {
+          setStatus(form, "Please enter your preferred location.", "error");
+          markInvalid('input[name="location"], #careers-location');
+          return;
+        }
+        if (!(payload.qualification || "").trim()) {
+          setStatus(form, "Please enter your qualification.", "error");
+          markInvalid('input[name="qualification"], #careers-qualification');
+          return;
+        }
+        const resumeInput = form.querySelector<HTMLInputElement>(
+          'input[type="file"][name="resume"], #careers-resume',
+        );
+        resumeFile = resumeInput?.files?.[0] || null;
+        const resumeError = validateResumeClient(resumeFile);
+        if (resumeError) {
+          setResumeError(form, resumeError);
+          setStatus(form, resumeError, "error");
+          resumeInput?.focus();
+          return;
+        }
+        setResumeError(form, null);
+      }
+
       const submitBtn = form.querySelector<HTMLButtonElement>(
-        'button[type="submit"], .forminator-button-submit, .wpforms-submit',
+        'button[type="submit"], .forminator-button-submit, .wpforms-submit, .renacon-careers-submit',
       );
       const prevLabel = submitBtn?.textContent || "";
       if (submitBtn) {
@@ -360,24 +512,39 @@ export function FormBridge() {
           kind === "careers" ? "Submitting your application…" : "Sending your message…",
           "info",
         );
-        const res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...payload,
-            name: name.trim(),
-            email: email.trim(),
-            phone: phoneForApi,
-            message,
-            kind,
-            product: document.title,
-            page_url: path,
-            role: payload.role || "",
-            experience: payload.experience || "",
-            location: payload.location || "",
-            qualification: payload.qualification || "",
-          }),
-        });
+
+        let res: Response;
+        if (kind === "careers") {
+          const body = new FormData();
+          body.set("name", name.trim());
+          body.set("email", email.trim());
+          body.set("phone", phoneForApi);
+          body.set("message", message);
+          body.set("kind", "careers");
+          body.set("product", document.title);
+          body.set("page_url", path);
+          body.set("role", payload.role || "");
+          body.set("experience", payload.experience || "");
+          body.set("location", payload.location || "");
+          body.set("qualification", payload.qualification || "");
+          if (resumeFile) body.set("resume", resumeFile, resumeFile.name);
+          res = await fetch(endpoint, { method: "POST", body });
+        } else {
+          res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...payload,
+              name: name.trim(),
+              email: email.trim(),
+              phone: phoneForApi,
+              message,
+              kind,
+              product: document.title,
+              page_url: path,
+            }),
+          });
+        }
         const json = (await res.json()) as { ok?: boolean; error?: string };
         if (!res.ok || !json.ok) throw new Error(json.error || "Submit failed");
         setStatus(
@@ -390,6 +557,10 @@ export function FormBridge() {
         form.classList.add("renacon-form-success");
         form.reset();
         clearFieldStates();
+        if (kind === "careers") {
+          updateResumeFilename(form, null);
+          setResumeError(form, null);
+        }
         const responseMsg = form.querySelector<HTMLElement>(".forminator-response-message");
         if (responseMsg) {
           responseMsg.classList.remove("forminator-error", "forminator-success");

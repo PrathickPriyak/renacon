@@ -9,6 +9,7 @@ This repository is a clean rebuild of [renacon.in](https://renacon.in/). Third-p
 - Home, About, Why Renacon, all product pages, Rapid Wall, projects, media, news/blogs, careers, contact (enquiry + channel partner), calculator, privacy, sitemap, TDS pages
 - 139 official WordPress posts (company news and blogs)
 - Brochure request, contact and careers forms (stored as JSONL under `data/submissions/`, gitignored)
+- Careers applications accept resume upload (PDF/DOC/DOCX, max 5MB) stored under `data/submissions/resumes/`
 
 ## Local development
 

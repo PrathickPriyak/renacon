@@ -18,23 +18,39 @@ export function LeadForm({
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries());
+    const formData = new FormData(form);
     setStatus("loading");
     setMessage("");
     const endpoint =
       kind === "careers" ? "/api/careers" : kind === "brochure" ? "/api/brochure" : "/api/contact";
 
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          kind,
-          product,
-          productPath: typeof window !== "undefined" ? window.location.pathname : "",
-        }),
-      });
+      let res: Response;
+      if (kind === "careers") {
+        formData.set("kind", "careers");
+        if (product) formData.set("product", product);
+        formData.set(
+          "productPath",
+          typeof window !== "undefined" ? window.location.pathname : "",
+        );
+        formData.set(
+          "page_url",
+          typeof window !== "undefined" ? window.location.pathname : "",
+        );
+        res = await fetch(endpoint, { method: "POST", body: formData });
+      } else {
+        const data = Object.fromEntries(formData.entries());
+        res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...data,
+            kind,
+            product,
+            productPath: typeof window !== "undefined" ? window.location.pathname : "",
+          }),
+        });
+      }
       const json = (await res.json()) as { ok?: boolean; error?: string; downloadUrl?: string };
       if (!res.ok || !json.ok) {
         throw new Error(json.error || "Unable to submit");
@@ -152,6 +168,19 @@ export function LeadForm({
           </div>
           <input className={input} name="location" required placeholder="Preferred location *" />
           <input className={input} name="qualification" required placeholder="Qualification *" />
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-slate-800">
+              Resume / CV <span className="text-red-600">*</span>
+            </label>
+            <input
+              className={input}
+              type="file"
+              name="resume"
+              required
+              accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            />
+            <p className="mt-1 text-xs text-slate-500">PDF, DOC, or DOCX · Max 5MB</p>
+          </div>
         </>
       ) : null}
       <textarea className={input} name="message" rows={4} placeholder="Message" />

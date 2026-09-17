@@ -74,10 +74,11 @@
 
 
 <div class="renacon-careers-form-wrap">
-<form id="renacon-careers-form" class="renacon-careers-form wpforms-form" method="post" action="/api/careers/" novalidate>
+<form id="renacon-careers-form" class="renacon-careers-form wpforms-form" method="post" action="/api/careers/" enctype="multipart/form-data" novalidate>
   <div class="renacon-careers-intro">
+    <p class="renacon-careers-kicker">Renacon careers</p>
     <h3 class="renacon-careers-form-title">Apply now</h3>
-    <p class="renacon-careers-form-lead">Share your details and our HR team will review your application.</p>
+    <p class="renacon-careers-form-lead">Share your details and attach your resume. Our HR team will review your application.</p>
   </div>
   <div class="renacon-careers-grid">
     <div class="renacon-field">
@@ -117,10 +118,31 @@
       <label for="careers-message">Cover note / message</label>
       <textarea id="careers-message" name="message" rows="4" placeholder="Briefly tell us about your background (optional)"></textarea>
     </div>
+    <div class="renacon-field renacon-field-span renacon-resume-field">
+      <label id="careers-resume-label" for="careers-resume">Resume / CV <span class="req" aria-hidden="true">*</span></label>
+      <div class="renacon-resume-dropzone" data-renacon-resume-dropzone>
+        <input
+          id="careers-resume"
+          class="renacon-resume-input"
+          type="file"
+          name="resume"
+          accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          required
+          aria-describedby="careers-resume-hint careers-resume-error"
+        >
+        <div class="renacon-resume-dropzone-inner" aria-hidden="true">
+          <span class="renacon-resume-icon" aria-hidden="true"></span>
+          <p class="renacon-resume-prompt"><strong>Drag &amp; drop</strong> your resume here, or <span class="renacon-resume-browse">browse files</span></p>
+          <p id="careers-resume-hint" class="renacon-resume-meta">PDF, DOC, or DOCX · Max 5MB</p>
+          <p class="renacon-resume-filename" data-renacon-resume-filename hidden></p>
+        </div>
+      </div>
+      <p id="careers-resume-error" class="renacon-resume-error" role="alert" aria-live="polite" hidden></p>
+    </div>
   </div>
   <div class="renacon-careers-actions">
     <button type="submit" class="renacon-careers-submit">Submit application</button>
-    <p class="renacon-careers-hint">You can also email your resume to <a href="mailto:career@renacon.in">career@renacon.in</a></p>
+    <p class="renacon-careers-hint">Questions? Email <a href="mailto:career@renacon.in">career@renacon.in</a></p>
   </div>
 </form>
 </div>
