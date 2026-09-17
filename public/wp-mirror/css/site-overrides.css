@@ -603,7 +603,12 @@ html.ct-panel-open #offcanvas * {
 .renacon-media-ix .pgc_sgb_slider,
 .renacon-media-ix .simply-gallery-amp.alignwide,
 .page-id-1192 .simply-gallery-amp,
-.page-id-1067 .simply-gallery-amp {
+.page-id-1067 .simply-gallery-amp,
+body.renacon-page-projects-2 .simply-gallery-amp,
+body.renacon-page-projects-2 .pgc_sgb_slider,
+body.renacon-page-media .simply-gallery-amp,
+body.renacon-page-media .pgc_sgb_slider,
+main.site-main .simply-gallery-amp.alignwide {
   max-width: 1180px !important;
   width: 100% !important;
   margin-left: auto !important;
@@ -622,7 +627,11 @@ html.ct-panel-open #offcanvas * {
 #post-1067 h1.wp-block-heading,
 #post-1067 h2.wp-block-heading,
 .renacon-projects-gallery-ix h1.wp-block-heading,
-.renacon-media-ix h1.wp-block-heading {
+.renacon-media-ix h1.wp-block-heading,
+body.renacon-page-projects-2 main.site-main > h1.wp-block-heading,
+body.renacon-page-projects-2 .entry-content > h1.wp-block-heading,
+body.renacon-page-media h1.wp-block-heading,
+body.renacon-page-media h2.wp-block-heading {
   margin-block: 1.5rem 0.75rem;
   padding-inline: 0.25rem;
   max-width: 1180px;
