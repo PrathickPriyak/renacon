@@ -5892,14 +5892,14 @@ body.renacon-page-our-products #post-635 {
   align-items: stretch !important;
 }
 
-/* Equal-height product cards — flex column, CTA pinned to bottom */
+/* Equal-height product cards — flex stretch (no height:100% — that blocks row stretch) */
 #post-635.renacon-our-products-ix .renacon-product-hub-card,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card {
   display: flex !important;
   flex-direction: column !important;
   align-self: stretch !important;
-  height: 100% !important;
-  min-height: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
   text-align: center;
   box-sizing: border-box;
 }
@@ -6023,10 +6023,34 @@ body.renacon-page-our-products #post-635 {
 
 /* Pin Read more to card bottom so row bottoms align */
 #post-635.renacon-our-products-ix .renacon-product-hub-card .stk-block-button-group,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-9bff2c4,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-6804005,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-406bfd4,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-13952d9,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-708e58a,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-af2a390,
+#post-635.renacon-our-products-ix .renacon-product-hub-card .stk-64c20df,
 #post-635[data-renacon-products-ix] .renacon-product-hub-card .stk-block-button-group {
   margin-top: auto !important;
   margin-bottom: 0 !important;
   width: 100%;
+  flex: 0 0 auto !important;
+}
+
+/* Nested content stack must fill stretched card so margin-top:auto has free space */
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  box-sizing: border-box !important;
+}
+
+#post-635.renacon-our-products-ix .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks,
+#post-635[data-renacon-products-ix] .renacon-product-hub-card > .stk-column-wrapper > .stk-inner-blocks > .stk-block-columns > .stk-row > .stk-block-column > .stk-column-wrapper > .stk-inner-blocks {
+  flex: 1 1 auto !important;
+  min-height: 100% !important;
+  height: 100% !important;
 }
 
 /* Brand green CTAs (Stackable buttons already green via page CSS; harden focus) */
