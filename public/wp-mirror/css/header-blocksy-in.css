@@ -172,9 +172,16 @@ body.renacon-mirror {
   border-top: 1px dashed rgba(255, 255, 255, 0.1) !important;
 }
 
+#header.ct-header .menu-container .sub-menu > .menu-item:first-child {
+  border-top: none !important;
+}
+
 #header.ct-header .menu-container .sub-menu a,
 #header.ct-header .menu-container .sub-menu .ct-menu-link {
-  display: block !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.2em;
   padding: 13px 19.5px !important;
   color: #f4c709 !important;
   background: transparent !important;
@@ -185,6 +192,20 @@ body.renacon-mirror {
   text-decoration: none !important;
   text-transform: none !important;
   letter-spacing: 0 !important;
+}
+
+/* Nested product items (Tile Adhesive / Grout) use a right chevron like .in */
+#header.ct-header .menu-container .sub-menu .animated-submenu-inline > a {
+  --toggle-icon-transform: rotate(-90deg);
+  --dropdown-toggle-margin-start: auto;
+}
+
+#header.ct-header .menu-container .sub-menu .animated-submenu-inline > a .ct-toggle-dropdown-desktop {
+  margin-inline-start: auto !important;
+}
+
+#header.ct-header .menu-container .sub-menu .animated-submenu-inline > a .ct-toggle-dropdown-desktop svg {
+  transform: rotate(-90deg) !important;
 }
 
 #header.ct-header .menu-container .sub-menu a:hover,
