@@ -1,43 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { localizeMediaUrl } from "@/lib/localizeMedia";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/** Prefer same-origin mirrored media under public/assets/wp-content (/wp-content rewrite). */
-function localizeWpUrl(url: string): string {
-  const trimmed = url.trim();
-  if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
-    return trimmed;
-  }
-  if (trimmed.startsWith("//")) {
-    try {
-      const u = new URL(`https:${trimmed}`);
-      if (u.hostname === "renacon.in" || u.hostname === "www.renacon.in") {
-        return `${u.pathname}${u.search}`;
-      }
-      return `https:${trimmed}`;
-    } catch {
-      return `https:${trimmed}`;
-    }
-  }
-  if (
-    trimmed.startsWith("https://renacon.in/") ||
-    trimmed.startsWith("https://www.renacon.in/")
-  ) {
-    try {
-      const u = new URL(trimmed);
-      return `${u.pathname}${u.search}`;
-    } catch {
-      return trimmed;
-    }
-  }
-  return trimmed;
-}
-
-/** Derive a short accessible label from a media URL when alt is missing. */
 function altFromMediaUrl(url: string): string {
   try {
     const path = new URL(url, "https://renacon.vercel.app").pathname;
@@ -49,6 +18,13 @@ function altFromMediaUrl(url: string): string {
   }
 }
 
+function setLocalizedAttr(el: Element, name: string): void {
+  const current = el.getAttribute(name);
+  if (!current) return;
+  const next = localizeMediaUrl(current);
+  if (next !== current) el.setAttribute(name, next);
+}
+
 /** Fix relative / lazy WordPress media so product images actually paint. */
 function hydrateWpImages(root: ParentNode): void {
   root.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
@@ -58,9 +34,9 @@ function hydrateWpImages(root: ParentNode): void {
       img.getAttribute("data-original");
     const current = img.getAttribute("src") || "";
     if (lazy && (!current || current.startsWith("data:"))) {
-      img.setAttribute("src", localizeWpUrl(lazy));
+      img.setAttribute("src", localizeMediaUrl(lazy));
     } else if (current) {
-      const local = localizeWpUrl(current);
+      const local = localizeMediaUrl(current);
       if (local !== current) img.setAttribute("src", local);
     }
 
@@ -74,7 +50,7 @@ function hydrateWpImages(root: ParentNode): void {
         .map((part) => {
           const bits = part.trim().split(/\s+/);
           if (!bits[0]) return part.trim();
-          bits[0] = localizeWpUrl(bits[0]);
+          bits[0] = localizeMediaUrl(bits[0]);
           return bits.join(" ");
         })
         .join(", ");
@@ -84,8 +60,31 @@ function hydrateWpImages(root: ParentNode): void {
     // A11y: mirrored WP markup often omits alt — fill from filename when absent
     if (!img.hasAttribute("alt") || img.getAttribute("alt") === null) {
       const src = img.getAttribute("src") || lazy || "";
-      img.setAttribute("alt", altFromMediaUrl(localizeWpUrl(src)));
+      img.setAttribute("alt", altFromMediaUrl(localizeMediaUrl(src)));
     }
+  });
+
+  root.querySelectorAll<HTMLVideoElement>("video").forEach((video) => {
+    setLocalizedAttr(video, "src");
+    setLocalizedAttr(video, "poster");
+    video.querySelectorAll("source").forEach((source) => {
+      setLocalizedAttr(source, "src");
+    });
+    const play = () => {
+      video.muted = true;
+      video.playsInline = true;
+      void video.play().catch(() => {
+        /* autoplay can be blocked until user gesture */
+      });
+    };
+    if (video.hasAttribute("autoplay")) {
+      if (video.readyState >= 2) play();
+      else video.addEventListener("canplay", play, { once: true });
+    }
+  });
+
+  root.querySelectorAll("source, audio").forEach((el) => {
+    setLocalizedAttr(el, "src");
   });
 
   root.querySelectorAll<HTMLElement>("[style*='wp-content'], [style*='background']").forEach(
@@ -893,7 +892,7 @@ function largestImageUrl(img: HTMLImageElement): string {
       best = url;
     }
   });
-  return localizeWpUrl(best);
+  return localizeMediaUrl(best);
 }
 
 /**

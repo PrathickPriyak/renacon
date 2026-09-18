@@ -1,5 +1,6 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { localizeMediaHtml } from "@/lib/localizeMedia";
 
 const root = join(process.cwd(), "content/pages-html");
 const pageStylesRoot = join(process.cwd(), "content/page-styles");
@@ -47,7 +48,7 @@ export function readPageHtml(slug: string): string | null {
     );
   }
 
-  return html;
+  return localizeMediaHtml(html);
 }
 
 /** Stackable page CSS (background-image columns) mirrored from renacon.in */
@@ -55,7 +56,7 @@ export function readPageStyles(slug: string): string | null {
   const path = join(pageStylesRoot, `${slug}.css`);
   if (!existsSync(path)) return null;
   const css = readFileSync(path, "utf8").trim();
-  return css || null;
+  return css ? localizeMediaHtml(css) : null;
 }
 
 export function listPageStyleSlugs(): string[] {
@@ -66,7 +67,7 @@ export function listPageStyleSlugs(): string[] {
 }
 
 export function readPartial(name: "_header.html" | "_footer.html" | "_offcanvas.html"): string {
-  return readFileSync(join(root, name), "utf8");
+  return localizeMediaHtml(readFileSync(join(root, name), "utf8"));
 }
 
 export const WP_STYLESHEETS = [
