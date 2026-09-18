@@ -40,7 +40,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-forms-db-excel-202609180430"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-ui-polish-form-calc-vision-202609180838"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link

@@ -4813,42 +4813,65 @@ body.renacon-page-media .sgb-item img {
 }
 
 /* ==========================================================================
-   Calculator page — Involve.me embeds + green Stackable shell (renacon.in parity)
+   Calculator page — refined Renacon shell (premium accordion panel)
    ========================================================================== */
 body.renacon-page-calculator #post-6793,
 body.renacon-page-calculator article.post-6793 {
-  --renacon-calc-green: #02a554;
+  --renacon-calc-green: #0a7a45;
+  --renacon-calc-green-deep: #065c34;
+  --renacon-calc-leaf: #12b45f;
 }
 
 body.renacon-page-calculator .ugb-e75cca7-wrapper.ugb-container__wrapper,
 body.renacon-page-calculator .ugb-e75cca7-wrapper.ugb-container__wrapper:before {
-  background-color: #02a554 !important;
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 0%, rgba(255, 255, 255, 0.14), transparent 55%),
+    radial-gradient(ellipse 70% 55% at 88% 100%, rgba(0, 0, 0, 0.18), transparent 50%),
+    linear-gradient(165deg, var(--renacon-calc-green-deep) 0%, var(--renacon-calc-green) 48%, #0e8f52 100%) !important;
 }
 
 body.renacon-page-calculator .ugb-e75cca7-content-wrapper > h1,
 body.renacon-page-calculator h1.eplus-styles-uid-538c5a {
-  color: #f4c708 !important;
-  font-size: 40px;
+  color: #fff8e1 !important;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: normal;
-  margin: 0.35em 0 0.75em;
+  letter-spacing: 0.12em;
+  margin: 0.5em 0 1.25em;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.22);
 }
 
 body.renacon-page-calculator details.wp-block-stackable-accordion,
 body.renacon-page-calculator details.stk-block-accordion {
   background: #ffffff;
-  border-radius: 4px;
-  margin: 0 0 14px;
+  border-radius: 10px;
+  margin: 0 0 16px;
   overflow: hidden;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.renacon-page-calculator details.wp-block-stackable-accordion:hover,
+  body.renacon-page-calculator details.stk-block-accordion:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+  }
 }
 
 body.renacon-page-calculator details.wp-block-stackable-accordion > summary,
 body.renacon-page-calculator details.stk-block-accordion > summary {
   cursor: pointer;
   list-style: none;
-  padding: 14px 18px;
-  background: #ffffff;
+  padding: 18px 22px;
+  background: linear-gradient(180deg, #ffffff 0%, #f7fbf8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 body.renacon-page-calculator details.wp-block-stackable-accordion > summary::-webkit-details-marker,
@@ -4858,19 +4881,32 @@ body.renacon-page-calculator details.stk-block-accordion > summary::-webkit-deta
 
 body.renacon-page-calculator details.wp-block-stackable-accordion > summary:hover,
 body.renacon-page-calculator details.stk-block-accordion > summary:hover {
-  background: #f5fbf7;
+  background: linear-gradient(180deg, #ffffff 0%, #eef8f1 100%);
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion[open] > summary,
+body.renacon-page-calculator details.stk-block-accordion[open] > summary {
+  border-bottom: 1px solid #e3efe7;
 }
 
 body.renacon-page-calculator details.wp-block-stackable-accordion .stk-block-heading__text,
 body.renacon-page-calculator details.stk-block-accordion .stk-block-heading__text {
-  color: #1a1a1a;
+  color: #123528;
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 body.renacon-page-calculator details.wp-block-stackable-accordion .stk-block-icon,
 body.renacon-page-calculator details.stk-block-accordion .stk-block-icon {
-  color: #02a554;
+  color: var(--renacon-calc-leaf);
+  transition: transform 0.25s ease;
+}
+
+body.renacon-page-calculator details.wp-block-stackable-accordion[open] .stk-block-icon,
+body.renacon-page-calculator details.stk-block-accordion[open] .stk-block-icon {
+  transform: rotate(180deg);
 }
 
 body.renacon-page-calculator .involveme_embed {
@@ -4878,7 +4914,7 @@ body.renacon-page-calculator .involveme_embed {
   max-width: 100%;
   min-height: 480px;
   background: #ffffff;
-  padding: 4px 0 12px;
+  padding: 8px 12px 16px;
 }
 
 body.renacon-page-calculator .involveme_embed iframe {
@@ -4887,20 +4923,24 @@ body.renacon-page-calculator .involveme_embed iframe {
   min-height: 480px;
   border: 0;
   background: #ffffff;
+  border-radius: 6px;
 }
 
 body.renacon-page-calculator .ugb-container__side {
-  max-width: 920px;
+  max-width: 880px;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 28px;
+  padding-bottom: 36px;
 }
 
 @media screen and (max-width: 689px) {
   body.renacon-page-calculator .ugb-e75cca7-content-wrapper > h1,
   body.renacon-page-calculator h1.eplus-styles-uid-538c5a {
-    font-size: clamp(1.75rem, 8vw, 2.4rem) !important;
+    font-size: clamp(1.65rem, 7.5vw, 2.2rem) !important;
+    letter-spacing: 0.08em;
   }
 
   body.renacon-page-calculator .involveme_embed,
@@ -4910,7 +4950,7 @@ body.renacon-page-calculator .ugb-container__side {
 
   body.renacon-page-calculator details.wp-block-stackable-accordion > summary,
   body.renacon-page-calculator details.stk-block-accordion > summary {
-    padding: 12px 14px;
+    padding: 14px 16px;
   }
 }
 
@@ -5171,78 +5211,275 @@ body.renacon-page-media .wp-block-embed.renacon-reveal {
 }
 
 /* ============================================================
-   Contact enquiry form (native — replaces OpnForm iframe)
+   Contact enquiry form — polished Renacon panel
    ============================================================ */
+body.renacon-page-contact-us h3.eplus-styles-uid-341832,
+.entry-content h3.eplus-styles-uid-341832 {
+  font-size: clamp(1.55rem, 3vw, 2rem) !important;
+  letter-spacing: 0.08em;
+  color: #123528 !important;
+  margin-bottom: 1.5rem !important;
+  position: relative;
+  padding-bottom: 0.65rem;
+}
+
+body.renacon-page-contact-us h3.eplus-styles-uid-341832::after,
+.entry-content h3.eplus-styles-uid-341832::after {
+  content: "";
+  display: block;
+  width: 3.25rem;
+  height: 3px;
+  margin: 0.65rem auto 0;
+  background: linear-gradient(90deg, #04a354, #12b45f);
+  border-radius: 2px;
+}
+
 .renacon-contact-enquiry-form {
-  max-width: 560px;
+  --renacon-form-green: #04a354;
+  --renacon-form-ink: #1a2e24;
+  max-width: 520px;
   width: 100%;
-  margin: 0 auto 2rem;
+  margin: 0 auto 2.5rem;
   text-align: left;
+  padding: 1.75rem 1.5rem 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, #f6faf7 100%);
+  border: 1px solid #d9e8de;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(11, 61, 44, 0.08);
 }
+
 .renacon-contact-enquiry-form .renacon-contact-field {
-  margin: 0 0 1.1rem;
+  margin: 0 0 1.25rem;
 }
+
 .renacon-contact-enquiry-form label {
   display: block;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 0.35rem;
-  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--renacon-form-ink);
+  margin-bottom: 0.45rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
+
 .renacon-contact-enquiry-form .req {
-  color: #d63637;
+  color: #c62828;
 }
+
 .renacon-contact-enquiry-form input[type="text"],
 .renacon-contact-enquiry-form input[type="tel"],
 .renacon-contact-enquiry-form input[type="email"],
 .renacon-contact-enquiry-form select {
   width: 100%;
   box-sizing: border-box;
-  min-height: 42px;
-  border: 0;
-  border-bottom: 2px solid #484b4d;
-  border-radius: 0;
-  background: transparent;
-  padding: 6px 0 8px;
+  min-height: 48px;
+  border: 1px solid #cfdcd4;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 14px;
   font-size: 16px;
   line-height: 1.4;
+  color: var(--renacon-form-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
+
+.renacon-contact-enquiry-form select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #04a354 50%),
+    linear-gradient(135deg, #04a354 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) calc(50% - 3px),
+    calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  padding-right: 36px;
+}
+
+.renacon-contact-enquiry-form input:hover,
+.renacon-contact-enquiry-form select:hover {
+  border-color: #a8c9b6;
+}
+
 .renacon-contact-enquiry-form input:focus,
 .renacon-contact-enquiry-form select:focus,
 .renacon-contact-enquiry-form .renacon-field-focus {
-  border-bottom-color: #04a354;
+  border-color: var(--renacon-form-green);
   outline: none;
+  box-shadow: 0 0 0 3px rgba(4, 163, 84, 0.18);
+  background: #fff;
 }
+
 .renacon-contact-enquiry-form .renacon-field-invalid {
-  border-bottom-color: #d63637 !important;
+  border-color: #d63637 !important;
+  box-shadow: 0 0 0 3px rgba(214, 54, 55, 0.12) !important;
 }
+
+.renacon-contact-enquiry-form .renacon-contact-actions {
+  margin: 1.35rem 0 0;
+  text-align: center;
+}
+
 .renacon-contact-enquiry-form .renacon-contact-submit {
-  background: #04a354 !important;
+  background: linear-gradient(180deg, #12b45f 0%, #04a354 100%) !important;
   color: #fff !important;
   border: 0 !important;
-  border-radius: 3px !important;
-  padding: 10px 22px !important;
-  min-height: 42px;
-  font-weight: 600;
+  border-radius: 8px !important;
+  padding: 12px 36px !important;
+  min-height: 48px;
+  min-width: 160px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.9rem !important;
   cursor: pointer;
+  box-shadow: 0 8px 20px rgba(4, 163, 84, 0.28);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
+
+@media (hover: hover) and (pointer: fine) {
+  .renacon-contact-enquiry-form .renacon-contact-submit:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.04);
+    box-shadow: 0 12px 26px rgba(4, 163, 84, 0.34);
+  }
+}
+
 .renacon-contact-enquiry-form .renacon-contact-submit:disabled,
 .renacon-contact-enquiry-form .renacon-submit-busy {
-  opacity: 0.7;
+  opacity: 0.72;
   cursor: wait;
+  transform: none;
 }
+
 .renacon-contact-enquiry-form .renacon-form-status {
-  margin: 0.5rem 0 1rem;
+  margin: 0.35rem 0 0.85rem;
   min-height: 1.25rem;
+  font-size: 0.92rem;
 }
+
 .renacon-contact-enquiry-form .renacon-form-status[data-kind="error"] {
   color: #8a0018;
 }
+
 .renacon-contact-enquiry-form .renacon-form-status[data-kind="ok"] {
   color: #046b38;
 }
+
 .renacon-contact-enquiry-form .renacon-form-status[data-kind="info"] {
-  color: #333;
+  color: #345043;
+}
+
+@media screen and (max-width: 689px) {
+  .renacon-contact-enquiry-form {
+    padding: 1.35rem 1.1rem 1.25rem;
+    border-radius: 10px;
+  }
+}
+
+/* ============================================================
+   About Us — Vision / Mission / We Serve With cards
+   ============================================================ */
+body.renacon-page-about-us .stk-b827d7a.stk-block-columns,
+body.renacon-page-about-us #post-4487 .stk-b827d7a {
+  gap: 1.25rem !important;
+  margin: 0.5rem 0 1.5rem;
+}
+
+body.renacon-page-about-us .stk-b827d7a > .stk-row {
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-column {
+  height: 100%;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
+body.renacon-page-about-us .stk-b827d7a .stk-9ca72ed-container,
+body.renacon-page-about-us .stk-b827d7a .stk-b9aef73-container,
+body.renacon-page-about-us .stk-b827d7a .stk-ad91ac3-container {
+  height: 100%;
+  background: #ffffff !important;
+  border: 1px solid #dde8e1;
+  border-radius: 14px;
+  padding: 1.75rem 1.35rem 1.5rem !important;
+  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.06);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #065c34, #12b45f);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper:hover {
+    transform: translateY(-4px);
+    border-color: #b7d4c4;
+    box-shadow: 0 18px 40px rgba(11, 61, 44, 0.12);
+  }
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon .stk--svg-wrapper,
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon .stk--inner-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #e8f7ee, #d4efe0);
+  box-shadow: inset 0 0 0 1px rgba(4, 163, 84, 0.18);
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg path {
+  fill: #0a7a45 !important;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-heading__text {
+  color: #123528 !important;
+  font-size: 1.05rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0.35rem 0 0.85rem !important;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-inner-blocks > p,
+body.renacon-page-about-us .stk-b827d7a p.eplus-wrapper {
+  color: #3d5248 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.65 !important;
+  margin: 0 !important;
+}
+
+@media screen and (max-width: 781px) {
+  body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
+  body.renacon-page-about-us .stk-b827d7a .stk-9ca72ed-container,
+  body.renacon-page-about-us .stk-b827d7a .stk-b9aef73-container,
+  body.renacon-page-about-us .stk-b827d7a .stk-ad91ac3-container {
+    padding: 1.4rem 1.15rem 1.25rem !important;
+  }
 }
 
 /* Admin submissions viewer */
