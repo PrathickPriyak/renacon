@@ -229,6 +229,7 @@ export async function POST(request: Request) {
 
   let dbId: string;
   let excelError: string | null = null;
+  let googleSheetsError: string | null = null;
   try {
     const saved = await saveCareerSubmission({
       name: fields.name,
@@ -247,6 +248,7 @@ export async function POST(request: Request) {
     });
     dbId = saved.id;
     excelError = saved.excelError;
+    googleSheetsError = saved.googleSheetsError;
   } catch (err) {
     console.error("[careers] database save failed", err);
     return NextResponse.json(
@@ -268,6 +270,7 @@ export async function POST(request: Request) {
     ok: true,
     id: dbId,
     excelWarning: excelError || undefined,
+    googleSheetsWarning: googleSheetsError || undefined,
     photo: { name: photoMeta.originalName, size: photoMeta.size },
     resume: { name: resumeMeta.originalName, size: resumeMeta.size },
   });

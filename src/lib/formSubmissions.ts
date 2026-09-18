@@ -6,6 +6,12 @@ import {
   writeExcelBuffer,
   type ExcelKind,
 } from "@/lib/excelExport";
+import {
+  appendCareerToGoogleSheet,
+  appendContactToGoogleSheet,
+  appendProductToGoogleSheet,
+  isGoogleSheetsConfigured,
+} from "@/lib/googleSheets";
 import type { ResumeMeta } from "@/lib/resumes";
 
 function jsonString(value: unknown): string {
@@ -58,6 +64,7 @@ export type PersistResult = {
   id: string;
   excelPath: string | null;
   excelError: string | null;
+  googleSheetsError: string | null;
 };
 
 async function syncExcel(kind: ExcelKind): Promise<{ path: string | null; error: string | null }> {
@@ -102,7 +109,27 @@ export async function saveProductSubmission(input: ProductInput): Promise<Persis
     },
   });
   const excel = await syncExcel("product");
-  return { id: row.id, excelPath: excel.path, excelError: excel.error };
+  let googleSheetsError: string | null = null;
+  if (isGoogleSheetsConfigured()) {
+    const sheet = await appendProductToGoogleSheet({
+      id: row.id,
+      submittedAt: row.submittedAt.toISOString(),
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      product: row.product,
+      productPath: row.productPath,
+      message: row.message,
+      pageUrl: row.pageUrl,
+    });
+    if (!sheet.ok) googleSheetsError = sheet.error;
+  }
+  return {
+    id: row.id,
+    excelPath: excel.path,
+    excelError: excel.error,
+    googleSheetsError,
+  };
 }
 
 export async function saveCareerSubmission(input: CareerInput): Promise<PersistResult> {
@@ -135,7 +162,32 @@ export async function saveCareerSubmission(input: CareerInput): Promise<PersistR
     },
   });
   const excel = await syncExcel("career");
-  return { id: row.id, excelPath: excel.path, excelError: excel.error };
+  let googleSheetsError: string | null = null;
+  if (isGoogleSheetsConfigured()) {
+    const sheet = await appendCareerToGoogleSheet({
+      id: row.id,
+      submittedAt: row.submittedAt.toISOString(),
+      name: row.name,
+      email: row.email,
+      phone: row.phone,
+      altPhone: row.altPhone,
+      role: row.role,
+      experience: row.experience,
+      location: row.location,
+      qualification: row.qualification,
+      message: row.message,
+      photo: row.photoOriginalName || row.photoStoredName,
+      resume: row.resumeOriginalName || row.resumeStoredName,
+      pageUrl: row.pageUrl,
+    });
+    if (!sheet.ok) googleSheetsError = sheet.error;
+  }
+  return {
+    id: row.id,
+    excelPath: excel.path,
+    excelError: excel.error,
+    googleSheetsError,
+  };
 }
 
 export async function saveContactSubmission(input: ContactInput): Promise<PersistResult> {
@@ -153,5 +205,25 @@ export async function saveContactSubmission(input: ContactInput): Promise<Persis
     },
   });
   const excel = await syncExcel("contact");
-  return { id: row.id, excelPath: excel.path, excelError: excel.error };
+  let googleSheetsError: string | null = null;
+  if (isGoogleSheetsConfigured()) {
+    const sheet = await appendContactToGoogleSheet({
+      id: row.id,
+      submittedAt: row.submittedAt.toISOString(),
+      name: row.name,
+      phone: row.phone,
+      city: row.city,
+      products: row.products,
+      email: row.email,
+      message: row.message,
+      pageUrl: row.pageUrl,
+    });
+    if (!sheet.ok) googleSheetsError = sheet.error;
+  }
+  return {
+    id: row.id,
+    excelPath: excel.path,
+    excelError: excel.error,
+    googleSheetsError,
+  };
 }

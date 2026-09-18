@@ -74,6 +74,7 @@ export async function POST(request: Request) {
 
     let id: string;
     let excelError: string | null = null;
+    let googleSheetsError: string | null = null;
     try {
       const saved = await saveContactSubmission({
         name,
@@ -87,6 +88,7 @@ export async function POST(request: Request) {
       });
       id = saved.id;
       excelError = saved.excelError;
+      googleSheetsError = saved.googleSheetsError;
     } catch (err) {
       console.error("[contact] database save failed", err);
       return NextResponse.json(
@@ -99,7 +101,12 @@ export async function POST(request: Request) {
       (err) => console.error("[contact] jsonl backup failed", err),
     );
 
-    return NextResponse.json({ ok: true, id, excelWarning: excelError || undefined });
+    return NextResponse.json({
+      ok: true,
+      id,
+      excelWarning: excelError || undefined,
+      googleSheetsWarning: googleSheetsError || undefined,
+    });
   }
 
   // Brochure / product lead forms require email
@@ -115,6 +122,7 @@ export async function POST(request: Request) {
 
   let id: string;
   let excelError: string | null = null;
+  let googleSheetsError: string | null = null;
   try {
     const saved = await saveProductSubmission({
       name,
@@ -128,6 +136,7 @@ export async function POST(request: Request) {
     });
     id = saved.id;
     excelError = saved.excelError;
+    googleSheetsError = saved.googleSheetsError;
   } catch (err) {
     console.error("[product] database save failed", err);
     return NextResponse.json(
@@ -154,8 +163,14 @@ export async function POST(request: Request) {
       id,
       downloadUrl,
       excelWarning: excelError || undefined,
+      googleSheetsWarning: googleSheetsError || undefined,
     });
   }
 
-  return NextResponse.json({ ok: true, id, excelWarning: excelError || undefined });
+  return NextResponse.json({
+    ok: true,
+    id,
+    excelWarning: excelError || undefined,
+    googleSheetsWarning: googleSheetsError || undefined,
+  });
 }

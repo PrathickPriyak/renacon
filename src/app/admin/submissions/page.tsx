@@ -53,8 +53,16 @@ export default async function AdminSubmissionsPage({
     <main className="renacon-admin-submissions">
       <h1>Form submissions</h1>
       <p className="renacon-admin-hint">
-        Database is the source of truth. Download Excel exports below, or open Prisma Studio locally
-        with <code>npm run db:studio</code>.
+        Database is the source of truth. Live Google Sheet (when configured):{" "}
+        <a
+          href="https://docs.google.com/spreadsheets/d/1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA/edit"
+          target="_blank"
+          rel="noreferrer"
+        >
+          open spreadsheet
+        </a>
+        . Download Excel exports below, or open Prisma Studio locally with{" "}
+        <code>npm run db:studio</code>.
       </p>
 
       <div className="renacon-admin-grid">
