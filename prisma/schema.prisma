@@ -1,0 +1,77 @@
+// Renacon form submissions — SQLite locally; set DATABASE_URL to Postgres for Vercel.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Product / brochure lead forms on product pages
+model ProductSubmission {
+  id          String   @id @default(cuid())
+  submittedAt DateTime @default(now())
+  formType    String   @default("product")
+
+  name        String
+  email       String
+  phone       String
+  message     String   @default("")
+  product     String   @default("")
+  productPath String   @default("")
+  pageUrl     String   @default("")
+
+  /// Raw payload for audit / extra fields
+  detailsJson String   @default("{}")
+}
+
+/// Careers application (WPForms wizard)
+model CareerSubmission {
+  id          String   @id @default(cuid())
+  submittedAt DateTime @default(now())
+  formType    String   @default("career")
+
+  name          String
+  email         String
+  phone         String
+  altPhone      String   @default("")
+  role          String   @default("")
+  experience    String   @default("")
+  location      String   @default("")
+  qualification String   @default("")
+  message       String   @default("")
+  pageUrl       String   @default("")
+
+  photoOriginalName  String @default("")
+  photoStoredName    String @default("")
+  photoStoragePath   String @default("")
+  photoMimeType      String @default("")
+  photoSize          Int    @default(0)
+
+  resumeOriginalName String @default("")
+  resumeStoredName   String @default("")
+  resumeStoragePath  String @default("")
+  resumeMimeType     String @default("")
+  resumeSize         Int    @default(0)
+
+  /// Full WPForms field map as JSON string
+  detailsJson String @default("{}")
+}
+
+/// Contact Us form (native replacement for OpnForm iframe)
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  submittedAt DateTime @default(now())
+  formType    String   @default("contact")
+
+  name     String
+  phone    String
+  city     String   @default("")
+  products String   @default("")
+  email    String   @default("")
+  message  String   @default("")
+  pageUrl  String   @default("")
+
+  detailsJson String @default("{}")
+}

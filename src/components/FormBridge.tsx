@@ -36,6 +36,14 @@ function isCareersForm(form: HTMLFormElement): boolean {
   );
 }
 
+function isContactEnquiryForm(form: HTMLFormElement): boolean {
+  return (
+    form.dataset.renaconContact === "1" ||
+    form.id === "renacon-contact-enquiry-form" ||
+    form.classList.contains("renacon-contact-enquiry-form")
+  );
+}
+
 function setResumeError(form: HTMLFormElement, message: string | null): void {
   const errorEl = form.querySelector<HTMLElement>(".renacon-resume-error, #careers-resume-error");
   const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone");
@@ -334,6 +342,7 @@ export function FormBridge() {
         form.className.includes("wpforms") ||
         form.classList.contains("renacon-careers-form") ||
         form.classList.contains("renacon-brochure-form") ||
+        isContactEnquiryForm(form) ||
         action.includes("admin-ajax") ||
         form.closest(".forminator-ui, .wpforms-container, .stk-block, .renacon-careers-form-wrap");
       if (!isWpForm) return;
@@ -438,7 +447,12 @@ export function FormBridge() {
         fieldValue(form, ["textarea"]) ||
         "";
 
-      const kind = path.includes("career") || isCareersForm(form) ? "careers" : "contact";
+      const kind =
+        path.includes("career") || isCareersForm(form)
+          ? "careers"
+          : isContactEnquiryForm(form)
+            ? "contact"
+            : "contact";
       const endpoint = kind === "careers" ? "/api/careers/" : "/api/contact/";
 
       if (kind !== "careers") {
@@ -501,12 +515,43 @@ export function FormBridge() {
         message = mapped.message;
       }
 
+      const city = payload.city || fieldValue(form, ['input[name="city"]']) || "";
+      const products =
+        payload.products ||
+        fieldValue(form, ['select[name="products"]']) ||
+        payload.product ||
+        "";
+
       if (!name.trim()) {
         setStatus(form, "Please enter your name.", "error");
-        markInvalid('input[name="name"], input[name="name-1"], input[name*="name" i], .forminator-name--field, #wpforms-7919-field_3');
+        markInvalid('input[name="name"], input[name="name-1"], input[name*="name" i], .forminator-name--field, #wpforms-7919-field_3, #contact-name');
         return;
       }
-      if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+      if (isContactEnquiryForm(form)) {
+        if (!phone.trim() || phone.replace(/\D/g, "").length < 8) {
+          setStatus(form, "Enter a valid phone number.", "error");
+          markInvalid('#contact-phone, input[name="phone"], input[type="tel"]');
+          return;
+        }
+        if (!city.trim()) {
+          setStatus(form, "Please enter your city.", "error");
+          markInvalid('#contact-city, input[name="city"]');
+          return;
+        }
+        if (!products.trim()) {
+          setStatus(form, "Please select a product.", "error");
+          markInvalid('#contact-products, select[name="products"]');
+          return;
+        }
+      } else if (kind === "careers") {
+        // email required for careers — checked below with other careers fields
+        if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          setStatus(form, "Enter a valid email address.", "error");
+          markInvalid('input[type="email"], input[name="email"], #wpforms-7919-field_48');
+          return;
+        }
+      } else if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         setStatus(form, "Enter a valid email address.", "error");
         markInvalid('input[type="email"], input[name="email"], input[name="email-1"], .forminator-email--field, #wpforms-7919-field_48');
         return;
@@ -562,17 +607,22 @@ export function FormBridge() {
           return;
         }
         setResumeError(form, null);
-      } else if (phone && phone.replace(/\D/g, "").length > 0 && phone.replace(/\D/g, "").length < 8) {
+      } else if (
+        !isContactEnquiryForm(form) &&
+        phone &&
+        phone.replace(/\D/g, "").length > 0 &&
+        phone.replace(/\D/g, "").length < 8
+      ) {
         setStatus(form, "Enter a valid phone number.", "error");
         markInvalid('input[name="phone"], input[name="phone-1"], .forminator-field--phone, input[type="tel"]');
         return;
       }
 
       const phoneForApi =
-        kind === "careers" ? phone.trim() : phone.trim() || "0000000000";
+        kind === "careers" || isContactEnquiryForm(form) ? phone.trim() : phone.trim() || "0000000000";
 
       const submitBtn = form.querySelector<HTMLButtonElement>(
-        'button[type="submit"], .forminator-button-submit, .wpforms-submit, .renacon-careers-submit',
+        'button[type="submit"], .forminator-button-submit, .wpforms-submit, .renacon-careers-submit, .renacon-contact-submit',
       );
       const prevLabel = submitBtn?.textContent || "";
       if (form.dataset.submitting === "1") return;
@@ -609,6 +659,21 @@ export function FormBridge() {
           if (photoFile) body.set("photo", photoFile, photoFile.name);
           if (resumeFile) body.set("resume", resumeFile, resumeFile.name);
           res = await fetch(endpoint, { method: "POST", body });
+        } else if (isContactEnquiryForm(form)) {
+          res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: name.trim(),
+              phone: phoneForApi,
+              city: city.trim(),
+              products: products.trim(),
+              email: email.trim(),
+              message,
+              kind: "contact",
+              page_url: path,
+            }),
+          });
         } else {
           res = await fetch(endpoint, {
             method: "POST",
@@ -630,7 +695,9 @@ export function FormBridge() {
         const successText =
           kind === "careers"
             ? "Thanks for contacting us! We will be in touch with you shortly."
-            : "Thank you. Your request has been received.";
+            : isContactEnquiryForm(form)
+              ? "Thank you. Your enquiry has been received."
+              : "Thank you. Your request has been received.";
         setStatus(form, successText, "ok");
         form.classList.add("renacon-form-success");
         if (kind === "careers") {

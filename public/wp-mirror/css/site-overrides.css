@@ -5169,3 +5169,158 @@ body.renacon-page-media .wp-block-embed.renacon-reveal {
     transition: none !important;
   }
 }
+
+/* ============================================================
+   Contact enquiry form (native — replaces OpnForm iframe)
+   ============================================================ */
+.renacon-contact-enquiry-form {
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto 2rem;
+  text-align: left;
+}
+.renacon-contact-enquiry-form .renacon-contact-field {
+  margin: 0 0 1.1rem;
+}
+.renacon-contact-enquiry-form label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+.renacon-contact-enquiry-form .req {
+  color: #d63637;
+}
+.renacon-contact-enquiry-form input[type="text"],
+.renacon-contact-enquiry-form input[type="tel"],
+.renacon-contact-enquiry-form input[type="email"],
+.renacon-contact-enquiry-form select {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  border: 0;
+  border-bottom: 2px solid #484b4d;
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 0 8px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.renacon-contact-enquiry-form input:focus,
+.renacon-contact-enquiry-form select:focus,
+.renacon-contact-enquiry-form .renacon-field-focus {
+  border-bottom-color: #04a354;
+  outline: none;
+}
+.renacon-contact-enquiry-form .renacon-field-invalid {
+  border-bottom-color: #d63637 !important;
+}
+.renacon-contact-enquiry-form .renacon-contact-submit {
+  background: #04a354 !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 3px !important;
+  padding: 10px 22px !important;
+  min-height: 42px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.renacon-contact-enquiry-form .renacon-contact-submit:disabled,
+.renacon-contact-enquiry-form .renacon-submit-busy {
+  opacity: 0.7;
+  cursor: wait;
+}
+.renacon-contact-enquiry-form .renacon-form-status {
+  margin: 0.5rem 0 1rem;
+  min-height: 1.25rem;
+}
+.renacon-contact-enquiry-form .renacon-form-status[data-kind="error"] {
+  color: #8a0018;
+}
+.renacon-contact-enquiry-form .renacon-form-status[data-kind="ok"] {
+  color: #046b38;
+}
+.renacon-contact-enquiry-form .renacon-form-status[data-kind="info"] {
+  color: #333;
+}
+
+/* Admin submissions viewer */
+.renacon-admin-submissions {
+  max-width: 960px;
+  margin: 2rem auto 4rem;
+  padding: 0 1.25rem;
+  font-family: Roboto, sans-serif;
+  color: #333;
+}
+.renacon-admin-submissions h1 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.renacon-admin-submissions .renacon-admin-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  margin: 1.5rem 0;
+}
+.renacon-admin-submissions .renacon-admin-card {
+  border: 1px solid #dfe6e1;
+  padding: 1rem 1.15rem;
+  background: #fff;
+}
+.renacon-admin-submissions .renacon-admin-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+.renacon-admin-submissions .renacon-admin-count {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #04a354;
+  margin: 0.25rem 0 0.75rem;
+}
+.renacon-admin-submissions a.renacon-admin-btn {
+  display: inline-block;
+  background: #04a354;
+  color: #fff !important;
+  text-decoration: none;
+  padding: 0.55rem 0.9rem;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.renacon-admin-submissions .renacon-admin-hint {
+  color: #5a6b60;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.renacon-admin-submissions .renacon-admin-table-block {
+  margin: 2rem 0 1.5rem;
+}
+.renacon-admin-submissions .renacon-admin-table-block h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+}
+.renacon-admin-submissions .renacon-admin-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #dfe6e1;
+  background: #fff;
+}
+.renacon-admin-submissions .renacon-admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.renacon-admin-submissions .renacon-admin-table th,
+.renacon-admin-submissions .renacon-admin-table td {
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-bottom: 1px solid #e8eee9;
+  white-space: nowrap;
+}
+.renacon-admin-submissions .renacon-admin-table th {
+  background: #f4f8f5;
+  font-weight: 600;
+}
+.renacon-admin-submissions .renacon-admin-table tr:last-child td {
+  border-bottom: none;
+}

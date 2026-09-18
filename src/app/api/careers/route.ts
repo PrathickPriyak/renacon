@@ -9,6 +9,10 @@ import {
   validateResumeFile,
   type ResumeMeta,
 } from "@/lib/resumes";
+import { saveCareerSubmission } from "@/lib/formSubmissions";
+
+export const runtime = "nodejs";
+export const maxDuration = 60;
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -18,22 +22,8 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-function parseDetails(raw: string): Record<string, string> {
-  if (!raw) return {};
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object") return {};
-    const out: Record<string, string> = {};
-    for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
-      if (typeof value === "string") out[key] = value;
-    }
-    return out;
-  } catch {
-    return {};
-  }
-}
-
-async function persistCareersSubmission(payload: Record<string, unknown>): Promise<void> {
+/** Legacy JSONL backup — best effort alongside the database. */
+async function persistCareersJsonl(payload: Record<string, unknown>): Promise<void> {
   const line = `${JSON.stringify({ ...payload, at: new Date().toISOString() })}\n`;
   const candidates = [
     join(process.cwd(), "data", "submissions"),
@@ -46,10 +36,9 @@ async function persistCareersSubmission(payload: Record<string, unknown>): Promi
       await appendFile(join(dir, "careers.jsonl"), line, "utf8");
       return;
     } catch {
-      // try next location (read-only FS on some hosts)
+      // try next
     }
   }
-
   console.info("[submission]", "careers", line.trim());
 }
 
@@ -102,6 +91,21 @@ function fileFromForm(form: FormData, names: string[]): File | null {
     if (entry instanceof File && entry.size > 0) return entry;
   }
   return null;
+}
+
+function parseDetails(raw: string): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return {};
+    const out: Record<string, string> = {};
+    for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof value === "string") out[key] = value;
+    }
+    return out;
+  } catch {
+    return {};
+  }
 }
 
 async function parseRequest(request: Request): Promise<
@@ -222,18 +226,54 @@ export async function POST(request: Request) {
     resumeMeta = await storeResumeFile(resume);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unable to store files";
+    console.error("[careers] file store failed", err);
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 
-  await persistCareersSubmission({
+  let dbId: string;
+  let excelError: string | null = null;
+  let googleSheetsError: string | null = null;
+  try {
+    const saved = await saveCareerSubmission({
+      name: fields.name,
+      email: fields.email,
+      phone: fields.phone,
+      altPhone: fields.altPhone,
+      role: fields.role,
+      experience: fields.experience,
+      location: fields.location,
+      qualification: fields.qualification,
+      message: fields.message,
+      pageUrl: fields.page_url,
+      details: fields.details,
+      photo: photoMeta,
+      resume: resumeMeta,
+    });
+    dbId = saved.id;
+    excelError = saved.excelError;
+    googleSheetsError = saved.googleSheetsError;
+  } catch (err) {
+    console.error("[careers] database save failed", err);
+    return NextResponse.json(
+      { ok: false, error: "Unable to save your application. Please try again." },
+      { status: 500 },
+    );
+  }
+
+  // Non-blocking JSONL backup
+  await persistCareersJsonl({
     kind: "careers",
+    id: dbId,
     ...fields,
     photo: fileMeta(photoMeta),
     resume: fileMeta(resumeMeta),
-  });
+  }).catch((err) => console.error("[careers] jsonl backup failed", err));
 
   return NextResponse.json({
     ok: true,
+    id: dbId,
+    excelWarning: excelError || undefined,
+    googleSheetsWarning: googleSheetsError || undefined,
     photo: { name: photoMeta.originalName, size: photoMeta.size },
     resume: { name: resumeMeta.originalName, size: resumeMeta.size },
   });

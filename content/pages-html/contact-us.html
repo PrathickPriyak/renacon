@@ -159,7 +159,48 @@
 <div class="wp-block-group alignwide eplus-wrapper is-layout-flow wp-block-group-is-layout-flow"><h3 class="has-45-font-size wp-block-heading has-text-align-center eplus-wrapper eplus-styles-uid-341832" style="text-transform:uppercase">ENQUIRY FORM</h3>
 
 
-<div class="wp-block-group alignwide eplus-wrapper is-content-justification-center is-layout-constrained wp-block-group-is-layout-constrained"><p><iframe style="border:none;width:100%;" height="480px" src="https://forms.infozub.com/forms/renacon-contact-form-m8yffd"></iframe></p>
+<div class="wp-block-group alignwide eplus-wrapper is-content-justification-center is-layout-constrained wp-block-group-is-layout-constrained">
+<form id="renacon-contact-enquiry-form" class="renacon-contact-enquiry-form wpforms-form" method="post" action="/api/contact/" novalidate data-renacon-contact="1">
+  <p class="renacon-contact-field">
+    <label for="contact-name">Name <span class="req" aria-hidden="true">*</span></label>
+    <input id="contact-name" name="name" type="text" required autocomplete="name" />
+  </p>
+  <p class="renacon-contact-field">
+    <label for="contact-phone">Phone Number <span class="req" aria-hidden="true">*</span></label>
+    <input id="contact-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" />
+  </p>
+  <p class="renacon-contact-field">
+    <label for="contact-city">City <span class="req" aria-hidden="true">*</span></label>
+    <input id="contact-city" name="city" type="text" required autocomplete="address-level2" />
+  </p>
+  <p class="renacon-contact-field">
+    <label for="contact-products">Products <span class="req" aria-hidden="true">*</span></label>
+    <select id="contact-products" name="products" required>
+      <option value="" disabled selected>Select a product</option>
+      <option value="Renacon ACC Blocks">Renacon ACC Blocks</option>
+      <option value="Renacon Rapid Wall">Renacon Rapid Wall</option>
+      <option value="AAC Joint Mortar">AAC Joint Mortar</option>
+      <option value="Readymix Plaster">Readymix Plaster</option>
+      <option value="Brick Joint Mortar">Brick Joint Mortar</option>
+      <option value="Floor Top Hardener">Floor Top Hardener</option>
+      <option value="GP Grout">GP Grout</option>
+      <option value="Wall Putty">Wall Putty</option>
+      <option value="Coarse Putty">Coarse Putty</option>
+      <option value="Tile Adhesive - 201">Tile Adhesive - 201</option>
+      <option value="Tile Adhesive - 211">Tile Adhesive - 211</option>
+      <option value="Tile Adhesive - 222">Tile Adhesive - 222</option>
+      <option value="Tile Adhesive - 333">Tile Adhesive - 333</option>
+      <option value="Tile Adhesive - 444">Tile Adhesive - 444</option>
+      <option value="The Grout">The Grout</option>
+    </select>
+  </p>
+  <input type="hidden" name="kind" value="contact" />
+  <input type="hidden" name="page_url" value="/contact-us/" />
+  <p class="renacon-form-status" aria-live="polite"></p>
+  <p class="renacon-contact-actions">
+    <button type="submit" class="wpforms-submit renacon-contact-submit">Submit</button>
+  </p>
+</form>
 </div>
 </div>
 </div></div></div>
