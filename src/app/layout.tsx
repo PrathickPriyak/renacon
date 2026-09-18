@@ -40,7 +40,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-contact-form-202609171445"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-remove-contact-tabs-202609180400"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
