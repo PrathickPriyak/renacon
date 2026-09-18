@@ -2,15 +2,20 @@
 
 import { useEffect } from "react";
 import { isBrochurePath, resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
+import {
+  enhanceCareersWizard,
+  isCareersHoneypotTripped,
+  mapCareersFields,
+  validateCareersPage,
+  validatePhotoFile,
+  validateResumeFileClient,
+} from "@/lib/careersWizard";
 
 type BrochureSubmitResponse = {
   ok?: boolean;
   error?: string;
   downloadUrl?: string;
 };
-
-const RESUME_MAX_BYTES = 5 * 1024 * 1024;
-const RESUME_EXT = /\.(pdf|doc|docx)$/i;
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -19,16 +24,16 @@ function formatFileSize(bytes: number): string {
 }
 
 function validateResumeClient(file: File | null | undefined): string | null {
-  if (!file || file.size <= 0) {
-    return "Please attach your resume (PDF, DOC, or DOCX).";
-  }
-  if (file.size > RESUME_MAX_BYTES) {
-    return "Resume must be 5MB or smaller.";
-  }
-  if (!RESUME_EXT.test(file.name)) {
-    return "Resume must be a PDF, DOC, or DOCX file.";
-  }
-  return null;
+  return validateResumeFileClient(file);
+}
+
+function isCareersForm(form: HTMLFormElement): boolean {
+  return (
+    form.classList.contains("renacon-careers-form") ||
+    form.id === "renacon-careers-form" ||
+    form.id === "wpforms-form-7919" ||
+    /\/careers\/?$/.test(window.location.pathname)
+  );
 }
 
 function setResumeError(form: HTMLFormElement, message: string | null): void {
@@ -74,8 +79,10 @@ function enhanceCareersForm(form: HTMLFormElement): void {
     form.setAttribute("enctype", "multipart/form-data");
   }
 
-  const input = form.querySelector<HTMLInputElement>('input[type="file"][name="resume"], #careers-resume');
-  const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone");
+  enhanceCareersWizard(form);
+
+  const input = form.querySelector<HTMLInputElement>('input[type="file"][name="resume"], #careers-resume, #wpforms-7919-field_47');
+  const zone = form.querySelector<HTMLElement>("[data-renacon-resume-dropzone], .renacon-resume-dropzone, [data-kind='resume']");
   if (!input) return;
 
   const onFileChosen = (file: File | null) => {
@@ -272,11 +279,7 @@ export function FormBridge() {
         if (isBrochureForm(form)) {
           enhanceBrochureForm(form);
         }
-        const isCareers =
-          form.classList.contains("renacon-careers-form") ||
-          form.id === "renacon-careers-form" ||
-          /\/careers\/?$/.test(window.location.pathname);
-        if (isCareers) {
+        if (isCareersForm(form)) {
           enhanceCareersForm(form);
         }
         if (
@@ -403,7 +406,7 @@ export function FormBridge() {
         if (typeof value === "string") payload[key] = value;
       });
 
-      const name =
+      let name =
         payload["name-1"] ||
         payload.name ||
         payload["input-1"] ||
@@ -411,13 +414,13 @@ export function FormBridge() {
         [payload["name-1-first-name"], payload["name-1-last-name"]].filter(Boolean).join(" ") ||
         fieldValue(form, ['input[name="name"]', 'input[name*="name" i]', ".wpforms-field-name input"]) ||
         "";
-      const email =
+      let email =
         payload["email-1"] ||
         payload.email ||
         payload["wpforms[fields][48]"] ||
         fieldValue(form, ['input[type="email"]', 'input[name="email"]']) ||
         "";
-      const phone =
+      let phone =
         payload["phone-1"] ||
         payload.phone ||
         payload.tel ||
@@ -425,7 +428,7 @@ export function FormBridge() {
         payload["wpforms[fields][13]"] ||
         findPhoneInput(form)?.value.trim() ||
         "";
-      const message =
+      let message =
         payload["textarea-1"] ||
         payload.message ||
         payload["text-2"] ||
@@ -433,15 +436,13 @@ export function FormBridge() {
         fieldValue(form, ["textarea"]) ||
         "";
 
-      const kind = path.includes("career") || form.classList.contains("renacon-careers-form")
-        ? "careers"
-        : "contact";
+      const kind = path.includes("career") || isCareersForm(form) ? "careers" : "contact";
       const endpoint = kind === "careers" ? "/api/careers/" : "/api/contact/";
 
       form.classList.add("renacon-contact-form");
       const clearFieldStates = () => {
-        form.querySelectorAll(".renacon-field-invalid").forEach((el) =>
-          el.classList.remove("renacon-field-invalid"),
+        form.querySelectorAll(".renacon-field-invalid, .wpforms-error").forEach((el) =>
+          el.classList.remove("renacon-field-invalid", "wpforms-error", "user-invalid"),
         );
         if (kind === "careers") setResumeError(form, null);
       };
@@ -455,47 +456,98 @@ export function FormBridge() {
         }
       };
 
+      let mapped = {
+        name,
+        email,
+        phone,
+        altPhone: "",
+        role: payload.role || "",
+        experience: payload.experience || "",
+        location: payload.location || "",
+        qualification: payload.qualification || "",
+        message,
+        details: {} as Record<string, string>,
+      };
+
+      if (kind === "careers") {
+        enhanceCareersForm(form);
+        if (form.dataset.submitting === "1") return;
+        const pageCount = form.querySelectorAll(".wpforms-page").length;
+        const pageNum = Number(form.dataset.careersPage || "1");
+        if (pageCount > 1 && pageNum < pageCount) {
+          const nextBtn = form.querySelector<HTMLButtonElement>(".wpforms-page-next");
+          nextBtn?.click();
+          return;
+        }
+        if (isCareersHoneypotTripped(form)) {
+          setStatus(form, "Thanks for contacting us! We will be in touch with you shortly.", "ok");
+          return;
+        }
+        const pages = [...form.querySelectorAll<HTMLElement>(".wpforms-page")];
+        const currentPage = pages.find((page) => Number(page.dataset.page) === Number(form.dataset.careersPage || pages.length))
+          || pages[pages.length - 1];
+        if (currentPage && !validateCareersPage(form, currentPage)) {
+          setStatus(form, "Please complete the required fields on this step.", "error");
+          return;
+        }
+        mapped = mapCareersFields(form);
+        name = mapped.name;
+        email = mapped.email;
+        phone = mapped.phone;
+        message = mapped.message;
+      }
+
       if (!name.trim()) {
         setStatus(form, "Please enter your name.", "error");
-        markInvalid('input[name="name"], input[name="name-1"], input[name*="name" i], .forminator-name--field');
+        markInvalid('input[name="name"], input[name="name-1"], input[name*="name" i], .forminator-name--field, #wpforms-7919-field_3');
         return;
       }
       if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         setStatus(form, "Enter a valid email address.", "error");
-        markInvalid('input[type="email"], input[name="email"], input[name="email-1"], .forminator-email--field');
+        markInvalid('input[type="email"], input[name="email"], input[name="email-1"], .forminator-email--field, #wpforms-7919-field_48');
         return;
       }
 
       let resumeFile: File | null = null;
+      let photoFile: File | null = null;
       if (kind === "careers") {
-        enhanceCareersForm(form);
         if (!phone.trim() || phone.replace(/\D/g, "").length < 8) {
           setStatus(form, "Enter a valid phone number.", "error");
-          markInvalid('input[name="phone"], #careers-phone, input[type="tel"]');
+          markInvalid('input[name="phone"], #careers-phone, input[type="tel"], #wpforms-7919-field_13');
           return;
         }
-        if (!(payload.role || "").trim()) {
-          setStatus(form, "Please select the position you are applying for.", "error");
-          markInvalid('select[name="role"], #careers-role');
+        if (!mapped.role.trim()) {
+          setStatus(form, "Please select the functional department.", "error");
+          markInvalid('select[name="role"], #careers-role, #wpforms-7919-field_50');
           return;
         }
-        if (!(payload.experience || "").trim()) {
-          setStatus(form, "Please enter your experience.", "error");
-          markInvalid('input[name="experience"], #careers-experience');
+        if (!mapped.experience.trim()) {
+          setStatus(form, "Please enter your experience / period.", "error");
+          markInvalid('input[name="experience"], #careers-experience, #wpforms-7919-field_30');
           return;
         }
-        if (!(payload.location || "").trim()) {
-          setStatus(form, "Please enter your preferred location.", "error");
-          markInvalid('input[name="location"], #careers-location');
+        if (!mapped.location.trim()) {
+          setStatus(form, "Please enter your location.", "error");
+          markInvalid('input[name="location"], #careers-location, #wpforms-7919-field_32');
           return;
         }
-        if (!(payload.qualification || "").trim()) {
+        if (!mapped.qualification.trim()) {
           setStatus(form, "Please enter your qualification.", "error");
-          markInvalid('input[name="qualification"], #careers-qualification');
+          markInvalid('input[name="qualification"], #careers-qualification, #wpforms-7919-field_23');
+          return;
+        }
+        const photoInput = form.querySelector<HTMLInputElement>(
+          'input[type="file"][name="photo"], #wpforms-7919-field_49',
+        );
+        photoFile = photoInput?.files?.[0] || null;
+        const photoError = validatePhotoFile(photoFile);
+        if (photoError) {
+          setStatus(form, photoError, "error");
+          photoInput?.focus();
           return;
         }
         const resumeInput = form.querySelector<HTMLInputElement>(
-          'input[type="file"][name="resume"], #careers-resume',
+          'input[type="file"][name="resume"], #careers-resume, #wpforms-7919-field_47',
         );
         resumeFile = resumeInput?.files?.[0] || null;
         const resumeError = validateResumeClient(resumeFile);
@@ -519,10 +571,12 @@ export function FormBridge() {
         'button[type="submit"], .forminator-button-submit, .wpforms-submit, .renacon-careers-submit',
       );
       const prevLabel = submitBtn?.textContent || "";
+      if (form.dataset.submitting === "1") return;
+      form.dataset.submitting = "1";
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.classList.add("renacon-submit-busy");
-        submitBtn.textContent = "Sending…";
+        submitBtn.textContent = kind === "careers" ? "Sending..." : "Sending…";
       }
 
       try {
@@ -538,14 +592,17 @@ export function FormBridge() {
           body.set("name", name.trim());
           body.set("email", email.trim());
           body.set("phone", phoneForApi);
-          body.set("message", message);
+          body.set("altPhone", mapped.altPhone);
+          body.set("message", mapped.message);
           body.set("kind", "careers");
           body.set("product", document.title);
           body.set("page_url", path);
-          body.set("role", payload.role || "");
-          body.set("experience", payload.experience || "");
-          body.set("location", payload.location || "");
-          body.set("qualification", payload.qualification || "");
+          body.set("role", mapped.role);
+          body.set("experience", mapped.experience);
+          body.set("location", mapped.location);
+          body.set("qualification", mapped.qualification);
+          body.set("details", JSON.stringify(mapped.details));
+          if (photoFile) body.set("photo", photoFile, photoFile.name);
           if (resumeFile) body.set("resume", resumeFile, resumeFile.name);
           res = await fetch(endpoint, { method: "POST", body });
         } else {
@@ -566,20 +623,22 @@ export function FormBridge() {
         }
         const json = (await res.json()) as { ok?: boolean; error?: string };
         if (!res.ok || !json.ok) throw new Error(json.error || "Submit failed");
-        setStatus(
-          form,
+        const successText =
           kind === "careers"
-            ? "Application received. Our HR team will contact shortlisted candidates."
-            : "Thank you. Your request has been received.",
-          "ok",
-        );
+            ? "Thanks for contacting us! We will be in touch with you shortly."
+            : "Thank you. Your request has been received.";
+        setStatus(form, successText, "ok");
         form.classList.add("renacon-form-success");
+        if (kind === "careers") {
+          const confirm = document.createElement("div");
+          confirm.className = "wpforms-confirmation-container-full";
+          confirm.setAttribute("role", "status");
+          confirm.innerHTML = `<p>${successText}</p>`;
+          form.replaceWith(confirm);
+          return;
+        }
         form.reset();
         clearFieldStates();
-        if (kind === "careers") {
-          updateResumeFilename(form, null);
-          setResumeError(form, null);
-        }
         const responseMsg = form.querySelector<HTMLElement>(".forminator-response-message");
         if (responseMsg) {
           responseMsg.classList.remove("forminator-error", "forminator-success");
@@ -593,10 +652,11 @@ export function FormBridge() {
           "error",
         );
       } finally {
-        if (submitBtn) {
+        form.dataset.submitting = "0";
+        if (submitBtn && submitBtn.isConnected) {
           submitBtn.disabled = false;
           submitBtn.classList.remove("renacon-submit-busy");
-          submitBtn.textContent = prevLabel || (kind === "careers" ? "Submit application" : "Submit");
+          submitBtn.textContent = prevLabel || (kind === "careers" ? "Submit" : "Submit");
         }
       }
     };

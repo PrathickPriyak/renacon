@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 import { appendFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
-import { storeResumeFile, validateResumeFile, type ResumeMeta } from "@/lib/resumes";
+import {
+  storePhotoFile,
+  storeResumeFile,
+  validatePhotoFile,
+  validateResumeFile,
+  type ResumeMeta,
+} from "@/lib/resumes";
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -10,6 +16,21 @@ function asString(value: unknown): string {
 
 function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function parseDetails(raw: string): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object") return {};
+    const out: Record<string, string> = {};
+    for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
+      if (typeof value === "string") out[key] = value;
+    }
+    return out;
+  } catch {
+    return {};
+  }
 }
 
 async function persistCareersSubmission(payload: Record<string, unknown>): Promise<void> {
@@ -36,6 +57,7 @@ type CareersFields = {
   name: string;
   email: string;
   phone: string;
+  altPhone: string;
   message: string;
   role: string;
   experience: string;
@@ -43,6 +65,7 @@ type CareersFields = {
   qualification: string;
   page_url: string;
   product: string;
+  details: Record<string, string>;
 };
 
 function validateFields(fields: CareersFields): string | null {
@@ -54,6 +77,9 @@ function validateFields(fields: CareersFields): string | null {
   }
   if (fields.phone.replace(/\D/g, "").length < 8) {
     return "Enter a valid phone number";
+  }
+  if (fields.altPhone && fields.altPhone.replace(/\D/g, "").length < 8) {
+    return "Enter a valid alternate phone number";
   }
   if (!fields.role) {
     return "Please select the position you are applying for";
@@ -70,8 +96,16 @@ function validateFields(fields: CareersFields): string | null {
   return null;
 }
 
+function fileFromForm(form: FormData, names: string[]): File | null {
+  for (const name of names) {
+    const entry = form.get(name);
+    if (entry instanceof File && entry.size > 0) return entry;
+  }
+  return null;
+}
+
 async function parseRequest(request: Request): Promise<
-  | { ok: true; fields: CareersFields; resume: File | null }
+  | { ok: true; fields: CareersFields; resume: File | null; photo: File | null }
   | { ok: false; error: string; status: number }
 > {
   const contentType = request.headers.get("content-type") || "";
@@ -84,16 +118,13 @@ async function parseRequest(request: Request): Promise<
       return { ok: false, error: "Invalid form data", status: 400 };
     }
 
-    const resumeEntry = form.get("resume");
-    const resume =
-      resumeEntry instanceof File && resumeEntry.size > 0 ? resumeEntry : null;
-
     return {
       ok: true,
       fields: {
         name: asString(form.get("name")),
         email: asString(form.get("email")),
         phone: asString(form.get("phone")),
+        altPhone: asString(form.get("altPhone")),
         message: asString(form.get("message")),
         role: asString(form.get("role")),
         experience: asString(form.get("experience")),
@@ -101,8 +132,10 @@ async function parseRequest(request: Request): Promise<
         qualification: asString(form.get("qualification")),
         page_url: asString(form.get("page_url")),
         product: asString(form.get("product")),
+        details: parseDetails(asString(form.get("details"))),
       },
-      resume,
+      resume: fileFromForm(form, ["resume", "wpforms_7919_47"]),
+      photo: fileFromForm(form, ["photo", "wpforms_7919_49"]),
     };
   }
 
@@ -122,6 +155,7 @@ async function parseRequest(request: Request): Promise<
       name: asString(record.name),
       email: asString(record.email),
       phone: asString(record.phone),
+      altPhone: asString(record.altPhone),
       message: asString(record.message),
       role: asString(record.role),
       experience: asString(record.experience),
@@ -129,8 +163,21 @@ async function parseRequest(request: Request): Promise<
       qualification: asString(record.qualification),
       page_url: asString(record.page_url),
       product: asString(record.product),
+      details: parseDetails(asString(record.details)),
     },
     resume: null,
+    photo: null,
+  };
+}
+
+function fileMeta(meta: ResumeMeta) {
+  return {
+    originalName: meta.originalName,
+    storedName: meta.storedName,
+    mimeType: meta.mimeType,
+    size: meta.size,
+    storagePath: meta.storagePath,
+    storedAt: meta.storedAt,
   };
 }
 
@@ -140,10 +187,21 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: parsed.error }, { status: parsed.status });
   }
 
-  const { fields, resume } = parsed;
+  const { fields, resume, photo } = parsed;
   const fieldError = validateFields(fields);
   if (fieldError) {
     return NextResponse.json({ ok: false, error: fieldError }, { status: 400 });
+  }
+
+  if (!photo) {
+    return NextResponse.json(
+      { ok: false, error: "Please upload your photo (JPG or PDF, max 5MB)." },
+      { status: 400 },
+    );
+  }
+  const photoCheck = validatePhotoFile(photo);
+  if (!photoCheck.ok) {
+    return NextResponse.json({ ok: false, error: photoCheck.error }, { status: 400 });
   }
 
   if (!resume) {
@@ -152,38 +210,31 @@ export async function POST(request: Request) {
       { status: 400 },
     );
   }
-
   const resumeCheck = validateResumeFile(resume);
   if (!resumeCheck.ok) {
     return NextResponse.json({ ok: false, error: resumeCheck.error }, { status: 400 });
   }
 
+  let photoMeta: ResumeMeta;
   let resumeMeta: ResumeMeta;
   try {
+    photoMeta = await storePhotoFile(photo);
     resumeMeta = await storeResumeFile(resume);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unable to store resume";
+    const message = err instanceof Error ? err.message : "Unable to store files";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }
 
   await persistCareersSubmission({
     kind: "careers",
     ...fields,
-    resume: {
-      originalName: resumeMeta.originalName,
-      storedName: resumeMeta.storedName,
-      mimeType: resumeMeta.mimeType,
-      size: resumeMeta.size,
-      storagePath: resumeMeta.storagePath,
-      storedAt: resumeMeta.storedAt,
-    },
+    photo: fileMeta(photoMeta),
+    resume: fileMeta(resumeMeta),
   });
 
   return NextResponse.json({
     ok: true,
-    resume: {
-      name: resumeMeta.originalName,
-      size: resumeMeta.size,
-    },
+    photo: { name: photoMeta.originalName, size: photoMeta.size },
+    resume: { name: resumeMeta.originalName, size: resumeMeta.size },
   });
 }
