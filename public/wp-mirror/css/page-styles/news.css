@@ -1,0 +1,31 @@
+/* Phase 5 — News archive sticky header */
+body:has(main.news-index) .renacon-site-header,
+body.renacon-news-ix .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body:has(main.news-index) #header.ct-header,
+body.renacon-news-ix #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body:has(main.news-index) #main.site-main,
+body:has(main.news-index) .site-main,
+body.renacon-news-ix #main.site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body:has(main.news-index) #header.ct-header [data-device="desktop"][data-transparent],
+  body.renacon-news-ix #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body:has(main.news-index) #header.ct-header [data-device="mobile"][data-transparent],
+  body.renacon-news-ix #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important; top:auto !important; left:auto !important; right:auto !important;
+  }
+}
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

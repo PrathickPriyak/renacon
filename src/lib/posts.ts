@@ -11,29 +11,42 @@ export type Post = {
   contentHtml: string;
 };
 
-const WP_ORIGIN = "https://renacon.in";
-
-function absolutizeMediaUrl(url: string): string {
+/** Keep media on this deployment (public/assets/wp-content via /wp-content rewrite). */
+function localizeMediaUrl(url: string): string {
   const trimmed = url.trim();
   if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
-  if (trimmed.startsWith("//")) return `https:${trimmed}`;
-  if (trimmed.startsWith("/wp-content/") || trimmed.startsWith("/wp-includes/")) {
-    return `${WP_ORIGIN}${trimmed}`;
+  if (trimmed.startsWith("//")) {
+    try {
+      const u = new URL(`https:${trimmed}`);
+      if (u.hostname === "renacon.in" || u.hostname === "www.renacon.in") {
+        return `${u.pathname}${u.search}`;
+      }
+    } catch {
+      return `https:${trimmed}`;
+    }
+  }
+  if (trimmed.startsWith("https://renacon.in/") || trimmed.startsWith("https://www.renacon.in/")) {
+    try {
+      const u = new URL(trimmed);
+      return `${u.pathname}${u.search}`;
+    } catch {
+      return trimmed;
+    }
   }
   return trimmed;
 }
 
 function firstContentImage(html: string): string | null {
   const match = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  return match?.[1] ? absolutizeMediaUrl(match[1]) : null;
+  return match?.[1] ? localizeMediaUrl(match[1]) : null;
 }
 
 function normalizePost(post: Post): Post {
   const contentHtml = sanitizeHtml(post.contentHtml || "");
   const image =
-    (post.image ? absolutizeMediaUrl(post.image) : null) ||
+    (post.image ? localizeMediaUrl(post.image) : null) ||
     firstContentImage(contentHtml);
   return {
     ...post,
@@ -62,12 +75,13 @@ export function sanitizeHtml(html: string): string {
     .replace(/<iframe(?![^>]*youtube)[^>]*>[\s\S]*?<\/iframe>/gi, "")
     .replace(/on\w+="[^"]*"/gi, "")
     .replace(/javascript:/gi, "")
+    // Prefer same-origin media (mirrored into public/assets/wp-content)
     .replace(
-      /(src|href)=(["'])\/(wp-content|wp-includes)\//gi,
-      `$1=$2${WP_ORIGIN}/$3/`,
+      /(src|href)=(["'])https?:\/\/(?:www\.)?renacon\.in\/(wp-content|wp-includes)\//gi,
+      "$1=$2/$3/",
     )
     .replace(
-      /url\(\s*(['"]?)\/(wp-content|wp-includes)\//gi,
-      `url($1${WP_ORIGIN}/$2/`,
+      /url\(\s*(['"]?)https?:\/\/(?:www\.)?renacon\.in\/(wp-content|wp-includes)\//gi,
+      "url($1/$2/",
     );
 }

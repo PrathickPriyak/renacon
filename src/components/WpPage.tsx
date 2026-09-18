@@ -24,14 +24,34 @@ export function WpPage({ slug, title }: { slug: string; title?: string }) {
       {pageCss || product ? (
         <link
           rel="stylesheet"
-          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-header-in-202609171050`}
+          href={`/wp-mirror/css/page-styles/${slug}.css?v=renacon-careers-match-202609180600`}
         />
+      ) : null}
+      {slug === "careers" ? (
+        <>
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/wpforms-base.min.css?v=careers-match-20260918" />
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/wpforms-pro-base.min.css?v=careers-match-20260918" />
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/layout.min.css?v=careers-match-20260918" />
+          <link
+            rel="stylesheet"
+            href="/wp-mirror/css/wpforms/layout-screen-big.min.css?v=careers-match-20260918"
+            media="(min-width: 600px)"
+          />
+          <link
+            rel="stylesheet"
+            href="/wp-mirror/css/wpforms/layout-screen-small.min.css?v=careers-match-20260918"
+            media="(max-width: 599.98px)"
+          />
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/repeater.min.css?v=careers-match-20260918" />
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/dropzone.min.css?v=careers-match-20260918" />
+          <link rel="stylesheet" href="/wp-mirror/css/wpforms/blocksy-wpforms.min.css?v=careers-match-20260918" />
+        </>
       ) : null}
       {/* Hard cache-bust site overrides on calculator + product pages */}
       {slug === "calculator" || product ? (
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-header-in-202609171050"
+          href="/wp-mirror/css/header-blocksy-in.css?v=renacon-final-visual-qa-202609171825"
         />
       ) : null}
       <WpMain html={html} />

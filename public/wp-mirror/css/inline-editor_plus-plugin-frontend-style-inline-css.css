@@ -2,12 +2,12 @@
 
     @font-face {
       font-family: 'eplus-icon';
-      src: url('https://renacon.in/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.eot?xs1351');
-      src: url('https://renacon.in/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.eot?xs1351#iefix')
+      src: url('/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.eot?xs1351');
+      src: url('/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.eot?xs1351#iefix')
           format('embedded-opentype'),
-        url('https://renacon.in/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.ttf?xs1351') format('truetype'),
-        url('https://renacon.in/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.woff?xs1351') format('woff'),
-        url('https://renacon.in/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.svg?xs1351#eplus-icon') format('svg');
+        url('/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.ttf?xs1351') format('truetype'),
+        url('/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.woff?xs1351') format('woff'),
+        url('/wp-content/plugins/editorplus/extensions/icon-inserter/fonts/eplus-icon.svg?xs1351#eplus-icon') format('svg');
       font-weight: normal;
       font-style: normal;
       font-display: block;

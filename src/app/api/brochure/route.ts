@@ -1,1 +1,1 @@
-export { POST } from "@/app/api/contact/route";
+export { POST, runtime, maxDuration } from "@/app/api/contact/route";

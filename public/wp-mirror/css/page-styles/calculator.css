@@ -1,0 +1,101 @@
+/* Mirrored from https://renacon.in/calculator/ — Editor Plus + Stackable */
+
+/* source:editorplus-generated-styles-header */
+.eplus-styles-uid-538c5a{font-size:40px;color:#f4c708!important}
+
+
+/* Phase 5 — in-flow sticky header (no overlay hero pull-under) */
+body.renacon-page-calculator .renacon-site-header,
+body:has(#post-6793) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+body.renacon-page-calculator #header.ct-header,
+body:has(#post-6793) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+body.renacon-page-calculator #main.site-main,
+body.renacon-page-calculator .site-main,
+body:has(#post-6793) #main.site-main,
+body:has(#post-6793) .site-main{
+  padding-top:0 !important;
+}
+@media (min-width:1000px){
+  body.renacon-page-calculator #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-6793) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-calculator #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-6793) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+body.renacon-page-calculator #header.ct-header [data-row*="middle"],
+body:has(#post-6793) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+body.renacon-page-calculator,
+body:has(#post-6793){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+#post-6793{
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+/* Full-bleed first hero — sit below in-flow header */
+body.renacon-page-calculator .entry-content > .wp-block-image.alignfull:first-child,
+body.renacon-page-calculator .entry-content > .wp-block-cover.alignfull:first-child,
+body:has(#post-6793) .entry-content > .wp-block-image.alignfull:first-child,
+body:has(#post-6793) .entry-content > .wp-block-cover.alignfull:first-child,
+#post-6793 .entry-content > .wp-block-image.alignfull:first-child,
+#post-6793 .entry-content > .wp-block-cover.alignfull:first-child{
+  margin-top:0 !important;
+  max-width:none !important;
+  width:100% !important;
+}
+#post-6793 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:fill;
+  transform:none !important;
+}
+#post-6793 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  box-sizing:border-box;
+}
+@media screen and (max-width:689px){
+  #post-6793 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)){
+    width:calc(100% - 47px) !important;
+  }
+}
+
+
+#post-6793 h1.eplus-styles-uid-538c5a,
+#post-6793 .ugb-e75cca7-content-wrapper > h1{
+  font-size:40px !important;
+  color:#f4c708 !important;
+  text-align:center;
+}
+
+/* CACHE_BUST_MARKER remaining-pages-recreation-202609171500 */

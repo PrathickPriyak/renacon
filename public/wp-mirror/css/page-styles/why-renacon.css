@@ -1,0 +1,358 @@
+/* Mirrored from https://renacon.in/why-renacon/ — Editor Plus + Stackable page styles */
+
+/* source:id="editorplus-generated-styles-header" */
+.eplus-styles-uid-eb50a4{color:#000000}
+.eplus-styles-uid-3d5b16{grid-template-columns:repeat(1,1fr);list-style-type:disc}
+@media (max-width:981px){.eplus-styles-uid-3d5b16{list-style-type:}}
+@media (max-width:600px){.eplus-styles-uid-3d5b16{list-style-type:}}
+.eplus-styles-uid-3d5b16:hover{list-style-type:}
+.eplus-styles-uid-17de4e{font-size:15px;color:#000000}
+
+/* source:class="stk-block-styles" */
+.stk-8eed3ae{
+  background-color:var(--theme-palette-color-8,#ffffff) !important;
+  background-image:url(/wp-content/uploads/2022/10/1035-scaled-1.jpg) !important;
+  background-repeat:no-repeat !important;
+  background-size:35% !important;
+  background-position:50% 50% !important;
+  margin-bottom:0px !important;
+  position:relative;
+}
+.stk-8eed3ae:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-color:var(--theme-palette-color-8,#ffffff) !important;
+  opacity:0.9 !important;
+  pointer-events:none;
+  z-index:0;
+}
+.stk-8eed3ae > *{position:relative;z-index:1}
+.stk-8eed3ae-column{--stk-column-gap:100px !important}
+.stk-72ab4ab-container,.stk-bff5fe4-container{
+  margin-top:0px !important;
+  margin-right:0px !important;
+  margin-bottom:0px !important;
+  margin-left:0px !important;
+}
+.stk-bff5fe4{display:flex !important;align-items:center !important}
+@media screen and (min-width:690px){
+  .stk-72ab4ab{flex:1 1 calc(50% - var(--stk-column-gap,0px) * 1 / 2 ) !important}
+  .stk-bff5fe4{flex:1 1 calc(47.6% - var(--stk-column-gap,0px) * 1 / 2 ) !important}
+}
+@media screen and (min-width:690px) and (max-width:999px){
+  .stk-72ab4ab,.stk-bff5fe4{flex:0 1 calc(100% - var(--stk-column-gap,0px) * 0 / 1 ) !important}
+}
+
+/* Restore Blocksy/WP flow that global site-overrides flattened (Why Renacon only) */
+body.renacon-page-why-renacon,
+body:has(#post-5659){
+  color:rgb(72,75,77);
+  background-color:#fefefe;
+  font-family:Roboto,sans-serif;
+}
+
+#post-5659{
+  color:rgb(72,75,77);
+  background-color:transparent;
+  font-family:Roboto,sans-serif;
+  width:100% !important;
+  max-width:none !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box;
+}
+
+#post-5659 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
+#post-5659 .entry-content > .wp-block-columns:not(.alignfull),
+#post-5659 .entry-content > .stk-block-columns:not(.alignfull):not(.stk-8eed3ae),
+#post-5659 .entry-content > p,
+#post-5659 .entry-content > h1,
+#post-5659 .entry-content > h2{
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+  padding-inline:0 !important;
+  box-sizing:border-box;
+}
+
+#post-5659 .entry-content > .stk-8eed3ae.stk-block-columns{
+  max-width:1290px !important;
+  width:min(1290px,90vw) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding:24px !important;
+  box-sizing:border-box;
+}
+
+@media screen and (max-width:689px){
+  #post-5659 .entry-content > .stk-8eed3ae.stk-block-columns{
+    padding:16px !important;
+  }
+}
+
+/* Hero image sits below the in-flow header — do not pull under overlay */
+body.renacon-page-why-renacon .entry-content > .wp-block-image.alignfull:first-child,
+body:has(#post-5659) .entry-content > .wp-block-image.alignfull:first-child,
+#post-5659 .entry-content > .wp-block-image.alignfull:first-child{
+  margin-top:0 !important;
+  margin-bottom:27px !important;
+  overflow:visible !important;
+  max-width:none !important;
+  width:100% !important;
+}
+#post-5659 .entry-content > .wp-block-image.alignfull:first-child img{
+  display:inline;
+  width:100%;
+  height:auto;
+  max-height:none;
+  aspect-ratio:2560 / 747;
+  object-fit:fill;
+  transform:none !important;
+}
+
+#post-5659 h1.wp-block-heading{
+  font-size:30px !important;
+  line-height:45px !important;
+  font-weight:700 !important;
+  color:#000000 !important;
+  text-transform:uppercase !important;
+  letter-spacing:normal !important;
+  margin-top:0 !important;
+  margin-bottom:19px !important;
+  max-width:none !important;
+  display:block;
+}
+#post-5659 h1.wp-block-heading::after{
+  content:none !important;
+  display:none !important;
+}
+
+#post-5659 .stk-72ab4ab p,
+#post-5659 .eplus-styles-uid-eb50a4{
+  font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
+  color:#000000 !important;
+  margin-top:0 !important;
+  margin-bottom:1.5em !important;
+}
+
+/* Tailwind preflight sets img{display:block}; WP alignleft table shrink-wraps on inline */
+#post-5659 .stk-72ab4ab .wp-block-image.alignleft{
+  display:table;
+  float:left;
+  margin:0 27px 5.4px 0;
+  width:auto;
+}
+#post-5659 .stk-72ab4ab .wp-block-image.alignleft img{
+  display:inline !important;
+  width:64px;
+  height:auto;
+  max-width:100%;
+  vertical-align:bottom;
+}
+
+#post-5659 .ep-custom-list{
+  list-style-type:disc !important;
+  list-style-position:outside !important;
+  display:grid !important;
+  grid-template-columns:repeat(1,1fr);
+  gap:normal;
+  margin:0 !important;
+  padding:0 0 0 2.5em !important;
+  font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
+}
+#post-5659 .ep-custom-list > li{
+  list-style:disc outside !important;
+  position:static;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  transform:none !important;
+  cursor:inherit;
+  line-height:1.65;
+}
+#post-5659 .ep-custom-list > li::before{
+  content:none !important;
+  display:none !important;
+}
+#post-5659 .ep-custom-list > li .stk-highlight{
+  color:#000000 !important;
+  font-weight:400 !important;
+  letter-spacing:normal !important;
+  background-image:none !important;
+}
+
+#post-5659 .wp-block-embed-youtube{
+  background:transparent !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+#post-5659 .wp-block-embed .wp-block-embed__wrapper{
+  position:relative;
+  width:100%;
+}
+#post-5659 .wp-has-aspect-ratio .wp-block-embed__wrapper::before{
+  content:"";
+  display:block;
+  padding-top:56.25%;
+}
+#post-5659 .wp-block-embed iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+#post-5659 .entry-content > p{
+  font-size:15px !important;
+  line-height:24.75px !important;
+  color:#000000 !important;
+  margin-top:0 !important;
+  margin-bottom:1.5em !important;
+}
+
+#post-5659 .entry-content > h2.wp-block-heading{
+  margin-top:1.5em !important;
+  margin-bottom:calc(0.3em + 10px) !important;
+  padding-bottom:0 !important;
+}
+#post-5659 .entry-content > h2.wp-block-heading .stk-highlight{
+  color:#000000 !important;
+  background-image:none !important;
+}
+#post-5659 .entry-content > h2.wp-block-heading::after{
+  content:none !important;
+  display:none !important;
+}
+
+#post-5659 .entry-content > .wp-block-spacer{
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+@media screen and (max-width:689px){
+  #post-5659 .entry-content > :where(:not(.alignfull):not(.alignwide):not(.wp-block-spacer)),
+  #post-5659 .entry-content > .stk-block-columns:not(.alignfull),
+  #post-5659 .entry-content > p,
+  #post-5659 .entry-content > h2{
+    width:calc(100% - 47px) !important;
+  }
+}
+
+/* In-flow sticky header — this page has no overlay hero (same as About Us) */
+body.renacon-page-why-renacon .renacon-site-header,
+body:has(#post-5659) .renacon-site-header{
+  position:sticky !important;
+  top:0 !important;
+  z-index:10050 !important;
+  background:#ffffff !important;
+}
+
+body.renacon-page-why-renacon #header.ct-header,
+body:has(#post-5659) #header.ct-header{
+  position:relative !important;
+  background:#ffffff !important;
+}
+
+body.renacon-page-why-renacon #main.site-main,
+body.renacon-page-why-renacon .site-main,
+body:has(#post-5659) #main.site-main,
+body:has(#post-5659) .site-main{
+  padding-top:0 !important;
+}
+
+@media (min-width:1000px){
+  body.renacon-page-why-renacon #header.ct-header [data-device="desktop"][data-transparent],
+  body:has(#post-5659) #header.ct-header [data-device="desktop"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+@media (max-width:999.98px){
+  body.renacon-page-why-renacon #header.ct-header [data-device="mobile"][data-transparent],
+  body:has(#post-5659) #header.ct-header [data-device="mobile"][data-transparent]{
+    position:relative !important;
+    top:auto !important;
+    left:auto !important;
+    right:auto !important;
+  }
+}
+
+body.renacon-page-why-renacon #header.ct-header [data-row*="middle"],
+body:has(#post-5659) #header.ct-header [data-row*="middle"]{
+  background-color:#ffffff !important;
+}
+
+body.renacon-page-why-renacon #header.ct-header .ct-container,
+body:has(#post-5659) #header.ct-header .ct-container{
+  width:min(1290px,90vw) !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+body.renacon-page-why-renacon #header.ct-header .menu-container > .menu,
+body:has(#post-5659) #header.ct-header .menu-container > .menu{
+  align-items:stretch !important;
+  height:100%;
+}
+body.renacon-page-why-renacon #header.ct-header .menu-container > .menu > li,
+body:has(#post-5659) #header.ct-header .menu-container > .menu > li{
+  height:100%;
+  display:flex;
+  align-items:stretch;
+}
+body.renacon-page-why-renacon #header.ct-header .menu-container > .menu > li > a,
+body:has(#post-5659) #header.ct-header .menu-container > .menu > li > a{
+  height:100% !important;
+  display:flex !important;
+  gap:0 !important;
+}
+
+/* Kill ix-v2 scroll-reveal / hero crop / list cards if JS still tags nodes */
+#post-5659.renacon-ix-v2 .renacon-reveal,
+#post-5659.renacon-ix-v2 .renacon-hero-piece,
+#post-5659.renacon-ix-v2 .ep-custom-list > li,
+#post-5659.renacon-ix-v2 .ep-custom-list > li.renacon-why-benefit{
+  opacity:1 !important;
+  transform:none !important;
+  filter:none !important;
+  transition:none !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  padding:0 !important;
+}
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child img{
+  transform:none !important;
+  max-height:none !important;
+  object-fit:fill !important;
+}
+#post-5659.renacon-ix-v2 .entry-content > .wp-block-image.alignfull:first-child::after,
+#post-5659.renacon-ix-v2 h1.wp-block-heading::after,
+#post-5659.renacon-ix-v2 .entry-content > h2.wp-block-heading::after,
+#post-5659.renacon-ix-v2 .ep-custom-list > li::before{
+  content:none !important;
+  display:none !important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  #post-5659 *,
+  #post-5659 *::before,
+  #post-5659 *::after{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+
+/* CACHE_BUST_MARKER why-renacon-recreation-202609171430 */

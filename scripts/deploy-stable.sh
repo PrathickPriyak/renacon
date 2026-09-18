@@ -15,7 +15,9 @@ fi
 ORG_ID="${VERCEL_ORG_ID:-team_TaDueuIoGc39uzO1FWIjeRmW}"
 PROJECT_NAME="${VERCEL_PROJECT_NAME:-renacon}"
 PROJECT_ID="${VERCEL_PROJECT_ID:-prj_l8JUlW0Eua6JtBVEILaM85QYkWvZ}"
+# Primary preview/stable URL plus custom domains (Cloudflare → Vercel).
 ALIAS="${VERCEL_ALIAS:-renacon.vercel.app}"
+EXTRA_ALIASES="${VERCEL_EXTRA_ALIASES:-renacon.in www.renacon.in}"
 REF="${VERCEL_GIT_REF:-$(git rev-parse --abbrev-ref HEAD)}"
 
 api() {
@@ -82,9 +84,22 @@ PY
     exit 1
   fi
 
-  echo "Assigning alias ${ALIAS}…"
-  api POST "/v2/deployments/${dpl}/aliases?teamId=${ORG_ID}" \
-    -d "{\"alias\":\"${ALIAS}\"}" >/dev/null || true
+  echo "Ensuring project domains (${ALIAS} ${EXTRA_ALIASES})…"
+  for domain in ${ALIAS} ${EXTRA_ALIASES}; do
+    api POST "/v10/projects/${PROJECT_ID}/domains?teamId=${ORG_ID}" \
+      -d "{\"name\":\"${domain}\"}" >/dev/null || true
+    # Never leave a domain redirecting away from this deployment (e.g. to old WP host).
+    api PATCH "/v9/projects/${PROJECT_ID}/domains/${domain}?teamId=${ORG_ID}" \
+      -d '{"redirect":null,"redirectStatusCode":null}' >/dev/null || true
+  done
+
+  # www → apex redirect is OK once both are on Vercel; prefer serving both without bounce.
+  echo "Assigning aliases…"
+  for domain in ${ALIAS} ${EXTRA_ALIASES}; do
+    api POST "/v2/deployments/${dpl}/aliases?teamId=${ORG_ID}" \
+      -d "{\"alias\":\"${domain}\"}" >/dev/null || true
+    echo "  https://${domain}"
+  done
   echo "Live: https://${ALIAS}"
 }
 
