@@ -40,7 +40,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-vision-icons-fix-202609181015"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-vision-row-fix-202609181040"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link

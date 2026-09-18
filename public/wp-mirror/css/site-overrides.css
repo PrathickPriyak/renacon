@@ -5386,16 +5386,30 @@ body.renacon-page-about-us .stk-b827d7a.stk-block-columns,
 body.renacon-page-about-us #post-4487 .stk-b827d7a {
   gap: 1.5rem !important;
   margin: 0.75rem 0 1.75rem;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
-body.renacon-page-about-us .stk-b827d7a > .stk-row {
+body.renacon-page-about-us .stk-b827d7a > .stk-row,
+body.renacon-page-about-us #post-4487 .stk-b827d7a > .stk-row,
+#post-4487 .ugb-a10dec0 .stk-b827d7a > .stk-row {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: stretch !important;
-  gap: 1.5rem;
+  gap: 1.5rem !important;
+  width: 100% !important;
 }
 
-body.renacon-page-about-us .stk-b827d7a .stk-block-column {
+body.renacon-page-about-us .stk-b827d7a .stk-block-column,
+body.renacon-page-about-us #post-4487 .stk-b827d7a .stk-block-column,
+#post-4487 .ugb-a10dec0 .stk-b827d7a > .stk-row > .stk-block-column {
   height: auto;
-  display: flex;
+  display: flex !important;
+  flex: 1 1 0 !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  width: auto !important;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
@@ -5538,8 +5552,18 @@ body.renacon-page-about-us #post-4487.renacon-ix-v2 .stk-ad91ac3 p.has-text-alig
 }
 
 @media screen and (max-width: 781px) {
-  body.renacon-page-about-us .stk-b827d7a > .stk-row {
-    flex-direction: column;
+  body.renacon-page-about-us .stk-b827d7a > .stk-row,
+  body.renacon-page-about-us #post-4487 .stk-b827d7a > .stk-row,
+  #post-4487 .ugb-a10dec0 .stk-b827d7a > .stk-row {
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+  }
+
+  body.renacon-page-about-us .stk-b827d7a .stk-block-column,
+  #post-4487 .ugb-a10dec0 .stk-b827d7a > .stk-row > .stk-block-column {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 
   body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
