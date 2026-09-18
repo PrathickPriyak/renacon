@@ -40,7 +40,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-careers-match-202609180630"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-careers-match-202609180700"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
