@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { sanitizeTrustedHtml } from "@/lib/sanitizeHtml";
+import { escapeHtml, safeUrl } from "@/lib/htmlSafe";
 
 export type Post = {
   id: number;
@@ -32,11 +34,14 @@ function firstContentImage(html: string): string | null {
 
 function normalizePost(post: Post): Post {
   const contentHtml = sanitizeHtml(post.contentHtml || "");
-  const image =
+  const rawImage =
     (post.image ? absolutizeMediaUrl(post.image) : null) ||
     firstContentImage(contentHtml);
+  const image = rawImage ? safeUrl(rawImage) || null : null;
   return {
     ...post,
+    title: post.title || "",
+    date: post.date || "",
     image,
     contentHtml,
   };
@@ -56,18 +61,9 @@ export function getPost(slug: string): Post | undefined {
   return getPosts().find((p) => p.slug === slug);
 }
 
+/** @deprecated Prefer sanitizeTrustedHtml — kept for callers that import sanitizeHtml. */
 export function sanitizeHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<iframe(?![^>]*youtube)[^>]*>[\s\S]*?<\/iframe>/gi, "")
-    .replace(/on\w+="[^"]*"/gi, "")
-    .replace(/javascript:/gi, "")
-    .replace(
-      /(src|href)=(["'])\/(wp-content|wp-includes)\//gi,
-      `$1=$2${WP_ORIGIN}/$3/`,
-    )
-    .replace(
-      /url\(\s*(['"]?)\/(wp-content|wp-includes)\//gi,
-      `url($1${WP_ORIGIN}/$2/`,
-    );
+  return sanitizeTrustedHtml(html);
 }
+
+export { escapeHtml, safeUrl };

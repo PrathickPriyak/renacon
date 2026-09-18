@@ -1,7 +1,16 @@
 import { google, type sheets_v4 } from "googleapis";
+import { sanitizeSheetCell } from "@/lib/security";
 
-/** Shared Renacon form submissions spreadsheet */
-export const DEFAULT_SPREADSHEET_ID = "1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA";
+/** Prefer GOOGLE_SHEETS_SPREADSHEET_ID env (required for service-account API path). */
+function spreadsheetIdOrEmpty(): string {
+  return (process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "").trim();
+}
+
+function spreadsheetId(): string {
+  const id = spreadsheetIdOrEmpty();
+  if (!id) throw new Error("GOOGLE_SHEETS_SPREADSHEET_ID not set");
+  return id;
+}
 
 export type SheetKind = "product" | "career" | "contact";
 
@@ -51,10 +60,6 @@ const HEADERS: Record<SheetKind, string[]> = {
     "Page URL",
   ],
 };
-
-function spreadsheetId(): string {
-  return (process.env.GOOGLE_SHEETS_SPREADSHEET_ID || DEFAULT_SPREADSHEET_ID).trim();
-}
 
 function hasServiceAccount(): boolean {
   if ((process.env.GOOGLE_SERVICE_ACCOUNT_JSON || "").trim()) return true;
@@ -141,11 +146,15 @@ async function ensureTabWithHeaders(
     await sheets.spreadsheets.values.update({
       spreadsheetId: spreadsheetIdValue,
       range: `${tab}!A1`,
-      valueInputOption: "USER_ENTERED",
+      valueInputOption: "RAW",
       requestBody: { values: [HEADERS[kind]] },
     });
   }
   return tab;
+}
+
+function sanitizeRow(row: string[]): string[] {
+  return row.map((cell) => sanitizeSheetCell(cell));
 }
 
 async function appendViaApi(kind: SheetKind, row: string[]): Promise<void> {
@@ -156,9 +165,9 @@ async function appendViaApi(kind: SheetKind, row: string[]): Promise<void> {
   await sheets.spreadsheets.values.append({
     spreadsheetId: id,
     range: `${tab}!A:Z`,
-    valueInputOption: "USER_ENTERED",
+    valueInputOption: "RAW",
     insertDataOption: "INSERT_ROWS",
-    requestBody: { values: [row] },
+    requestBody: { values: [sanitizeRow(row)] },
   });
 }
 
@@ -166,12 +175,15 @@ async function appendViaWebhook(kind: SheetKind, row: string[]): Promise<void> {
   const url = (process.env.GOOGLE_SHEETS_WEBHOOK_URL || "").trim();
   if (!url) throw new Error("GOOGLE_SHEETS_WEBHOOK_URL not set");
 
+  const token = (process.env.GOOGLE_SHEETS_WEBHOOK_TOKEN || "").trim();
+  const sheetId = spreadsheetIdOrEmpty();
   const payload = JSON.stringify({
     kind,
     tab: TAB_NAMES[kind],
     headers: HEADERS[kind],
-    row,
-    spreadsheetId: spreadsheetId(),
+    row: sanitizeRow(row),
+    ...(sheetId ? { spreadsheetId: sheetId } : {}),
+    ...(token ? { token } : {}),
   });
 
   // Apps Script executes doPost on the first POST, then returns 302 to an echo URL.

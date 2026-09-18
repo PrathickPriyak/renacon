@@ -1,35 +1,45 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { AdminLoginForm } from "@/components/AdminLoginForm";
+import {
+  ADMIN_COOKIE,
+  getConfiguredAdminSecret,
+  isAdminAuthenticated,
+} from "@/lib/adminAuth";
 import { prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Form submissions" };
 
-function withSecret(path: string, secret: string): string {
-  if (!secret) return path;
-  const join = path.includes("?") ? "&" : "?";
-  return `${path}${join}secret=${encodeURIComponent(secret)}`;
-}
-
 function fmt(date: Date): string {
   return date.toISOString().replace("T", " ").slice(0, 19);
 }
 
-export default async function AdminSubmissionsPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ secret?: string }>;
-}) {
-  const params = await searchParams;
-  const configured = (process.env.ADMIN_SECRET || "").trim();
-  const provided = (params.secret || "").trim();
+export default async function AdminSubmissionsPage() {
+  const jar = await cookies();
+  const token = (jar.get(ADMIN_COOKIE)?.value || "").trim();
+  const configured = getConfiguredAdminSecret();
 
-  if (configured && provided !== configured) {
+  if (!isAdminAuthenticated(token)) {
     return (
       <main className="renacon-admin-submissions">
         <h1>Form submissions</h1>
+        {configured ? (
+          <>
+            <p className="renacon-admin-hint">
+              Sign in with the admin secret. The secret is stored in an HttpOnly cookie and is never
+              placed in URLs.
+            </p>
+            <AdminLoginForm />
+          </>
+        ) : (
+          <p className="renacon-admin-hint">
+            Admin is not configured. Set <code>ADMIN_SECRET</code> in the environment (required in
+            production).
+          </p>
+        )}
         <p className="renacon-admin-hint">
-          Unauthorized. Open this page with <code>?secret=YOUR_ADMIN_SECRET</code> or set an empty
-          ADMIN_SECRET for local access.
+          <Link href="/">← Back to site</Link>
         </p>
       </main>
     );
@@ -44,46 +54,33 @@ export default async function AdminSubmissionsPage({
     prisma.contactSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
   ]);
 
-  const secret = configured || provided;
-  const productExport = withSecret("/api/brochure/export/", secret);
-  const careerExport = withSecret("/api/careers/export/", secret);
-  const contactExport = withSecret("/api/contact/export/", secret);
-
   return (
     <main className="renacon-admin-submissions">
       <h1>Form submissions</h1>
       <p className="renacon-admin-hint">
-        Database is the source of truth. Live Google Sheet (when configured):{" "}
-        <a
-          href="https://docs.google.com/spreadsheets/d/1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA/edit"
-          target="_blank"
-          rel="noreferrer"
-        >
-          open spreadsheet
-        </a>
-        . Download Excel exports below, or open Prisma Studio locally with{" "}
-        <code>npm run db:studio</code>.
+        Database is the source of truth. Download Excel exports below (authenticated via secure
+        cookie), or open Prisma Studio locally with <code>npm run db:studio</code>.
       </p>
 
       <div className="renacon-admin-grid">
         <section className="renacon-admin-card">
           <h2>Product / brochure</h2>
           <p className="renacon-admin-count">{productCount}</p>
-          <a className="renacon-admin-btn" href={productExport}>
+          <a className="renacon-admin-btn" href="/api/brochure/export/">
             Download Excel
           </a>
         </section>
         <section className="renacon-admin-card">
           <h2>Careers</h2>
           <p className="renacon-admin-count">{careerCount}</p>
-          <a className="renacon-admin-btn" href={careerExport}>
+          <a className="renacon-admin-btn" href="/api/careers/export/">
             Download Excel
           </a>
         </section>
         <section className="renacon-admin-card">
           <h2>Contact</h2>
           <p className="renacon-admin-count">{contactCount}</p>
-          <a className="renacon-admin-btn" href={contactExport}>
+          <a className="renacon-admin-btn" href="/api/contact/export/">
             Download Excel
           </a>
         </section>

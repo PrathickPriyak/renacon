@@ -5553,6 +5553,37 @@ body.renacon-page-about-us .stk-b827d7a p.has-text-align-center {
   font-size: 0.92rem;
   line-height: 1.5;
 }
+.renacon-admin-submissions .renacon-admin-login {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  max-width: 360px;
+  margin: 1.25rem 0;
+}
+.renacon-admin-submissions .renacon-admin-login label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.renacon-admin-submissions .renacon-admin-login input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #cfdcd4;
+  border-radius: 3px;
+  font-size: 0.95rem;
+}
+.renacon-admin-submissions .renacon-admin-login button {
+  align-self: flex-start;
+  background: #04a354;
+  color: #fff;
+  border: 0;
+  border-radius: 3px;
+  padding: 0.55rem 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.renacon-admin-submissions .renacon-admin-login button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
 .renacon-admin-submissions .renacon-admin-table-block {
   margin: 2rem 0 1.5rem;
 }

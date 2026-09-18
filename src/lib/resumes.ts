@@ -41,6 +41,21 @@ function sanitizeBaseName(filename: string): string {
   return base.slice(0, 120);
 }
 
+function looksLikePdf(buf: Buffer): boolean {
+  return buf.length >= 5 && buf.subarray(0, 5).toString("ascii") === "%PDF-";
+}
+
+function looksLikeJpeg(buf: Buffer): boolean {
+  return buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff;
+}
+
+function looksLikeZipOleDoc(buf: Buffer): boolean {
+  // DOCX is ZIP (PK); legacy DOC often starts with D0 CF 11 E0 (OLE)
+  if (buf.length < 4) return false;
+  if (buf[0] === 0x50 && buf[1] === 0x4b) return true; // PK
+  return buf[0] === 0xd0 && buf[1] === 0xcf && buf[2] === 0x11 && buf[3] === 0xe0;
+}
+
 export function validateResumeFile(file: File): { ok: true } | { ok: false; error: string } {
   if (!file || !(file instanceof File) || file.size <= 0) {
     return { ok: false, error: "Please attach your resume (PDF, DOC, or DOCX)." };
@@ -82,6 +97,32 @@ export function validatePhotoFile(file: File): { ok: true } | { ok: false; error
   return { ok: true };
 }
 
+async function assertMagicBytes(
+  file: File,
+  kind: "resume" | "photo",
+): Promise<{ ok: true; buffer: Buffer } | { ok: false; error: string }> {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const ext = extensionOf(file.name);
+
+  if (kind === "photo") {
+    if (ext === ".pdf" && !looksLikePdf(buffer)) {
+      return { ok: false, error: "Photo PDF content is invalid." };
+    }
+    if ((ext === ".jpg" || ext === ".jpeg") && !looksLikeJpeg(buffer)) {
+      return { ok: false, error: "Photo must be a valid JPG image." };
+    }
+    return { ok: true, buffer };
+  }
+
+  if (ext === ".pdf" && !looksLikePdf(buffer)) {
+    return { ok: false, error: "Resume PDF content is invalid." };
+  }
+  if ((ext === ".doc" || ext === ".docx") && !looksLikeZipOleDoc(buffer)) {
+    return { ok: false, error: "Resume DOC/DOCX content is invalid." };
+  }
+  return { ok: true, buffer };
+}
+
 async function resolveResumeDirs(): Promise<string[]> {
   return [
     join(process.cwd(), "data", "submissions", "resumes"),
@@ -103,11 +144,16 @@ export async function storeResumeFile(file: File): Promise<ResumeMeta> {
     throw new Error(validation.error);
   }
 
+  const magic = await assertMagicBytes(file, "resume");
+  if (!magic.ok) {
+    throw new Error(magic.error);
+  }
+
   const ext = extensionOf(file.name) || ".pdf";
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const id = randomBytes(4).toString("hex");
   const storedName = `${stamp}-${id}-${sanitizeBaseName(file.name.replace(/\.[^.]+$/, ""))}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const buffer = magic.buffer;
   const dirs = await resolveResumeDirs();
 
   let lastError: unknown;
@@ -140,11 +186,16 @@ export async function storePhotoFile(file: File): Promise<ResumeMeta> {
     throw new Error(validation.error);
   }
 
+  const magic = await assertMagicBytes(file, "photo");
+  if (!magic.ok) {
+    throw new Error(magic.error);
+  }
+
   const ext = extensionOf(file.name) || ".jpg";
   const stamp = new Date().toISOString().replace(/[:.]/g, "-");
   const id = randomBytes(4).toString("hex");
   const storedName = `${stamp}-${id}-${sanitizeBaseName(file.name.replace(/\.[^.]+$/, ""))}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
+  const buffer = magic.buffer;
   const dirs = await resolvePhotoDirs();
 
   let lastError: unknown;

@@ -1,8 +1,9 @@
 import { readPartial } from "@/lib/wpPages";
+import { sanitizeMirroredHtml } from "@/lib/sanitizeHtml";
 
 /** Blocksy header from `content/pages-html/_header.html` — keep DOM hooks for WpInteractions. */
 export function SiteHeader() {
-  const html = readPartial("_header.html");
+  const html = sanitizeMirroredHtml(readPartial("_header.html"));
   return (
     <div
       className="renacon-site-header"
