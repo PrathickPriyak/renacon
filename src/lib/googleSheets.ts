@@ -165,20 +165,47 @@ async function appendViaApi(kind: SheetKind, row: string[]): Promise<void> {
 async function appendViaWebhook(kind: SheetKind, row: string[]): Promise<void> {
   const url = (process.env.GOOGLE_SHEETS_WEBHOOK_URL || "").trim();
   if (!url) throw new Error("GOOGLE_SHEETS_WEBHOOK_URL not set");
-  const res = await fetch(url, {
+
+  const payload = JSON.stringify({
+    kind,
+    tab: TAB_NAMES[kind],
+    headers: HEADERS[kind],
+    row,
+    spreadsheetId: spreadsheetId(),
+  });
+
+  // Apps Script web apps respond with 302 → googleusercontent echo URL.
+  // Follow manually: POST once, then GET the Location for the JSON body.
+  const postRes = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      kind,
-      tab: TAB_NAMES[kind],
-      headers: HEADERS[kind],
-      row,
-      spreadsheetId: spreadsheetId(),
-    }),
+    body: payload,
+    redirect: "manual",
   });
+
+  let res: Response = postRes;
+  if (postRes.status >= 300 && postRes.status < 400) {
+    const location = postRes.headers.get("location");
+    if (!location) {
+      throw new Error(`Sheets webhook redirect missing Location (${postRes.status})`);
+    }
+    res = await fetch(location, { method: "GET", redirect: "follow" });
+  }
+
+  const text = await res.text();
   if (!res.ok) {
-    const text = await res.text().catch(() => "");
     throw new Error(`Sheets webhook failed (${res.status}): ${text.slice(0, 200)}`);
+  }
+
+  if (!text.trim()) return;
+  try {
+    const parsed = JSON.parse(text) as { ok?: boolean; error?: string };
+    if (parsed.ok === false) {
+      throw new Error(parsed.error || "Sheets webhook returned ok:false");
+    }
+  } catch (err) {
+    if (err instanceof SyntaxError) return;
+    throw err;
   }
 }
 
