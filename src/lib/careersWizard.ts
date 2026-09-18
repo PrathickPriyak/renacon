@@ -265,7 +265,7 @@ function setProgress(form: HTMLFormElement, pageNum: number, total: number): voi
   }
 }
 
-function showPage(form: HTMLFormElement, pageNum: number): void {
+function showPage(form: HTMLFormElement, pageNum: number, options: { scroll?: boolean } = {}): void {
   const pages = [...form.querySelectorAll<HTMLElement>(".wpforms-page")];
   pages.forEach((page) => {
     const n = Number(page.dataset.page || "0");
@@ -279,7 +279,9 @@ function showPage(form: HTMLFormElement, pageNum: number): void {
   }
   setProgress(form, pageNum, pages.length);
   form.dataset.careersPage = String(pageNum);
-  form.querySelector(".wpforms-page-indicator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (options.scroll !== false) {
+    form.querySelector(".wpforms-page-indicator")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function wireDropzone(zone: HTMLElement): void {
@@ -479,7 +481,7 @@ export function enhanceCareersWizard(form: HTMLFormElement): void {
     }
   });
 
-  showPage(form, 1);
+  showPage(form, 1, { scroll: false });
 }
 
 export function isCareersHoneypotTripped(form: HTMLFormElement): boolean {
