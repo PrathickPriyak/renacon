@@ -29,6 +29,9 @@ const EXTS = new Set([
   ".avif",
   ".bmp",
   ".jfif",
+  ".mp4",
+  ".webm",
+  ".mov",
 ]);
 
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));

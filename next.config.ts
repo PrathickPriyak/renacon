@@ -29,6 +29,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/wp-content/:path*.mp4",
+        destination: "/r-media/:path*.mp4",
+      },
+      {
+        source: "/wp-content/:path*.webm",
+        destination: "/r-media/:path*.webm",
+      },
+      {
         source: "/wp-content/:path*",
         destination: "/assets/wp-content/:path*",
       },
