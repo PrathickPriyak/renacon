@@ -1716,7 +1716,7 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
   }
 }
 
-/* CACHE_BUST_MARKER contact-channel-form-visible-202609171445 */
+/* CACHE_BUST_MARKER remove-contact-tabs-form-202609180400 */
 
 /* ---------- Match live Renacon chrome ---------- */
 .ct-header .menu-container > .menu > li > a {
@@ -4127,6 +4127,16 @@ article.post.type-post .entry-content img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Contact: duplicate Forminator tab form removed — hide if leftover markup appears */
+body.renacon-page-contact-us .wp-block-ep-tabs,
+.renacon-contact-ix .wp-block-ep-tabs,
+body.renacon-page-contact-us .ep_tabs_root,
+.renacon-contact-ix .ep_tabs_root,
+body.renacon-page-contact-us form.forminator-custom-form,
+.renacon-contact-ix form.forminator-custom-form {
+  display: none !important;
 }
 
 /* Editor Plus tabs (contact) — show active panel/forms without WP plugin JS */
