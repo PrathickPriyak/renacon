@@ -104,11 +104,11 @@ export async function POST(request: Request) {
       (err) => console.error("[contact] jsonl backup failed", err),
     );
 
+    // Sheets is durable on Vercel; skip local Excel/DB warnings when save succeeded.
     return NextResponse.json({
       ok: true,
       id,
-      excelWarning: excelError || undefined,
-      googleSheetsWarning: googleSheetsError || undefined,
+      ...(googleSheetsError ? { googleSheetsWarning: googleSheetsError } : {}),
     });
   }
 
@@ -165,15 +165,13 @@ export async function POST(request: Request) {
       ok: true,
       id,
       downloadUrl,
-      excelWarning: excelError || undefined,
-      googleSheetsWarning: googleSheetsError || undefined,
+      ...(googleSheetsError ? { googleSheetsWarning: googleSheetsError } : {}),
     });
   }
 
   return NextResponse.json({
     ok: true,
     id,
-    excelWarning: excelError || undefined,
-    googleSheetsWarning: googleSheetsError || undefined,
+    ...(googleSheetsError ? { googleSheetsWarning: googleSheetsError } : {}),
   });
 }

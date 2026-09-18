@@ -272,8 +272,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     id: dbId,
-    excelWarning: excelError || undefined,
-    googleSheetsWarning: googleSheetsError || undefined,
+    ...(googleSheetsError ? { googleSheetsWarning: googleSheetsError } : {}),
     photo: { name: photoMeta.originalName, size: photoMeta.size },
     resume: { name: resumeMeta.originalName, size: resumeMeta.size },
   });
