@@ -4531,6 +4531,7 @@ body.renacon-page-media .sgb-item img {
 }
 #wpforms-7919 .wpforms-page-indicator {
   margin-bottom: 1.25rem;
+  scroll-margin-top: 110px;
 }
 #wpforms-7919 .wpforms-field-label,
 #wpforms-7919 legend.wpforms-field-label,
@@ -4549,13 +4550,30 @@ body.renacon-page-media .sgb-item img {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  min-height: 42px;
-  border: 1px solid #ccc;
-  border-radius: 2px;
-  background: #fff;
-  padding: 8px 10px;
+  min-height: 38px;
+  border: 0 !important;
+  border-bottom: 1px solid #bbb !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 6px 0 8px !important;
   font-size: 16px;
-  line-height: 1.3;
+  line-height: 1.4;
+  box-shadow: none !important;
+}
+#wpforms-7919 input[type="text"]:focus,
+#wpforms-7919 input[type="email"]:focus,
+#wpforms-7919 input[type="tel"]:focus,
+#wpforms-7919 select:focus,
+#wpforms-7919 textarea:focus,
+#wpforms-7919 .renacon-field-focus {
+  border-bottom-color: #04a354 !important;
+  outline: none;
+  box-shadow: none !important;
+}
+#wpforms-7919 input.wpforms-error,
+#wpforms-7919 select.wpforms-error,
+#wpforms-7919 textarea.wpforms-error {
+  border-bottom-color: #d63637 !important;
 }
 #wpforms-7919 .wpforms-field-date-dropdown-wrap {
   display: flex;

@@ -289,7 +289,9 @@ export function FormBridge() {
           /\/contact-us\/?$/.test(window.location.pathname) ||
           /\/careers\/?$/.test(window.location.pathname)
         ) {
-          form.classList.add("renacon-contact-form");
+          if (!isCareersForm(form)) {
+            form.classList.add("renacon-contact-form");
+          }
           // Forminator mirrors often ship with inline display:none until WP JS runs
           if (
             /\/contact-us\/?$/.test(window.location.pathname) &&
@@ -439,7 +441,9 @@ export function FormBridge() {
       const kind = path.includes("career") || isCareersForm(form) ? "careers" : "contact";
       const endpoint = kind === "careers" ? "/api/careers/" : "/api/contact/";
 
-      form.classList.add("renacon-contact-form");
+      if (kind !== "careers") {
+        form.classList.add("renacon-contact-form");
+      }
       const clearFieldStates = () => {
         form.querySelectorAll(".renacon-field-invalid, .wpforms-error").forEach((el) =>
           el.classList.remove("renacon-field-invalid", "wpforms-error", "user-invalid"),
