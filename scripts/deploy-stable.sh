@@ -82,6 +82,10 @@ PY
     exit 1
   fi
 
+  echo "Ensuring project domain ${ALIAS}…"
+  api POST "/v10/projects/${PROJECT_ID}/domains?teamId=${ORG_ID}" \
+    -d "{\"name\":\"${ALIAS}\"}" >/dev/null || true
+
   echo "Assigning alias ${ALIAS}…"
   api POST "/v2/deployments/${dpl}/aliases?teamId=${ORG_ID}" \
     -d "{\"alias\":\"${ALIAS}\"}" >/dev/null || true
