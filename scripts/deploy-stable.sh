@@ -15,9 +15,9 @@ fi
 ORG_ID="${VERCEL_ORG_ID:-team_TaDueuIoGc39uzO1FWIjeRmW}"
 PROJECT_NAME="${VERCEL_PROJECT_NAME:-renacon}"
 PROJECT_ID="${VERCEL_PROJECT_ID:-prj_l8JUlW0Eua6JtBVEILaM85QYkWvZ}"
-# Primary preview/stable URL plus custom domains (Cloudflare → Vercel).
+# Primary preview URL plus apex custom domain only (no www).
 ALIAS="${VERCEL_ALIAS:-renacon.vercel.app}"
-EXTRA_ALIASES="${VERCEL_EXTRA_ALIASES:-renacon.in www.renacon.in}"
+EXTRA_ALIASES="${VERCEL_EXTRA_ALIASES:-renacon.in}"
 REF="${VERCEL_GIT_REF:-$(git rev-parse --abbrev-ref HEAD)}"
 
 api() {
@@ -93,7 +93,6 @@ PY
       -d '{"redirect":null,"redirectStatusCode":null}' >/dev/null || true
   done
 
-  # www → apex redirect is OK once both are on Vercel; prefer serving both without bounce.
   echo "Assigning aliases…"
   for domain in ${ALIAS} ${EXTRA_ALIASES}; do
     api POST "/v2/deployments/${dpl}/aliases?teamId=${ORG_ID}" \
