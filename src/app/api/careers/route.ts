@@ -231,7 +231,6 @@ export async function POST(request: Request) {
   }
 
   let dbId: string;
-  let excelError: string | null = null;
   let googleSheetsError: string | null = null;
   try {
     const saved = await saveCareerSubmission({
@@ -250,7 +249,6 @@ export async function POST(request: Request) {
       resume: resumeMeta,
     });
     dbId = saved.id;
-    excelError = saved.excelError;
     googleSheetsError = saved.googleSheetsError;
   } catch (err) {
     console.error("[careers] database save failed", err);

@@ -1,8 +1,15 @@
 import type { NextConfig } from "next";
 
+/**
+ * Media strategy for GoDaddy/Cloudflare → Vercel custom domain:
+ * - All WP images are mirrored under public/wp-content (same-origin).
+ * - Do NOT rewrite /wp-content to https://renacon.in — once DNS points here,
+ *   that rewrite becomes a self-loop and breaks images.
+ */
 const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
+    // Allow transitional absolute URLs if any markup still points at the old host.
     remotePatterns: [
       { protocol: "https", hostname: "renacon.in", pathname: "/wp-content/**" },
       { protocol: "https", hostname: "www.renacon.in", pathname: "/wp-content/**" },
@@ -15,20 +22,6 @@ const nextConfig: NextConfig = {
         source: "/:year(\\d{4})/:month(\\d{2})/:slug",
         destination: "/news/:slug/",
         permanent: false,
-      },
-    ];
-  },
-  async rewrites() {
-    return [
-      // Fallback only: mirrored files in public/wp-content are served first.
-      // Missing paths still proxy to renacon.in so old/rare media does not 404.
-      {
-        source: "/wp-content/:path*",
-        destination: "https://renacon.in/wp-content/:path*",
-      },
-      {
-        source: "/wp-includes/:path*",
-        destination: "https://renacon.in/wp-includes/:path*",
       },
     ];
   },

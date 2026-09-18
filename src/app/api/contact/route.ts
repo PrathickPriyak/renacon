@@ -76,7 +76,6 @@ export async function POST(request: Request) {
     }
 
     let id: string;
-    let excelError: string | null = null;
     let googleSheetsError: string | null = null;
     try {
       const saved = await saveContactSubmission({
@@ -90,7 +89,6 @@ export async function POST(request: Request) {
         details: record as Record<string, unknown>,
       });
       id = saved.id;
-      excelError = saved.excelError;
       googleSheetsError = saved.googleSheetsError;
     } catch (err) {
       console.error("[contact] database save failed", err);
@@ -124,7 +122,6 @@ export async function POST(request: Request) {
   const product = asString(record.product) || slugFromPath(productPath);
 
   let id: string;
-  let excelError: string | null = null;
   let googleSheetsError: string | null = null;
   try {
     const saved = await saveProductSubmission({
@@ -138,7 +135,6 @@ export async function POST(request: Request) {
       details: record as Record<string, unknown>,
     });
     id = saved.id;
-    excelError = saved.excelError;
     googleSheetsError = saved.googleSheetsError;
   } catch (err) {
     console.error("[product] database save failed", err);
