@@ -5380,20 +5380,22 @@ body.renacon-page-contact-us h3.eplus-styles-uid-341832::after,
 
 /* ============================================================
    About Us — Vision / Mission / We Serve With cards
+   Match renacon.in: flat light-gray cards, teal laurel icons
    ============================================================ */
 body.renacon-page-about-us .stk-b827d7a.stk-block-columns,
 body.renacon-page-about-us #post-4487 .stk-b827d7a {
-  gap: 1.25rem !important;
-  margin: 0.5rem 0 1.5rem;
+  gap: 1.5rem !important;
+  margin: 0.75rem 0 1.75rem;
 }
 
 body.renacon-page-about-us .stk-b827d7a > .stk-row {
-  align-items: stretch;
-  gap: 1.25rem;
+  align-items: stretch !important;
+  gap: 1.5rem;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-block-column {
-  height: 100%;
+  height: auto;
+  display: flex;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
@@ -5401,38 +5403,42 @@ body.renacon-page-about-us .stk-b827d7a .stk-9ca72ed-container,
 body.renacon-page-about-us .stk-b827d7a .stk-b9aef73-container,
 body.renacon-page-about-us .stk-b827d7a .stk-ad91ac3-container {
   height: 100%;
-  background: #ffffff !important;
-  border: 1px solid #dde8e1;
-  border-radius: 14px;
-  padding: 1.75rem 1.35rem 1.5rem !important;
-  box-shadow: 0 10px 28px rgba(11, 61, 44, 0.06);
+  width: 100%;
+  background: #f4f4f4 !important;
+  border: 0 !important;
+  border-radius: 10px;
+  padding: 2rem 1.5rem 1.75rem !important;
+  box-shadow: none !important;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden !important;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* Remove polish accent bar / hover lift — match flat reference */
 body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #065c34, #12b45f);
+  display: none !important;
+  content: none !important;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper:hover {
-    transform: translateY(-4px);
-    border-color: #b7d4c4;
-    box-shadow: 0 18px 40px rgba(11, 61, 44, 0.12);
-  }
+body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+body.renacon-page-about-us .stk-b827d7a .stk-block-content,
+body.renacon-page-about-us .stk-b827d7a .stk-inner-blocks {
+  width: 100%;
+  text-align: center;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-block-icon {
   display: flex;
   justify-content: center;
-  margin-bottom: 0.85rem;
+  margin: 0 0 1rem;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-block-icon .stk--svg-wrapper,
@@ -5440,45 +5446,62 @@ body.renacon-page-about-us .stk-b827d7a .stk-block-icon .stk--inner-svg {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 25%, #e8f7ee, #d4efe0);
-  box-shadow: inset 0 0 0 1px rgba(4, 163, 84, 0.18);
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg {
-  width: 34px !important;
-  height: 34px !important;
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg,
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon .stk--inner-svg svg:last-child,
+body.renacon-page-about-us .stk-b827d7a .stk-a3eaa53 .stk--inner-svg svg:last-child,
+body.renacon-page-about-us .stk-b827d7a .stk-2abfe31 .stk--inner-svg svg:last-child,
+body.renacon-page-about-us .stk-b827d7a .stk-71c78d2 .stk--inner-svg svg:last-child {
+  width: 90px !important;
+  height: 90px !important;
 }
 
-body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg path {
-  fill: #0a7a45 !important;
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg path,
+body.renacon-page-about-us .stk-b827d7a .stk-block-icon svg :is(g, path, rect, polygon, ellipse) {
+  fill: #167278 !important;
 }
 
-body.renacon-page-about-us .stk-b827d7a .stk-block-heading__text {
-  color: #123528 !important;
-  font-size: 1.05rem !important;
-  font-weight: 750 !important;
-  letter-spacing: 0.06em;
+body.renacon-page-about-us .stk-b827d7a .stk-block-heading__text,
+body.renacon-page-about-us .stk-b827d7a h4.stk-block-heading__text {
+  color: #000000 !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  margin: 0.35rem 0 0.85rem !important;
+  margin: 0.25rem 0 0.75rem !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
 }
 
 body.renacon-page-about-us .stk-b827d7a .stk-inner-blocks > p,
-body.renacon-page-about-us .stk-b827d7a p.eplus-wrapper {
-  color: #3d5248 !important;
-  font-size: 0.95rem !important;
+body.renacon-page-about-us .stk-b827d7a p.eplus-wrapper,
+body.renacon-page-about-us .stk-b827d7a p.has-text-align-center {
+  color: #000000 !important;
+  font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.078), 15px) !important;
   line-height: 1.65 !important;
   margin: 0 !important;
+  text-align: center !important;
+  max-width: none;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 @media screen and (max-width: 781px) {
+  body.renacon-page-about-us .stk-b827d7a > .stk-row {
+    flex-direction: column;
+  }
+
   body.renacon-page-about-us .stk-b827d7a .stk-column-wrapper,
   body.renacon-page-about-us .stk-b827d7a .stk-9ca72ed-container,
   body.renacon-page-about-us .stk-b827d7a .stk-b9aef73-container,
   body.renacon-page-about-us .stk-b827d7a .stk-ad91ac3-container {
-    padding: 1.4rem 1.15rem 1.25rem !important;
+    padding: 1.65rem 1.25rem 1.4rem !important;
   }
 }
 
