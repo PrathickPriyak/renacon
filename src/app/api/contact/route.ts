@@ -5,6 +5,9 @@ import { tmpdir } from "node:os";
 import { resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
 import { saveContactSubmission, saveProductSubmission } from "@/lib/formSubmissions";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }

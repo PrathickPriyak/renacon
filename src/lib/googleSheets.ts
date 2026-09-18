@@ -174,8 +174,8 @@ async function appendViaWebhook(kind: SheetKind, row: string[]): Promise<void> {
     spreadsheetId: spreadsheetId(),
   });
 
-  // Apps Script web apps respond with 302 → googleusercontent echo URL.
-  // Follow manually: POST once, then GET the Location for the JSON body.
+  // Apps Script executes doPost on the first POST, then returns 302 to an echo URL.
+  // Treat 302 as success so Vercel serverless doesn't wait on the slow redirect hop.
   const postRes = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -183,18 +183,13 @@ async function appendViaWebhook(kind: SheetKind, row: string[]): Promise<void> {
     redirect: "manual",
   });
 
-  let res: Response = postRes;
   if (postRes.status >= 300 && postRes.status < 400) {
-    const location = postRes.headers.get("location");
-    if (!location) {
-      throw new Error(`Sheets webhook redirect missing Location (${postRes.status})`);
-    }
-    res = await fetch(location, { method: "GET", redirect: "follow" });
+    return;
   }
 
-  const text = await res.text();
-  if (!res.ok) {
-    throw new Error(`Sheets webhook failed (${res.status}): ${text.slice(0, 200)}`);
+  const text = await postRes.text();
+  if (!postRes.ok) {
+    throw new Error(`Sheets webhook failed (${postRes.status}): ${text.slice(0, 200)}`);
   }
 
   if (!text.trim()) return;

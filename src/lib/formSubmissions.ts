@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { prisma } from "@/lib/db";
 import {
   buildCareerWorkbook,
@@ -20,6 +21,10 @@ function jsonString(value: unknown): string {
   } catch {
     return "{}";
   }
+}
+
+function fallbackId(): string {
+  return `sheet_${randomUUID()}`;
 }
 
 export type ProductInput = {
@@ -65,6 +70,7 @@ export type PersistResult = {
   excelPath: string | null;
   excelError: string | null;
   googleSheetsError: string | null;
+  dbError: string | null;
 };
 
 async function syncExcel(kind: ExcelKind): Promise<{ path: string | null; error: string | null }> {
@@ -94,136 +100,216 @@ async function syncExcel(kind: ExcelKind): Promise<{ path: string | null; error:
   }
 }
 
+function requirePersisted(result: PersistResult): PersistResult {
+  // On Vercel, SQLite may be unavailable — Google Sheet is the durable store.
+  if (result.dbError && result.googleSheetsError) {
+    throw new Error(result.googleSheetsError || result.dbError || "Unable to save submission");
+  }
+  if (result.dbError && !isGoogleSheetsConfigured()) {
+    throw new Error(result.dbError);
+  }
+  return result;
+}
+
 export async function saveProductSubmission(input: ProductInput): Promise<PersistResult> {
-  const row = await prisma.productSubmission.create({
-    data: {
-      formType: "product",
-      name: input.name,
-      email: input.email,
-      phone: input.phone,
-      message: input.message ?? "",
-      product: input.product ?? "",
-      productPath: input.productPath ?? "",
-      pageUrl: input.pageUrl ?? "",
-      detailsJson: jsonString(input.details ?? input),
-    },
-  });
-  const excel = await syncExcel("product");
+  let id = fallbackId();
+  let submittedAt = new Date();
+  let dbError: string | null = null;
+  const name = input.name;
+  const email = input.email;
+  const phone = input.phone;
+  const message = input.message ?? "";
+  const product = input.product ?? "";
+  const productPath = input.productPath ?? "";
+  const pageUrl = input.pageUrl ?? "";
+
+  try {
+    const row = await prisma.productSubmission.create({
+      data: {
+        formType: "product",
+        name,
+        email,
+        phone,
+        message,
+        product,
+        productPath,
+        pageUrl,
+        detailsJson: jsonString(input.details ?? input),
+      },
+    });
+    id = row.id;
+    submittedAt = row.submittedAt;
+  } catch (err) {
+    dbError = err instanceof Error ? err.message : "Database save failed";
+    console.error("[product] database save failed — will still try Google Sheets", err);
+  }
+
+  const excel = dbError ? { path: null, error: dbError } : await syncExcel("product");
   let googleSheetsError: string | null = null;
   if (isGoogleSheetsConfigured()) {
     const sheet = await appendProductToGoogleSheet({
-      id: row.id,
-      submittedAt: row.submittedAt.toISOString(),
-      name: row.name,
-      email: row.email,
-      phone: row.phone,
-      product: row.product,
-      productPath: row.productPath,
-      message: row.message,
-      pageUrl: row.pageUrl,
+      id,
+      submittedAt: submittedAt.toISOString(),
+      name,
+      email,
+      phone,
+      product,
+      productPath,
+      message,
+      pageUrl,
     });
     if (!sheet.ok) googleSheetsError = sheet.error;
   }
-  return {
-    id: row.id,
+
+  return requirePersisted({
+    id,
     excelPath: excel.path,
     excelError: excel.error,
     googleSheetsError,
-  };
+    dbError,
+  });
 }
 
 export async function saveCareerSubmission(input: CareerInput): Promise<PersistResult> {
   const photo = input.photo;
   const resume = input.resume;
-  const row = await prisma.careerSubmission.create({
-    data: {
-      formType: "career",
-      name: input.name,
-      email: input.email,
-      phone: input.phone,
-      altPhone: input.altPhone ?? "",
-      role: input.role ?? "",
-      experience: input.experience ?? "",
-      location: input.location ?? "",
-      qualification: input.qualification ?? "",
-      message: input.message ?? "",
-      pageUrl: input.pageUrl ?? "",
-      photoOriginalName: photo?.originalName ?? "",
-      photoStoredName: photo?.storedName ?? "",
-      photoStoragePath: photo?.storagePath ?? "",
-      photoMimeType: photo?.mimeType ?? "",
-      photoSize: photo?.size ?? 0,
-      resumeOriginalName: resume?.originalName ?? "",
-      resumeStoredName: resume?.storedName ?? "",
-      resumeStoragePath: resume?.storagePath ?? "",
-      resumeMimeType: resume?.mimeType ?? "",
-      resumeSize: resume?.size ?? 0,
-      detailsJson: jsonString(input.details ?? {}),
-    },
-  });
-  const excel = await syncExcel("career");
+  let id = fallbackId();
+  let submittedAt = new Date();
+  let dbError: string | null = null;
+
+  const name = input.name;
+  const email = input.email;
+  const phone = input.phone;
+  const altPhone = input.altPhone ?? "";
+  const role = input.role ?? "";
+  const experience = input.experience ?? "";
+  const location = input.location ?? "";
+  const qualification = input.qualification ?? "";
+  const message = input.message ?? "";
+  const pageUrl = input.pageUrl ?? "";
+  const photoName = photo?.originalName ?? photo?.storedName ?? "";
+  const resumeName = resume?.originalName ?? resume?.storedName ?? "";
+
+  try {
+    const row = await prisma.careerSubmission.create({
+      data: {
+        formType: "career",
+        name,
+        email,
+        phone,
+        altPhone,
+        role,
+        experience,
+        location,
+        qualification,
+        message,
+        pageUrl,
+        photoOriginalName: photo?.originalName ?? "",
+        photoStoredName: photo?.storedName ?? "",
+        photoStoragePath: photo?.storagePath ?? "",
+        photoMimeType: photo?.mimeType ?? "",
+        photoSize: photo?.size ?? 0,
+        resumeOriginalName: resume?.originalName ?? "",
+        resumeStoredName: resume?.storedName ?? "",
+        resumeStoragePath: resume?.storagePath ?? "",
+        resumeMimeType: resume?.mimeType ?? "",
+        resumeSize: resume?.size ?? 0,
+        detailsJson: jsonString(input.details ?? {}),
+      },
+    });
+    id = row.id;
+    submittedAt = row.submittedAt;
+  } catch (err) {
+    dbError = err instanceof Error ? err.message : "Database save failed";
+    console.error("[career] database save failed — will still try Google Sheets", err);
+  }
+
+  const excel = dbError ? { path: null, error: dbError } : await syncExcel("career");
   let googleSheetsError: string | null = null;
   if (isGoogleSheetsConfigured()) {
     const sheet = await appendCareerToGoogleSheet({
-      id: row.id,
-      submittedAt: row.submittedAt.toISOString(),
-      name: row.name,
-      email: row.email,
-      phone: row.phone,
-      altPhone: row.altPhone,
-      role: row.role,
-      experience: row.experience,
-      location: row.location,
-      qualification: row.qualification,
-      message: row.message,
-      photo: row.photoOriginalName || row.photoStoredName,
-      resume: row.resumeOriginalName || row.resumeStoredName,
-      pageUrl: row.pageUrl,
+      id,
+      submittedAt: submittedAt.toISOString(),
+      name,
+      email,
+      phone,
+      altPhone,
+      role,
+      experience,
+      location,
+      qualification,
+      message,
+      photo: photoName,
+      resume: resumeName,
+      pageUrl,
     });
     if (!sheet.ok) googleSheetsError = sheet.error;
   }
-  return {
-    id: row.id,
+
+  return requirePersisted({
+    id,
     excelPath: excel.path,
     excelError: excel.error,
     googleSheetsError,
-  };
+    dbError,
+  });
 }
 
 export async function saveContactSubmission(input: ContactInput): Promise<PersistResult> {
-  const row = await prisma.contactSubmission.create({
-    data: {
-      formType: "contact",
-      name: input.name,
-      phone: input.phone,
-      city: input.city ?? "",
-      products: input.products ?? "",
-      email: input.email ?? "",
-      message: input.message ?? "",
-      pageUrl: input.pageUrl ?? "",
-      detailsJson: jsonString(input.details ?? input),
-    },
-  });
-  const excel = await syncExcel("contact");
+  let id = fallbackId();
+  let submittedAt = new Date();
+  let dbError: string | null = null;
+  const name = input.name;
+  const phone = input.phone;
+  const city = input.city ?? "";
+  const products = input.products ?? "";
+  const email = input.email ?? "";
+  const message = input.message ?? "";
+  const pageUrl = input.pageUrl ?? "";
+
+  try {
+    const row = await prisma.contactSubmission.create({
+      data: {
+        formType: "contact",
+        name,
+        phone,
+        city,
+        products,
+        email,
+        message,
+        pageUrl,
+        detailsJson: jsonString(input.details ?? input),
+      },
+    });
+    id = row.id;
+    submittedAt = row.submittedAt;
+  } catch (err) {
+    dbError = err instanceof Error ? err.message : "Database save failed";
+    console.error("[contact] database save failed — will still try Google Sheets", err);
+  }
+
+  const excel = dbError ? { path: null, error: dbError } : await syncExcel("contact");
   let googleSheetsError: string | null = null;
   if (isGoogleSheetsConfigured()) {
     const sheet = await appendContactToGoogleSheet({
-      id: row.id,
-      submittedAt: row.submittedAt.toISOString(),
-      name: row.name,
-      phone: row.phone,
-      city: row.city,
-      products: row.products,
-      email: row.email,
-      message: row.message,
-      pageUrl: row.pageUrl,
+      id,
+      submittedAt: submittedAt.toISOString(),
+      name,
+      phone,
+      city,
+      products,
+      email,
+      message,
+      pageUrl,
     });
     if (!sheet.ok) googleSheetsError = sheet.error;
   }
-  return {
-    id: row.id,
+
+  return requirePersisted({
+    id,
     excelPath: excel.path,
     excelError: excel.error,
     googleSheetsError,
-  };
+    dbError,
+  });
 }
