@@ -195,7 +195,7 @@ textarea:focus-visible {
   .renacon-mirror #offcanvas[data-behaviour*="left-side"].active .ct-panel-inner {
     background-color: #121519 !important;
     background-image: linear-gradient(rgba(0, 0, 0, 0.86), rgba(0, 0, 0, 0.86)),
-      url(https://renacon.in/wp-content/uploads/2023/05/giant-building-with-sun.jpg) !important;
+      url(/wp-content/uploads/2023/05/giant-building-with-sun.jpg) !important;
     background-position: 50% 50% !important;
     background-size: cover !important;
     background-repeat: no-repeat !important;
@@ -1350,7 +1350,7 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
 .ct-footer {
   background-color: #ffffff;
   background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
-    url(https://renacon.in/wp-content/uploads/2022/05/lines-background.svg);
+    url(/wp-content/uploads/2022/05/lines-background.svg);
   background-position: 50% 48%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -2098,7 +2098,7 @@ button[type="submit"]:not(.renacon-careers-submit):not(.stk-button):hover {
   position: relative !important;
   overflow: hidden !important;
   background-color: #000000 !important;
-  background-image: url(https://renacon.in/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;
+  background-image: url(/wp-content/uploads/2023/02/skyscrapers-from-low-angle-view.jpg) !important;
   background-position: center center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;

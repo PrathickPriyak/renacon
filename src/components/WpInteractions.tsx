@@ -6,16 +6,33 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-const WP_ORIGIN = "https://renacon.in";
-
-function absolutizeWpUrl(url: string): string {
+/** Prefer same-origin mirrored media under public/wp-content (rewrite falls back if missing). */
+function localizeWpUrl(url: string): string {
   const trimmed = url.trim();
   if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
     return trimmed;
   }
-  if (trimmed.startsWith("//")) return `https:${trimmed}`;
-  if (trimmed.startsWith("/wp-content/") || trimmed.startsWith("/wp-includes/")) {
-    return `${WP_ORIGIN}${trimmed}`;
+  if (trimmed.startsWith("//")) {
+    try {
+      const u = new URL(`https:${trimmed}`);
+      if (u.hostname === "renacon.in" || u.hostname === "www.renacon.in") {
+        return `${u.pathname}${u.search}`;
+      }
+      return `https:${trimmed}`;
+    } catch {
+      return `https:${trimmed}`;
+    }
+  }
+  if (
+    trimmed.startsWith("https://renacon.in/") ||
+    trimmed.startsWith("https://www.renacon.in/")
+  ) {
+    try {
+      const u = new URL(trimmed);
+      return `${u.pathname}${u.search}`;
+    } catch {
+      return trimmed;
+    }
   }
   return trimmed;
 }
@@ -23,7 +40,7 @@ function absolutizeWpUrl(url: string): string {
 /** Derive a short accessible label from a media URL when alt is missing. */
 function altFromMediaUrl(url: string): string {
   try {
-    const path = new URL(url, WP_ORIGIN).pathname;
+    const path = new URL(url, "https://renacon.vercel.app").pathname;
     const base = path.split("/").pop() || "";
     const name = base.replace(/\.[a-z0-9]+$/i, "").replace(/[-_]+/g, " ").trim();
     return name ? name.replace(/\b\w/g, (c) => c.toUpperCase()) : "Renacon image";
@@ -41,10 +58,10 @@ function hydrateWpImages(root: ParentNode): void {
       img.getAttribute("data-original");
     const current = img.getAttribute("src") || "";
     if (lazy && (!current || current.startsWith("data:"))) {
-      img.setAttribute("src", absolutizeWpUrl(lazy));
+      img.setAttribute("src", localizeWpUrl(lazy));
     } else if (current) {
-      const abs = absolutizeWpUrl(current);
-      if (abs !== current) img.setAttribute("src", abs);
+      const local = localizeWpUrl(current);
+      if (local !== current) img.setAttribute("src", local);
     }
 
     const srcset =
@@ -52,29 +69,34 @@ function hydrateWpImages(root: ParentNode): void {
       img.getAttribute("data-srcset") ||
       img.getAttribute("data-lazy-srcset");
     if (srcset) {
-      const next = srcset.replace(
-        /(^|,\s*)(\/wp-content\/|\/wp-includes\/)/g,
-        (_m, sep: string, path: string) => `${sep}${WP_ORIGIN}${path}`,
-      );
+      const next = srcset
+        .split(",")
+        .map((part) => {
+          const bits = part.trim().split(/\s+/);
+          if (!bits[0]) return part.trim();
+          bits[0] = localizeWpUrl(bits[0]);
+          return bits.join(" ");
+        })
+        .join(", ");
       img.setAttribute("srcset", next);
     }
 
     // A11y: mirrored WP markup often omits alt — fill from filename when absent
     if (!img.hasAttribute("alt") || img.getAttribute("alt") === null) {
       const src = img.getAttribute("src") || lazy || "";
-      img.setAttribute("alt", altFromMediaUrl(absolutizeWpUrl(src)));
+      img.setAttribute("alt", altFromMediaUrl(localizeWpUrl(src)));
     }
   });
 
   root.querySelectorAll<HTMLElement>("[style*='wp-content'], [style*='background']").forEach(
     (el) => {
       const style = el.getAttribute("style");
-      if (!style || !style.includes("/wp-content/")) return;
+      if (!style || (!style.includes("/wp-content/") && !style.includes("renacon.in"))) return;
       el.setAttribute(
         "style",
         style.replace(
-          /url\(\s*(['"]?)\/(wp-content|wp-includes)\//g,
-          `url($1${WP_ORIGIN}/$2/`,
+          /url\(\s*(['"]?)https?:\/\/(?:www\.)?renacon\.in\/(wp-content|wp-includes)\//gi,
+          "url($1/$2/",
         ),
       );
     },
@@ -871,7 +893,7 @@ function largestImageUrl(img: HTMLImageElement): string {
       best = url;
     }
   });
-  return absolutizeWpUrl(best);
+  return localizeWpUrl(best);
 }
 
 /**

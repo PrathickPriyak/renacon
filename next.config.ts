@@ -20,7 +20,8 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
-      // Proxy WordPress media when pages use root-relative /wp-content paths
+      // Fallback only: mirrored files in public/wp-content are served first.
+      // Missing paths still proxy to renacon.in so old/rare media does not 404.
       {
         source: "/wp-content/:path*",
         destination: "https://renacon.in/wp-content/:path*",
