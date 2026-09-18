@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
-    "db:push": "prisma db push"
+    "db:push": "prisma db push",
+    "mirror:media": "node scripts/mirror-wp-media.mjs"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

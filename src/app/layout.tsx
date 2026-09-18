@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   description:
     "Renacon (Renaatus Procon Private Limited) – South India’s leading AAC blocks and green building materials brand.",
   icons: {
-    icon: "https://renacon.in/wp-content/uploads/2023/05/logo-green.png",
+    icon: "/wp-content/uploads/2023/05/logo-green.png",
   },
 };
 
@@ -40,7 +40,7 @@ export default function RootLayout({
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
           rel="stylesheet"
-          href="/wp-mirror/css/site-overrides.css?v=renacon-vision-row-fix-202609181040"
+          href="/wp-mirror/css/site-overrides.css?v=renacon-local-media-202609181145"
         />
         {/* eslint-disable-next-line @next/next/no-css-tags */}
         <link
