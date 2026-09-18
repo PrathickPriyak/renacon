@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Print / apply Cloudflare DNS records needed for renacon.in → Vercel.
+# Print / apply Cloudflare DNS so apex renacon.in → Vercel.
 # Registrar can stay GoDaddy; nameservers should remain Cloudflare.
+# www is not used.
 #
 # Usage:
 #   bash scripts/cloudflare-vercel-dns.sh
@@ -8,34 +9,29 @@
 set -euo pipefail
 
 APEX="renacon.in"
-WWW="www.renacon.in"
-# Vercel recommended values for this project (from Vercel Domains API).
+# Vercel recommended apex A record for this project.
 VERCEL_A_PRIMARY="76.76.21.21"
-VERCEL_CNAME="cname.vercel-dns.com"
 
 cat <<EOF
-Cloudflare DNS for ${APEX} → Vercel (images served from this app's public/assets/wp-content)
+Cloudflare DNS for ${APEX} only → Vercel (no www)
 
 1) Cloudflare dashboard → ${APEX} → DNS → Records
 
    Type    Name    Content                 Proxy
    A       @       ${VERCEL_A_PRIMARY}     Proxied (orange) OR DNS-only
-   CNAME   www     ${VERCEL_CNAME}         Proxied (orange) OR DNS-only
 
-   Remove any A/AAAA/CNAME that still point at the old LiteSpeed host (e.g. 217.21.92.159).
+   Do not add a www CNAME. Delete www if it exists.
+   Remove any A/AAAA that still point at the old LiteSpeed host (e.g. 217.21.92.159).
 
 2) SSL/TLS → Overview → mode: Full (strict)
-   (Flexible SSL breaks Vercel + causes mixed/image issues.)
+   Flexible SSL causes ERR_TOO_MANY_REDIRECTS.
 
-3) Speed → Optimization:
-   - Turn OFF Rocket Loader if scripts/images glitch
-   - Auto Minify: leave JS off if you see header/nav bugs
+3) Security → Bots: turn Bot Fight Mode off (or it 403s the homepage).
 
-4) Vercel project already has domains: renacon.in, www.renacon.in, renacon.vercel.app
-   After DNS propagates, https://${APEX}/wp-content/uploads/2023/05/logo-green.png
-   must return 200 from Vercel (not LiteSpeed).
+4) Vercel already has the apex domain: ${APEX}
+   After DNS propagates, https://${APEX}/ must return server: Vercel.
 
-5) Until DNS is switched, production app is live at:
+5) Until DNS is switched, the site is live at:
    https://renacon.vercel.app/
 
 EOF
@@ -59,8 +55,7 @@ cf() {
     "$@"
 }
 
-echo "Applying Cloudflare DNS via API…"
-# Upsert apex A
+echo "Applying Cloudflare DNS via API (apex only)…"
 existing=$(cf GET "/zones/${CF_ZONE_ID}/dns_records?type=A&name=${APEX}")
 rid=$(python3 -c 'import json,sys; d=json.load(sys.stdin); r=d.get("result") or []; print(r[0]["id"] if r else "")' <<<"$existing")
 payload=$(python3 - <<PY
@@ -78,24 +73,6 @@ else
   echo "Created A @ → ${VERCEL_A_PRIMARY}"
 fi
 
-# Upsert www CNAME
-existing=$(cf GET "/zones/${CF_ZONE_ID}/dns_records?type=CNAME&name=${WWW}")
-rid=$(python3 -c 'import json,sys; d=json.load(sys.stdin); r=d.get("result") or []; print(r[0]["id"] if r else "")' <<<"$existing")
-payload=$(python3 - <<PY
-import json
-print(json.dumps({
-  "type":"CNAME","name":"www","content":"${VERCEL_CNAME}","ttl":1,"proxied":True
-}))
-PY
-)
-if [[ -n "$rid" ]]; then
-  cf PUT "/zones/${CF_ZONE_ID}/dns_records/${rid}" -d "$payload" >/dev/null
-  echo "Updated CNAME www → ${VERCEL_CNAME}"
-else
-  cf POST "/zones/${CF_ZONE_ID}/dns_records" -d "$payload" >/dev/null
-  echo "Created CNAME www → ${VERCEL_CNAME}"
-fi
-
 echo "Done. Wait for propagation, then verify:"
-echo "  dig +short ${APEX} A"
-echo "  curl -sI https://${APEX}/wp-content/uploads/2023/05/logo-green.png | head"
+echo "  curl -sI https://${APEX}/ | head"
+echo "  (Expect server: Vercel and HTTP 200)"
