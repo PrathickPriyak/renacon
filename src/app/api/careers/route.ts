@@ -10,9 +10,30 @@ import {
   type ResumeMeta,
 } from "@/lib/resumes";
 import { saveCareerSubmission } from "@/lib/formSubmissions";
+import {
+  assertSameOrigin,
+  clientIp,
+  clip,
+  rateLimit,
+  rateLimitResponse,
+} from "@/lib/security";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+
+const FIELD_LIMITS = {
+  name: 120,
+  email: 254,
+  phone: 40,
+  message: 5000,
+  role: 120,
+  experience: 120,
+  location: 120,
+  qualification: 200,
+  page_url: 500,
+  product: 200,
+  detailsJson: 8000,
+};
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -95,12 +116,16 @@ function fileFromForm(form: FormData, names: string[]): File | null {
 
 function parseDetails(raw: string): Record<string, string> {
   if (!raw) return {};
+  const clipped = clip(raw, FIELD_LIMITS.detailsJson);
   try {
-    const parsed: unknown = JSON.parse(raw);
+    const parsed: unknown = JSON.parse(clipped);
     if (!parsed || typeof parsed !== "object") return {};
     const out: Record<string, string> = {};
     for (const [key, value] of Object.entries(parsed as Record<string, unknown>)) {
-      if (typeof value === "string") out[key] = value;
+      if (typeof value === "string" && key.length <= 80) {
+        out[clip(key, 80)] = clip(value, 500);
+      }
+      if (Object.keys(out).length >= 40) break;
     }
     return out;
   } catch {
@@ -186,12 +211,30 @@ function fileMeta(meta: ResumeMeta) {
 }
 
 export async function POST(request: Request) {
+  const originDenied = assertSameOrigin(request);
+  if (originDenied) return originDenied;
+
+  const limited = rateLimit(`careers:${clientIp(request)}`, 5, 60_000);
+  if (!limited.ok) return rateLimitResponse(limited.retryAfterSec);
+
   const parsed = await parseRequest(request);
   if (!parsed.ok) {
     return NextResponse.json({ ok: false, error: parsed.error }, { status: parsed.status });
   }
 
   const { fields, resume, photo } = parsed;
+  fields.name = clip(fields.name, FIELD_LIMITS.name);
+  fields.email = clip(fields.email, FIELD_LIMITS.email);
+  fields.phone = clip(fields.phone, FIELD_LIMITS.phone);
+  fields.altPhone = clip(fields.altPhone, FIELD_LIMITS.phone);
+  fields.message = clip(fields.message, FIELD_LIMITS.message);
+  fields.role = clip(fields.role, FIELD_LIMITS.role);
+  fields.experience = clip(fields.experience, FIELD_LIMITS.experience);
+  fields.location = clip(fields.location, FIELD_LIMITS.location);
+  fields.qualification = clip(fields.qualification, FIELD_LIMITS.qualification);
+  fields.page_url = clip(fields.page_url, FIELD_LIMITS.page_url);
+  fields.product = clip(fields.product, FIELD_LIMITS.product);
+
   const fieldError = validateFields(fields);
   if (fieldError) {
     return NextResponse.json({ ok: false, error: fieldError }, { status: 400 });
@@ -225,14 +268,14 @@ export async function POST(request: Request) {
     photoMeta = await storePhotoFile(photo);
     resumeMeta = await storeResumeFile(resume);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unable to store files";
     console.error("[careers] file store failed", err);
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "Unable to store files. Please try again." },
+      { status: 500 },
+    );
   }
 
   let dbId: string;
-  let excelError: string | null = null;
-  let googleSheetsError: string | null = null;
   try {
     const saved = await saveCareerSubmission({
       name: fields.name,
@@ -250,8 +293,8 @@ export async function POST(request: Request) {
       resume: resumeMeta,
     });
     dbId = saved.id;
-    excelError = saved.excelError;
-    googleSheetsError = saved.googleSheetsError;
+    if (saved.excelError) console.error("[careers] excel", saved.excelError);
+    if (saved.googleSheetsError) console.error("[careers] sheets", saved.googleSheetsError);
   } catch (err) {
     console.error("[careers] database save failed", err);
     return NextResponse.json(
@@ -272,8 +315,6 @@ export async function POST(request: Request) {
   return NextResponse.json({
     ok: true,
     id: dbId,
-    excelWarning: excelError || undefined,
-    googleSheetsWarning: googleSheetsError || undefined,
     photo: { name: photoMeta.originalName, size: photoMeta.size },
     resume: { name: resumeMeta.originalName, size: resumeMeta.size },
   });

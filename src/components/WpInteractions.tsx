@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { escapeHtml, safeUrl } from "@/lib/htmlSafe";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -657,9 +658,9 @@ function parseHotspotPoints(raw: string | null): HotspotPoint[] {
 }
 
 function buildHotspotTooltipHtml(point: HotspotPoint, fallbackTitle: string, fallbackHref: string): string {
-  const title = (point.title || fallbackTitle || "Learn more").trim();
-  const href = (point.link || fallbackHref || "#").trim() || "#";
-  const content = (point.content || "").trim();
+  const title = escapeHtml((point.title || fallbackTitle || "Learn more").trim());
+  const href = escapeHtml(safeUrl((point.link || fallbackHref || "").trim()) || "#");
+  const content = escapeHtml((point.content || "").trim());
   const target = point.newTab ? ' target="_blank" rel="noopener noreferrer"' : "";
   const titleHtml = href && href !== "#"
     ? `<a class="wp-block-getwid-image-hotspot__tooltip-link" href="${href}"${target}>${title}</a>`

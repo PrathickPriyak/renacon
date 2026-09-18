@@ -1,13 +1,17 @@
 /**
  * Paste into: Google Sheet → Extensions → Apps Script
- * Spreadsheet: https://docs.google.com/spreadsheets/d/1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA/
  *
  * Deploy → New deployment → Type: Web app
  *   Execute as: Me
  *   Who has access: Anyone
  * Copy the Web app URL into GOOGLE_SHEETS_WEBHOOK_URL (local .env + Vercel).
  *
+ * Optional shared secret (recommended):
+ *   Apps Script → Project Settings → Script properties
+ *     WEBHOOK_TOKEN = <same value as GOOGLE_SHEETS_WEBHOOK_TOKEN env>
+ *
  * Creates / updates tabs: Product, Careers, Contact
+ * Cells are stored as plain text (formula injection neutralized).
  */
 
 var TAB_HEADERS = {
@@ -79,12 +83,34 @@ function ensureAllTabs_(ss) {
   ensureSheet_(ss, "Contact", TAB_HEADERS.Contact);
 }
 
+/** Neutralize spreadsheet formula injection (=, +, -, @, tab, CR). */
+function sanitizeCell_(v) {
+  var s = String(v == null ? "" : v);
+  if (/^[=+\-@\t\r]/.test(s)) {
+    return "'" + s;
+  }
+  return s;
+}
+
+function requireToken_(body) {
+  var expected = PropertiesService.getScriptProperties().getProperty("WEBHOOK_TOKEN");
+  if (!expected) {
+    // Token not configured in script — allow (local/dev). Prefer setting WEBHOOK_TOKEN in production.
+    return;
+  }
+  if (!body || body.token !== expected) {
+    throw new Error("Unauthorized");
+  }
+}
+
 function doPost(e) {
   try {
     var body = JSON.parse((e && e.postData && e.postData.contents) || "{}");
+    requireToken_(body);
+
     var tab = body.tab || "Contact";
     var headers = body.headers && body.headers.length ? body.headers : TAB_HEADERS[tab] || [];
-    var row = body.row || [];
+    var row = (body.row || []).map(sanitizeCell_);
     var ss = getSpreadsheet_(body);
 
     // Always ensure Product / Careers / Contact tabs exist

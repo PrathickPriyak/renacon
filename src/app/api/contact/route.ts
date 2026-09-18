@@ -4,9 +4,28 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
 import { saveContactSubmission, saveProductSubmission } from "@/lib/formSubmissions";
+import {
+  assertSameOrigin,
+  clientIp,
+  clip,
+  rateLimit,
+  rateLimitResponse,
+} from "@/lib/security";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
+
+const FIELD_LIMITS = {
+  name: 120,
+  email: 254,
+  phone: 40,
+  message: 5000,
+  city: 120,
+  products: 200,
+  product: 200,
+  productPath: 500,
+  pageUrl: 500,
+};
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -37,6 +56,12 @@ async function persistJsonl(kind: string, payload: Record<string, unknown>): Pro
 }
 
 export async function POST(request: Request) {
+  const originDenied = assertSameOrigin(request);
+  if (originDenied) return originDenied;
+
+  const limited = rateLimit(`contact:${clientIp(request)}`, 8, 60_000);
+  if (!limited.ok) return rateLimitResponse(limited.retryAfterSec);
+
   let body: unknown;
   try {
     body = await request.json();
@@ -47,14 +72,19 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Invalid payload" }, { status: 400 });
   }
   const record = body as Record<string, unknown>;
-  const name = asString(record.name);
-  const email = asString(record.email);
-  const phone = asString(record.phone);
-  const message = asString(record.message);
-  const city = asString(record.city);
-  const products = asString(record.products) || asString(record.product);
-  const kind = asString(record.kind) || "contact";
-  const pageUrl = asString(record.page_url) || asString(record.productPath) || "";
+  const name = clip(asString(record.name), FIELD_LIMITS.name);
+  const email = clip(asString(record.email), FIELD_LIMITS.email);
+  const phone = clip(asString(record.phone), FIELD_LIMITS.phone);
+  const message = clip(asString(record.message), FIELD_LIMITS.message);
+  const city = clip(asString(record.city), FIELD_LIMITS.city);
+  const products =
+    clip(asString(record.products), FIELD_LIMITS.products) ||
+    clip(asString(record.product), FIELD_LIMITS.product);
+  const kind = clip(asString(record.kind) || "contact", 40);
+  const pageUrl = clip(
+    asString(record.page_url) || asString(record.productPath) || "",
+    FIELD_LIMITS.pageUrl,
+  );
 
   if (!name || !phone) {
     return NextResponse.json({ ok: false, error: "Name and phone are required" }, { status: 400 });
@@ -76,8 +106,6 @@ export async function POST(request: Request) {
     }
 
     let id: string;
-    let excelError: string | null = null;
-    let googleSheetsError: string | null = null;
     try {
       const saved = await saveContactSubmission({
         name,
@@ -87,11 +115,20 @@ export async function POST(request: Request) {
         email,
         message,
         pageUrl: pageUrl || "/contact-us/",
-        details: record as Record<string, unknown>,
+        details: {
+          name,
+          phone,
+          city,
+          products,
+          email,
+          message,
+          kind,
+          page_url: pageUrl || "/contact-us/",
+        },
       });
       id = saved.id;
-      excelError = saved.excelError;
-      googleSheetsError = saved.googleSheetsError;
+      if (saved.excelError) console.error("[contact] excel", saved.excelError);
+      if (saved.googleSheetsError) console.error("[contact] sheets", saved.googleSheetsError);
     } catch (err) {
       console.error("[contact] database save failed", err);
       return NextResponse.json(
@@ -104,12 +141,7 @@ export async function POST(request: Request) {
       (err) => console.error("[contact] jsonl backup failed", err),
     );
 
-    return NextResponse.json({
-      ok: true,
-      id,
-      excelWarning: excelError || undefined,
-      googleSheetsWarning: googleSheetsError || undefined,
-    });
+    return NextResponse.json({ ok: true, id });
   }
 
   // Brochure / product lead forms require email
@@ -120,12 +152,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Enter a valid email address" }, { status: 400 });
   }
 
-  const productPath = asString(record.productPath) || pageUrl;
-  const product = asString(record.product) || slugFromPath(productPath);
+  const productPath = clip(
+    asString(record.productPath) || pageUrl,
+    FIELD_LIMITS.productPath,
+  );
+  const product = clip(asString(record.product) || slugFromPath(productPath), FIELD_LIMITS.product);
 
   let id: string;
-  let excelError: string | null = null;
-  let googleSheetsError: string | null = null;
   try {
     const saved = await saveProductSubmission({
       name,
@@ -135,11 +168,19 @@ export async function POST(request: Request) {
       product,
       productPath,
       pageUrl: productPath,
-      details: record as Record<string, unknown>,
+      details: {
+        name,
+        email,
+        phone,
+        message,
+        product,
+        productPath,
+        kind,
+      },
     });
     id = saved.id;
-    excelError = saved.excelError;
-    googleSheetsError = saved.googleSheetsError;
+    if (saved.excelError) console.error("[product] excel", saved.excelError);
+    if (saved.googleSheetsError) console.error("[product] sheets", saved.googleSheetsError);
   } catch (err) {
     console.error("[product] database save failed", err);
     return NextResponse.json(
@@ -161,19 +202,8 @@ export async function POST(request: Request) {
 
   if (kind === "brochure") {
     const downloadUrl = resolveBrochureUrl(productPath || product);
-    return NextResponse.json({
-      ok: true,
-      id,
-      downloadUrl,
-      excelWarning: excelError || undefined,
-      googleSheetsWarning: googleSheetsError || undefined,
-    });
+    return NextResponse.json({ ok: true, id, downloadUrl });
   }
 
-  return NextResponse.json({
-    ok: true,
-    id,
-    excelWarning: excelError || undefined,
-    googleSheetsWarning: googleSheetsError || undefined,
-  });
+  return NextResponse.json({ ok: true, id });
 }
