@@ -4571,8 +4571,11 @@ body.renacon-page-media .sgb-item img {
   box-shadow: none !important;
 }
 #wpforms-7919 input.wpforms-error,
+#wpforms-7919 input.wpforms-error:focus,
 #wpforms-7919 select.wpforms-error,
-#wpforms-7919 textarea.wpforms-error {
+#wpforms-7919 select.wpforms-error:focus,
+#wpforms-7919 textarea.wpforms-error,
+#wpforms-7919 textarea.wpforms-error:focus {
   border-bottom-color: #d63637 !important;
 }
 #wpforms-7919 .wpforms-field-date-dropdown-wrap {
