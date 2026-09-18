@@ -11,7 +11,7 @@ export type Post = {
   contentHtml: string;
 };
 
-/** Keep media on this deployment (public/wp-content). Fallback rewrite still proxies missing files. */
+/** Keep media on this deployment (public/assets/wp-content via /wp-content rewrite). */
 function localizeMediaUrl(url: string): string {
   const trimmed = url.trim();
   if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {
@@ -75,7 +75,7 @@ export function sanitizeHtml(html: string): string {
     .replace(/<iframe(?![^>]*youtube)[^>]*>[\s\S]*?<\/iframe>/gi, "")
     .replace(/on\w+="[^"]*"/gi, "")
     .replace(/javascript:/gi, "")
-    // Prefer same-origin media (mirrored into public/wp-content)
+    // Prefer same-origin media (mirrored into public/assets/wp-content)
     .replace(
       /(src|href)=(["'])https?:\/\/(?:www\.)?renacon\.in\/(wp-content|wp-includes)\//gi,
       "$1=$2/$3/",

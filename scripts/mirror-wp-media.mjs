@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Mirror WordPress media from renacon.in into public/wp-content/...
+ * Mirror WordPress media from renacon.in into public/assets/wp-content/...
  * so production serves images from this deployment (no remote dependency).
+ * next.config rewrites /wp-content/* → /assets/wp-content/* for compatibility.
  *
  * Usage:
  *   node scripts/mirror-wp-media.mjs
@@ -15,7 +16,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const ORIGIN = "https://renacon.in";
-const OUT = join(ROOT, "public");
+const OUT = join(ROOT, "public/assets");
 const CONCURRENCY = 12;
 const EXTS = new Set([
   ".png",
@@ -236,7 +237,7 @@ async function main() {
   let list = [...paths].sort();
   if (Number.isFinite(LIMIT) && LIMIT > 0) list = list.slice(0, LIMIT);
 
-  console.log(`Downloading ${list.length} files → public/ (concurrency ${CONCURRENCY})…`);
+  console.log(`Downloading ${list.length} files → public/assets/ (concurrency ${CONCURRENCY})…`);
   const result = await runPool(list, downloadOne, CONCURRENCY);
   console.log(
     `Done. ok=${result.ok} exists=${result.exists} fail=${result.fail} bytes=${(
@@ -246,7 +247,7 @@ async function main() {
     ).toFixed(1)}MB`,
   );
   if (result.errors.length) {
-    const manifest = join(ROOT, "public/wp-content/_mirror-failures.txt");
+    const manifest = join(ROOT, "public/assets/wp-content/_mirror-failures.txt");
     mkdirSync(dirname(manifest), { recursive: true });
     const { writeFileSync } = await import("node:fs");
     writeFileSync(manifest, result.errors.slice(0, 500).join("\n") + "\n");
@@ -255,7 +256,7 @@ async function main() {
 
   // Manifest of mirrored paths for ops
   const { writeFileSync } = await import("node:fs");
-  const man = join(ROOT, "public/wp-content/_mirrored-paths.txt");
+  const man = join(ROOT, "public/assets/wp-content/_mirrored-paths.txt");
   mkdirSync(dirname(man), { recursive: true });
   writeFileSync(man, list.join("\n") + "\n");
   console.log(`Manifest: ${list.length} paths`);

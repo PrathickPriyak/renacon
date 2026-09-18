@@ -6,7 +6,7 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/** Prefer same-origin mirrored media under public/wp-content (rewrite falls back if missing). */
+/** Prefer same-origin mirrored media under public/assets/wp-content (/wp-content rewrite). */
 function localizeWpUrl(url: string): string {
   const trimmed = url.trim();
   if (!trimmed || trimmed.startsWith("data:") || trimmed.startsWith("blob:")) {

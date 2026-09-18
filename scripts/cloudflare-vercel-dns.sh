@@ -14,7 +14,7 @@ VERCEL_A_PRIMARY="76.76.21.21"
 VERCEL_CNAME="cname.vercel-dns.com"
 
 cat <<EOF
-Cloudflare DNS for ${APEX} → Vercel (images served from this app's public/wp-content)
+Cloudflare DNS for ${APEX} → Vercel (images served from this app's public/assets/wp-content)
 
 1) Cloudflare dashboard → ${APEX} → DNS → Records
 
