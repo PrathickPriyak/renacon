@@ -4,6 +4,9 @@ import { prisma } from "@/lib/db";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Form submissions" };
 
+const SHEETS_URL =
+  "https://docs.google.com/spreadsheets/d/1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA/edit";
+
 function withSecret(path: string, secret: string): string {
   if (!secret) return path;
   const join = path.includes("?") ? "&" : "?";
@@ -13,6 +16,10 @@ function withSecret(path: string, secret: string): string {
 function fmt(date: Date): string {
   return date.toISOString().replace("T", " ").slice(0, 19);
 }
+
+type ProductRow = Awaited<ReturnType<typeof prisma.productSubmission.findMany>>[number];
+type CareerRow = Awaited<ReturnType<typeof prisma.careerSubmission.findMany>>[number];
+type ContactRow = Awaited<ReturnType<typeof prisma.contactSubmission.findMany>>[number];
 
 export default async function AdminSubmissionsPage({
   searchParams,
@@ -35,14 +42,27 @@ export default async function AdminSubmissionsPage({
     );
   }
 
-  const [productCount, careerCount, contactCount, products, careers, contacts] = await Promise.all([
-    prisma.productSubmission.count(),
-    prisma.careerSubmission.count(),
-    prisma.contactSubmission.count(),
-    prisma.productSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
-    prisma.careerSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
-    prisma.contactSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
-  ]);
+  let productCount = 0;
+  let careerCount = 0;
+  let contactCount = 0;
+  let products: ProductRow[] = [];
+  let careers: CareerRow[] = [];
+  let contacts: ContactRow[] = [];
+  let dbAvailable = true;
+
+  try {
+    [productCount, careerCount, contactCount, products, careers, contacts] = await Promise.all([
+      prisma.productSubmission.count(),
+      prisma.careerSubmission.count(),
+      prisma.contactSubmission.count(),
+      prisma.productSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
+      prisma.careerSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
+      prisma.contactSubmission.findMany({ orderBy: { submittedAt: "desc" }, take: 50 }),
+    ]);
+  } catch (err) {
+    dbAvailable = false;
+    console.error("[admin/submissions] database unavailable", err);
+  }
 
   const secret = configured || provided;
   const productExport = withSecret("/api/brochure/export/", secret);
@@ -53,41 +73,79 @@ export default async function AdminSubmissionsPage({
     <main className="renacon-admin-submissions">
       <h1>Form submissions</h1>
       <p className="renacon-admin-hint">
-        Database is the source of truth. Live Google Sheet (when configured):{" "}
-        <a
-          href="https://docs.google.com/spreadsheets/d/1IXkszTmv_qUOpq8VZXYWjQn7--G3cC9kqlOVbZfwtWA/edit"
-          target="_blank"
-          rel="noreferrer"
-        >
+        {dbAvailable ? (
+          <>
+            Database is the source of truth for local Excel exports. Live Google Sheet:{" "}
+          </>
+        ) : (
+          <>
+            On this deploy the SQLite database is not available (normal on Vercel). Production leads
+            are stored in Google Sheets:{" "}
+          </>
+        )}
+        <a href={SHEETS_URL} target="_blank" rel="noreferrer">
           open spreadsheet
         </a>
-        . Download Excel exports below, or open Prisma Studio locally with{" "}
-        <code>npm run db:studio</code>.
+        .
+        {dbAvailable ? (
+          <>
+            {" "}
+            Download Excel exports below, or open Prisma Studio locally with{" "}
+            <code>npm run db:studio</code>.
+          </>
+        ) : (
+          <> Use the Product / Careers / Contact tabs in the sheet to review submissions.</>
+        )}
       </p>
 
       <div className="renacon-admin-grid">
         <section className="renacon-admin-card">
           <h2>Product / brochure</h2>
-          <p className="renacon-admin-count">{productCount}</p>
-          <a className="renacon-admin-btn" href={productExport}>
-            Download Excel
-          </a>
+          <p className="renacon-admin-count">{dbAvailable ? productCount : "—"}</p>
+          {dbAvailable ? (
+            <a className="renacon-admin-btn" href={productExport}>
+              Download Excel
+            </a>
+          ) : (
+            <a className="renacon-admin-btn" href={SHEETS_URL} target="_blank" rel="noreferrer">
+              Open Sheet
+            </a>
+          )}
         </section>
         <section className="renacon-admin-card">
           <h2>Careers</h2>
-          <p className="renacon-admin-count">{careerCount}</p>
-          <a className="renacon-admin-btn" href={careerExport}>
-            Download Excel
-          </a>
+          <p className="renacon-admin-count">{dbAvailable ? careerCount : "—"}</p>
+          {dbAvailable ? (
+            <a className="renacon-admin-btn" href={careerExport}>
+              Download Excel
+            </a>
+          ) : (
+            <a className="renacon-admin-btn" href={SHEETS_URL} target="_blank" rel="noreferrer">
+              Open Sheet
+            </a>
+          )}
         </section>
         <section className="renacon-admin-card">
           <h2>Contact</h2>
-          <p className="renacon-admin-count">{contactCount}</p>
-          <a className="renacon-admin-btn" href={contactExport}>
-            Download Excel
-          </a>
+          <p className="renacon-admin-count">{dbAvailable ? contactCount : "—"}</p>
+          {dbAvailable ? (
+            <a className="renacon-admin-btn" href={contactExport}>
+              Download Excel
+            </a>
+          ) : (
+            <a className="renacon-admin-btn" href={SHEETS_URL} target="_blank" rel="noreferrer">
+              Open Sheet
+            </a>
+          )}
         </section>
       </div>
+
+      {!dbAvailable ? (
+        <p className="renacon-admin-hint">
+          Recent rows are not listed here because the local database is unavailable. Open the
+          spreadsheet above for live Product, Careers, and Contact data.
+        </p>
+      ) : null}
 
       <section className="renacon-admin-table-block">
         <h2>Recent product / brochure (latest 50)</h2>
