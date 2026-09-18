@@ -86,6 +86,10 @@ PY
   api POST "/v10/projects/${PROJECT_ID}/domains?teamId=${ORG_ID}" \
     -d "{\"name\":\"${ALIAS}\"}" >/dev/null || true
 
+  # Never leave renacon.vercel.app as a redirect to the WordPress origin.
+  api PATCH "/v9/projects/${PROJECT_ID}/domains/${ALIAS}?teamId=${ORG_ID}" \
+    -d '{"redirect":null,"redirectStatusCode":null}' >/dev/null || true
+
   echo "Assigning alias ${ALIAS}…"
   api POST "/v2/deployments/${dpl}/aliases?teamId=${ORG_ID}" \
     -d "{\"alias\":\"${ALIAS}\"}" >/dev/null || true
