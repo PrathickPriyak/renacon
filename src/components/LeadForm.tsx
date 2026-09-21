@@ -60,15 +60,20 @@ export function LeadForm({
         const downloadUrl =
           json.downloadUrl ||
           resolveBrochureUrl(typeof window !== "undefined" ? window.location.pathname : "");
-        setMessage("Thank you. Your brochure download is starting…");
-        const anchor = document.createElement("a");
-        anchor.href = downloadUrl;
-        anchor.target = "_blank";
-        anchor.rel = "noopener";
-        anchor.download = "";
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
+        if (downloadUrl) {
+          setMessage("Thank you. Your brochure download is starting…");
+          const anchor = document.createElement("a");
+          anchor.href = downloadUrl;
+          anchor.target = "_blank";
+          anchor.rel = "noopener";
+          const name = downloadUrl.split("/").pop();
+          if (name) anchor.download = name;
+          document.body.appendChild(anchor);
+          anchor.click();
+          anchor.remove();
+        } else {
+          setMessage("Thank you. Your request has been received.");
+        }
       } else {
         setMessage(
           kind === "careers"
