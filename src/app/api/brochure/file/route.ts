@@ -1,24 +1,28 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import { NextResponse } from "next/server";
-import { brochureTitle, buildSimplePdf, slugFromPath } from "@/lib/brochures";
+import { brochureFiles, slugFromPath } from "@/lib/brochures";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const product = slugFromPath(searchParams.get("product") || "renacon");
-  const title = brochureTitle(product);
-  const pdf = buildSimplePdf(title, [
-    `Product: ${title}`,
-    "Visit https://renacon.in for specifications and technical data.",
-    "Contact: info@renacon.in",
-    `Generated: ${new Date().toISOString().slice(0, 10)}`,
-  ]);
+  const product = slugFromPath(searchParams.get("product") || "");
+  const filename = brochureFiles[product];
+  if (!filename) {
+    return NextResponse.json({ ok: false, error: "No brochure for this product" }, { status: 404 });
+  }
 
-  const filename = `${product || "renacon"}-brochure.pdf`;
-  return new NextResponse(Buffer.from(pdf), {
+  const filePath = join(process.cwd(), "public", "assets", "brochures", filename);
+  if (!existsSync(filePath)) {
+    return NextResponse.json({ ok: false, error: "Brochure file missing" }, { status: 404 });
+  }
+
+  const pdf = readFileSync(filePath);
+  return new NextResponse(pdf, {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="${filename}"`,
-      "Cache-Control": "no-store",
+      "Cache-Control": "public, max-age=86400",
     },
   });
 }
