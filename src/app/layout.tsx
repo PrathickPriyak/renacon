@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { ChatWidget } from "@/components/ChatWidget";
 import "./globals.css";
 
 const roboto = Roboto({
@@ -55,6 +56,7 @@ export default function RootLayout({
         data-footer="type-1"
       >
         {children}
+        <ChatWidget />
       </body>
     </html>
   );

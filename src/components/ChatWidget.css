@@ -1,0 +1,252 @@
+.renacon-chat .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.renacon-chat {
+  --renacon-chat-green: #1b7a3d;
+  --renacon-chat-green-dark: #0f5a2b;
+  --renacon-chat-ink: #1a1a1a;
+  --renacon-chat-muted: #5c5c5c;
+  --renacon-chat-panel: #ffffff;
+  --renacon-chat-shadow: 0 16px 40px rgba(15, 40, 22, 0.22);
+  font-family: inherit;
+}
+
+.renacon-chat-launcher {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 5.5rem;
+  z-index: 10050;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--renacon-chat-green);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(27, 122, 61, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.renacon-chat-launcher:hover,
+.renacon-chat-launcher:focus-visible {
+  background: var(--renacon-chat-green-dark);
+  transform: scale(1.05);
+  outline: none;
+}
+
+.renacon-chat-panel {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 9.4rem;
+  z-index: 10051;
+  width: min(22.5rem, calc(100vw - 1.6rem));
+  height: min(32rem, calc(100vh - 11rem));
+  display: flex;
+  flex-direction: column;
+  background: var(--renacon-chat-panel);
+  border-radius: 16px;
+  box-shadow: var(--renacon-chat-shadow);
+  overflow: hidden;
+  color: var(--renacon-chat-ink);
+}
+
+.renacon-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: linear-gradient(135deg, #1b7a3d, #0f5a2b);
+  color: #fff;
+}
+
+.renacon-chat-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.renacon-chat-header p {
+  margin: 0.15rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+.renacon-chat-close {
+  border: 0;
+  background: transparent;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.renacon-chat-close:hover,
+.renacon-chat-close:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+}
+
+.renacon-chat-log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.9rem 0.85rem;
+  background: #f4f7f4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.renacon-chat-bubble {
+  max-width: 92%;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.renacon-chat-bubble[data-role="assistant"] {
+  align-self: flex-start;
+  background: #fff;
+  color: var(--renacon-chat-ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.renacon-chat-bubble[data-role="user"] {
+  align-self: flex-end;
+  background: var(--renacon-chat-green);
+  color: #fff;
+}
+
+.renacon-chat-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.renacon-chat-links a {
+  display: inline-flex;
+  align-items: center;
+  background: #eaf5ee;
+  color: var(--renacon-chat-green-dark);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+}
+
+.renacon-chat-links a:hover,
+.renacon-chat-links a:focus-visible {
+  background: #d3eadb;
+  outline: none;
+}
+
+.renacon-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem 0;
+  background: #fff;
+}
+
+.renacon-chat-suggestions button {
+  border: 1px solid #d5e5da;
+  background: #fff;
+  color: var(--renacon-chat-green-dark);
+  border-radius: 999px;
+  padding: 0.32rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.renacon-chat-suggestions button:hover,
+.renacon-chat-suggestions button:focus-visible {
+  border-color: var(--renacon-chat-green);
+  outline: none;
+}
+
+.renacon-chat-form {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.75rem 0.85rem 0.9rem;
+  background: #fff;
+  border-top: 1px solid #e6eee8;
+}
+
+.renacon-chat-form input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d5e5da;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
+}
+
+.renacon-chat-form input:focus {
+  outline: 2px solid rgba(27, 122, 61, 0.35);
+  border-color: var(--renacon-chat-green);
+}
+
+.renacon-chat-form button {
+  border: 0;
+  border-radius: 10px;
+  background: var(--renacon-chat-green);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+}
+
+.renacon-chat-form button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.renacon-chat-error {
+  color: #9b1c1c;
+  font-size: 0.78rem;
+  padding: 0 0.85rem 0.35rem;
+  background: #fff;
+}
+
+@media (max-width: 768px) {
+  .renacon-chat-launcher {
+    right: 0.85rem;
+    bottom: 5.2rem;
+    width: 54px;
+    height: 54px;
+  }
+
+  .renacon-chat-panel {
+    right: 0.5rem;
+    left: 0.5rem;
+    width: auto;
+    bottom: 8.8rem;
+    height: min(70vh, 32rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .renacon-chat-launcher {
+    transition: none;
+  }
+}
