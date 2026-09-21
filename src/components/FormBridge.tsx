@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { isBrochurePath, resolveBrochureUrl, slugFromPath } from "@/lib/brochures";
+import { isBrochurePath, resolveBrochureUrl } from "@/lib/brochures";
 import {
   enhanceCareersWizard,
   isCareersHoneypotTripped,
@@ -355,6 +355,8 @@ export function FormBridge() {
 
       if (brochure) {
         enhanceBrochureForm(form);
+        if (form.dataset.renaconBrochureBusy === "1") return;
+
         const payload = extractBrochurePayload(form);
         if (!payload.phone || payload.phone.replace(/\D/g, "").length < 8) {
           setStatus(form, "Enter a valid phone number.", "error");
@@ -370,6 +372,7 @@ export function FormBridge() {
           'button[type="submit"], .wpforms-submit, .renacon-download-brochure',
         );
         const prevLabel = submitBtn?.textContent || "";
+        form.dataset.renaconBrochureBusy = "1";
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.textContent = "Sending…";
@@ -385,24 +388,26 @@ export function FormBridge() {
           const json = (await res.json()) as BrochureSubmitResponse;
           if (!res.ok || !json.ok) throw new Error(json.error || "Submit failed");
 
-          const downloadUrl =
-            json.downloadUrl ||
-            resolveBrochureUrl(path) ||
-            `/api/brochure/file/?product=${encodeURIComponent(slugFromPath(path))}`;
-
-          setStatus(form, "Thank you. Your brochure download is starting…", "ok");
-          const anchor = document.createElement("a");
-          anchor.href = downloadUrl;
-          anchor.target = "_blank";
-          anchor.rel = "noopener";
-          anchor.download = "";
-          document.body.appendChild(anchor);
-          anchor.click();
-          anchor.remove();
+          const downloadUrl = json.downloadUrl || resolveBrochureUrl(path);
+          if (downloadUrl) {
+            setStatus(form, "Thank you. Your brochure download is starting…", "ok");
+            const anchor = document.createElement("a");
+            anchor.href = downloadUrl;
+            anchor.target = "_blank";
+            anchor.rel = "noopener";
+            const name = downloadUrl.split("/").pop() || "";
+            if (name) anchor.download = name;
+            document.body.appendChild(anchor);
+            anchor.click();
+            anchor.remove();
+          } else {
+            setStatus(form, "Thank you. Your request has been received.", "ok");
+          }
           form.reset();
         } catch (err) {
           setStatus(form, err instanceof Error ? err.message : "Unable to submit form", "error");
         } finally {
+          delete form.dataset.renaconBrochureBusy;
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.textContent = prevLabel || "DOWNLOAD BROCHURE";
