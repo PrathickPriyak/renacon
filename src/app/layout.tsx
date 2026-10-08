@@ -17,7 +17,12 @@ export const metadata: Metadata = {
   description:
     "Renacon (Renaatus Procon Private Limited) – South India’s leading AAC blocks and green building materials brand.",
   icons: {
-    icon: "/assets/wp-content/uploads/2023/05/logo-green.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
   },
 };
 
